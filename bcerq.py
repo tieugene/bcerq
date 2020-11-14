@@ -31,7 +31,7 @@ class Opts(object):
     dbpass = None
     date0 = None
     date1 = None
-    num = 25
+    num = None
 
 
 TplFactory = dict()  # templates factory: cmd: fname, note, required, output, tpl_body
@@ -81,7 +81,7 @@ def init_cli():
                         help='From date')
     parser.add_argument('-t', '--todate', metavar='yyyy-mm-dd', type=datetime.date.fromisoformat,
                         help='To date')
-    parser.add_argument('-n', '--num', metavar='n', type=int, default=25,
+    parser.add_argument('-n', '--num', metavar='n', type=int,
                         help='Records to return (default=1)')
     parser.add_argument('-o', '--outfile', metavar='<filename>', type=str, nargs=1,
                         help='Output file name')
@@ -90,7 +90,7 @@ def init_cli():
     return parser
 
 
-def init_tpls():
+def init_templates():
     """
     Load all query templates
     :return:
@@ -131,7 +131,7 @@ def main():
     # FIXME: todate >= fromdate
     Opts.num = args.num
     # 2. templates/commands
-    init_tpls()
+    init_templates()
     if args.cmd == "list":
         print("= Commands: =")
         for k, v in TplFactory.items():
