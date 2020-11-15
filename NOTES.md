@@ -105,6 +105,18 @@ Tests (1):
 
 (To be continued)
 
+### 7. &#9993;[&hellip;] \(&cap; &#9993;[&hellip;])+
+
+- In: 2+ *.csv with columns (a_id, addr, &hellip;) (Note: skip header)
+- Out: &cap; of lists
+
+Action:
+
+- load id: addrs (all)
+- mk set()s
+- set() & set() & &hellip;
+- print set(): addr
+
 ## JSONB
 
 IDEAS:
@@ -140,8 +152,3 @@ WHERE
   AND jsonb_typeof(addr) = 'array'
 ...
 ```
-
-> 7. Допустим у нас есть 2, 3 и т.д пула адресов, нужно их объединить по "И" , сделать файл состоящий из  адресов которые встречаются во всех диапазонах.
-
-- входы - несколько (2+) csv, где в первых 2-х колонках - id и адрес адресов
-- выход - список id и адресов адресов, которые есть во _всех_ этих csv

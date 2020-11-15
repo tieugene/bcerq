@@ -72,8 +72,8 @@ def init_cli():
                         help="Output fields separator (default=<TAB>).")
     parser.add_argument('-v', '--verbose', action='store_true',
                         help='Debug (default=false).')
-    parser.add_argument('-o', '--out', metavar='file', type=str, nargs=1,
-                        help='Output file name (NA).')
+#    parser.add_argument('-o', '--out', metavar='file', type=str, nargs=1,
+#                        help='Output file name (NA).')
     return parser
 
 

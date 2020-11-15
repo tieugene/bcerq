@@ -9,11 +9,10 @@ BitCoin Export ReQuests - explore BTC blockchain SQL DB.
 
 ## Usage
 
-./bcerq.py <rq> <options>
+./bcerq.py <options> <command>
 
 Options:
 - f --from [date] - starting date
 - t --to [date] - end date
-- n --num [int] - limit
-- o --out output ?
-- l --log log to ?
+- n --num [int] - limit (qty/btc/%)
+- a --alist - address list
