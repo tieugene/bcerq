@@ -54,12 +54,12 @@ Limit | 1&uarr; | 1&darr; | 2&uarr; | 3&uarr; |
 
 ### 1. Top &#9993;[] by <sub>&Delta;</sub>&sum;&#x20BF; in <sub>&Delta;</sub>D.
 
+- file: [addr_abs_btc_max.sql](sql/addr_abs_btc_max.sql), [addr_abs_btc_min.sql](sql/addr_abs_btc_min.sql)
 - In: DATE0, DATE1, TOPX (date: YYYY-MM-DD)
 - Out: addr, &sum;
 - Action: &sum;<sub>1</sub> - &sum;<sub>0</sub>
 - Limits: &sum;<sub>0</sub>?&hellip;&sum;<sub>1</sub>+
 - Timing: 4'
-- file: addr_abs_btc_max.sql
 
 &darr;: &cross; fresh, &check; finished => b LEFT JOIN e
 
@@ -99,10 +99,7 @@ Tests (1):
 - Action:
 - Limits: &sum;<sub>0</sub>?&hellip;&sum;<sub>1</sub>+
 - Timing:
-
-(To be continued)
-~Like &numero;2:
-
+- File: [alist_abs_btc_chg_gt.sql](sql/alist_abs_btc_chg_gt.sql)
 
 ### 6. <sub>&Delta;</sub>&sum;(&#x20BF;,%) in <sub>&Delta;</sub>D for &#9993;[&hellip;] where <sub>&Delta;</sub>&sum; &gl;_N_%.
 
@@ -143,3 +140,8 @@ WHERE
   AND jsonb_typeof(addr) = 'array'
 ...
 ```
+
+> 7. Допустим у нас есть 2, 3 и т.д пула адресов, нужно их объединить по "И" , сделать файл состоящий из  адресов которые встречаются во всех диапазонах.
+
+- входы - несколько (2+) csv, где в первых 2-х колонках - id и адрес адресов
+- выход - список id и адресов адресов, которые есть во _всех_ этих csv

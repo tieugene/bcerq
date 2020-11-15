@@ -175,7 +175,7 @@ def main():
             f = open(args.alist, "rt")
         with f:
             Opts.alist = [s.rstrip() for s in f.readlines()]
-            print(Opts.alist)
+            # print(Opts.alist)
     # 2. templates/commands
     init_templates()
     if args.cmd == "list":
