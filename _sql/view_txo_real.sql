@@ -20,5 +20,4 @@ LEFT JOIN (
 ) AS tx1 ON
   data.t_in_id = tx1.t_id
 INNER JOIN addresses ON
-  data.a_id = addresses.a_id
-WHERE jsonb_typeof(addresses.a_list) = 'string';
+  data.a_id = addresses.a_id;
