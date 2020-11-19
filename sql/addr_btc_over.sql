@@ -2,7 +2,7 @@
 -- "name": "buratinos_btc_over",
 -- "note": "Get addresses with balance over [num] BTC on [todate].",
 -- "required": ["DATE1", "NUM"],
--- "header": ["a_id", "address", "profit, ₿"],
+-- "header": ["a_id", "address", "profit, ㋛"],
 -- "output": "columns name:typ (int,str,Decimal())"
 -- }
 SELECT

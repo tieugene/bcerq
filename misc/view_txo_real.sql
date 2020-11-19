@@ -1,3 +1,4 @@
+-- txo_real - with addresses only
 CREATE VIEW txo_real AS
 SELECT
   data.satoshi AS satoshi,

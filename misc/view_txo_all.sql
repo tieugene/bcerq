@@ -1,4 +1,4 @@
--- txo_all
+-- txo_all - all vouts
 CREATE VIEW txo_all AS
 SELECT
   data.satoshi AS satoshi,

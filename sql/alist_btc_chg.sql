@@ -2,7 +2,7 @@
 -- "name": "alist_btc_chg",
 -- "note": "Get balance change (₿) of addresses in [list] in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "ALIST"],
--- "header": ["a_id", "address", "Profit, ₿", "Profit, %", "Start ∑, ₿", "End ∑, ₿"],
+-- "header": ["a_id", "address", "Profit, ₿", "profit, %", "Start ∑, ₿", "End ∑, ₿"],
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT
