@@ -1,11 +1,10 @@
 -- txo_real - with addresses only
 CREATE VIEW txo_real AS
 SELECT
-  data.satoshi AS satoshi,
+  data.a_id AS a_id,
   DATE(bk0.b_time) AS date0,
   DATE(tx1.b_time) AS date1,
-  data.a_id AS a_id,
-  addresses.a_list AS addr
+  data.satoshi AS satoshi
 FROM data
 INNER JOIN transactions AS tx0 ON
   data.t_out_id = tx0.t_id

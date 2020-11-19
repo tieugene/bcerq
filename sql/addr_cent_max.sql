@@ -27,6 +27,6 @@ FROM (
         AND (date1 > '$DATE1' OR date1 IS NULL)
     GROUP BY a_id
 ) AS e ON b.a_id = e.a_id
-JOIN addresses ON e.a_id = addresses.a_id
+INNER JOIN addresses ON e.a_id = addresses.a_id
 ORDER BY profit DESC
 LIMIT $NUM;
