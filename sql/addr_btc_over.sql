@@ -1,14 +1,14 @@
 -- {
--- "name": "buratinos_over_btc",
--- "note": "Get addresses with profit over [num] BTC on [todate].",
+-- "name": "buratinos_btc_over",
+-- "note": "Get addresses with balance over [num] BTC on [todate].",
 -- "required": ["DATE1", "NUM"],
 -- "header": ["a_id", "address", "profit, ₿"],
 -- "output": "columns name:typ (int,str,Decimal())"
 -- }
 SELECT
-  txo.a_id AS a_id,
+    txo.a_id AS a_id,
     addresses.a_list as addr,
-  itogo
+    itogo
 FROM (
     SELECT a_id, sum(satoshi) as itogo
     from txo_real
