@@ -25,7 +25,12 @@ exim_d() {
   | sed -e 's/^/INSERT INTO data (a_id, date0, date1, satoshi) VALUES(/' -e 's/$/);/' -e 's/,,/,NULL,/'
 }
 
+TIMEFORMAT=%R
+echo "0. prepare db"
 mk_db | sqlite3 $DBPATH
-exim_a | sqlite3 $DBPATH
-exim_d | sqlite3 $DBPATH
-mk_idx | sqlite3 $DBPATH
+echo "1. exim addr"
+time exim_a | sqlite3 $DBPATH
+echo "2. exim data"
+time exim_d | sqlite3 $DBPATH
+echo "3. idx all"
+time mk_idx | sqlite3 $DBPATH
