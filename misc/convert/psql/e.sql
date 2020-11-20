@@ -1,4 +1,4 @@
-INSERT INTO txo (a_id, date0, date1, satoshi)
+COPY (
 SELECT
 	data.a_id AS a_id,
 	DATE(bk0.b_time) AS date0,
@@ -26,4 +26,5 @@ WHERE
 GROUP BY
 	date0, date1, data.a_id
 ORDER BY
-	date0, date1, data.a_id;
+	date0, date1, data.a_id
+) TO STDOUT WITH (FORMAT text);

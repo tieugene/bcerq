@@ -5,3 +5,8 @@ CREATE TABLE IF NOT EXISTS txo (
 	date1 DATE NULL,
 	satoshi BIGINT NOT NULL
 );
+DROP INDEX IF EXISTS idx_txo_addr;
+DROP INDEX IF EXISTS idx_txo_date0;
+DROP INDEX IF EXISTS idx_txo_date1;
+DROP INDEX IF EXISTS idx_txo_satoshi;
+DELETE FROM txo;
