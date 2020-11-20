@@ -1,16 +1,14 @@
 -- {
--- "name": "buratinos_cent_max",
--- "note": "Get top [num] addresses with max profit (%) in period [fromdate]..[todate].",
+-- "name": "buratinos_btc_min",
+-- "note": "Get top [num] addresses with max lost (BTC) in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "NUM"],
--- "header": ["a_id", "address", "profit, %", "balance0", "balance1"],
--- "output": "columns name:typ"
+-- "header": ["a_id", "address", "loss, ㋛"],
+-- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT
-    b.a_id AS a_id,
+    e.a_id AS a_id,
     addresses.a_list AS addr,
-    ROUND(e.itogo/b.itogo-1, 0) AS profit,
-    b.itogo AS itogo0,
-    e.itogo AS itogo1
+    COALESCE(e.itogo, 0)-b.itogo AS profit
 FROM (
     SELECT a_id, SUM(satoshi) AS itogo
     FROM txo_real
@@ -18,8 +16,7 @@ FROM (
         (date0 < '2012-01-01')
         AND (date1 >= '2012-01-01' OR date1 IS NULL)
     GROUP BY a_id
-    HAVING SUM(satoshi) > 0
-) AS b INNER JOIN (
+) AS b LEFT JOIN (
     SELECT a_id, SUM(satoshi) AS itogo
     FROM txo_real
     WHERE
@@ -28,5 +25,5 @@ FROM (
     GROUP BY a_id
 ) AS e ON b.a_id = e.a_id
 INNER JOIN addresses ON e.a_id = addresses.a_id
-ORDER BY profit DESC
+ORDER BY profit ASC, a_id ASC
 LIMIT 50;

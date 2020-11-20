@@ -1,8 +1,5 @@
-#!/bin/sh
 DBPATH=tmp.sqlite3
-PSQLHOST="localhost"
-BTCDB=btcdb
-BTCUSER=btcuser
+source ~/.bcerqrc
 
 # 1. mk db
 mk_db() {
@@ -15,13 +12,13 @@ mk_idx() {
 
 exim_a() {
   echo "DELETE FROM addr;"
-  psql -h $PSQLHOST -f 2_e_a.sql -t --no-align -F "," $BTCDB $BTCUSER \
+  psql -h $DBHOST -f 2_e_a.sql -t --no-align -F "," $DBNAME $DBUSER \
   | sed -e 's/^/INSERT INTO addr (id, name) VALUES(/' -e 's/$/);/'
 }
 
 exim_d() {
   echo "DELETE FROM data;"
-  psql -h $PSQLHOST -f 2_e_d.sql -t --no-align -F "," $BTCDB $BTCUSER \
+  psql -h $DBHOST -f 2_e_d.sql -t --no-align -F "," $DBNAME $DBUSER \
   | sed -e 's/^/INSERT INTO data (a_id, date0, date1, satoshi) VALUES(/' -e 's/$/);/' -e 's/,,/,NULL,/'
 }
 
