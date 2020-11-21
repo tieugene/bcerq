@@ -6,10 +6,10 @@ do_query() {
 
 TIMEFORMAT=%R
 echo -n "0. prepare db: "
-time do_query c.sql
+time do_query c_d.sql
 echo -n "2. export data: "
-time do_query e.sql | pigz -c > data.txt.gz
+time do_query e_d.sql | pigz -c > data.txt.gz
 echo -n "3. import data: "
 time unpigz -c data.txt.gz | psql -h $DBHOST -c "COPY txo FROM STDIN" -q $DBNAME $DBUSER
 echo -n "4. idx all: "
-time do_query i.sql
+time do_query i_d.sql

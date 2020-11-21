@@ -105,6 +105,19 @@ def init_templates():
     # print(TplFactory)
 
 
+def load_alist(f):
+    """
+    Load Opts.alist from opened file
+    :param f: File to load
+    :return: None
+    """
+    # Opts.alist = [s.rstrip() for s in f.readlines()]
+    Opts.alist = list()
+    for line in f.readlines():
+        if line[0].isdigit():
+            Opts.alist.append(line.split()[0])
+
+
 def do_this(cmd: str):
     # 1. load template
     # print(Opts.date0)
@@ -174,8 +187,7 @@ def main():
         else:
             f = open(args.alist, "rt")
         with f:
-            Opts.alist = [s.rstrip() for s in f.readlines()]
-            # print(Opts.alist)
+            load_alist(f)
     # 2. templates/commands
     init_templates()
     if args.cmd == "list":

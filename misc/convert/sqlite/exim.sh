@@ -3,22 +3,22 @@ source ~/.bcerqrc
 
 # 1. mk db
 mk_db() {
-  cat 1_c_a.sql 1_c_d.sql
+  cat c_a.sql c_d.sql
 }
 
 mk_idx() {
-  cat 3_i_a.sql 3_i_d.sql
+  cat i_a.sql i_d.sql
 }
 
 exim_a() {
   echo "DELETE FROM addr;"
-  psql -h $DBHOST -f 2_e_a.sql -t --no-align -F "," $DBNAME $DBUSER \
+  psql -h $DBHOST -f e_a.sql -t --no-align -F "," $DBNAME $DBUSER \
   | sed -e 's/^/INSERT INTO addr (id, name) VALUES(/' -e 's/$/);/'
 }
 
 exim_d() {
   echo "DELETE FROM data;"
-  psql -h $DBHOST -f 2_e_d.sql -t --no-align -F "," $DBNAME $DBUSER \
+  psql -h $DBHOST -f e_d.sql -t --no-align -F "," $DBNAME $DBUSER \
   | sed -e 's/^/INSERT INTO data (a_id, date0, date1, satoshi) VALUES(/' -e 's/$/);/' -e 's/,,/,NULL,/'
 }
 
