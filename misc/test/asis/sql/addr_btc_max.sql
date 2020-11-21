@@ -1,11 +1,3 @@
--- {
--- "name": "buratinos_btc_max",
--- "note": "Get top [num] addresses with max profit (BTC) in period [fromdate]..[todate].",
--- "required": ["DATE0", "DATE1", "NUM"],
--- "header": ["a_id", "address", "profit, ㋛"],
--- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
--- }
-BEGIN TRANSACTION;
 SELECT
     e.a_id AS a_id,
     addresses.a_list AS addr,
@@ -28,4 +20,3 @@ FROM (
 INNER JOIN addresses ON e.a_id = addresses.a_id
 ORDER BY profit DESC, a_id ASC
 LIMIT 50;
-COMMIT;

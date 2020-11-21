@@ -11,7 +11,7 @@ SELECT
     itogo
 FROM (
     SELECT a_id, sum(satoshi) as itogo
-    from txo_real
+    FROM txo
     WHERE
         (date0 < '$DATE1')
         AND (date1 >= '$DATE1' OR date1 IS NULL)

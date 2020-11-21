@@ -1,11 +1,3 @@
--- {
--- "name": "buratinos_btc_over",
--- "note": "Get addresses with balance over [num] BTC on [todate].",
--- "required": ["DATE1", "NUM"],
--- "header": ["a_id", "address", "profit, ㋛"],
--- "output": "columns name:typ (int,str,Decimal())"
--- }
-BEGIN TRANSACTION;
 SELECT
     txo.a_id AS a_id,
     addresses.a_list as addr,
@@ -20,4 +12,3 @@ FROM (
     HAVING SUM(satoshi) >= 1000000000000
 ) AS txo INNER JOIN addresses ON txo.a_id = addresses.a_id
 ORDER BY itogo DESC, a_id ASC;
-COMMIT;

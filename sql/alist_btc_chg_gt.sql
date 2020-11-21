@@ -18,7 +18,7 @@ FROM (
 ) AS a
 INNER JOIN (
     SELECT a_id, SUM(satoshi) AS itogo
-    FROM txo_real
+    FROM txo
     WHERE
         (date0 < '$DATE0')
         AND (date1 >= '$DATE0' OR date1 IS NULL)
@@ -27,7 +27,7 @@ INNER JOIN (
 ) AS b ON a.a_id = b.a_id
 INNER JOIN (
     SELECT a_id, SUM(satoshi) AS itogo
-    FROM txo_real
+    FROM txo
     WHERE
         (date0 <= '$DATE1')
         AND (date1 > '$DATE1' OR date1 IS NULL)

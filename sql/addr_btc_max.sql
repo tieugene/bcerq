@@ -11,14 +11,14 @@ SELECT
     e.itogo-COALESCE(b.itogo, 0) AS profit
 FROM (
     SELECT a_id, SUM(satoshi) AS itogo
-    FROM txo_real
+    FROM txo
     WHERE
         (date0 < '$DATE0')
         AND (date1 >= '$DATE0' OR date1 IS NULL)
     GROUP BY a_id
 ) AS b RIGHT JOIN (
     SELECT a_id, SUM(satoshi) AS itogo
-    FROM txo_real
+    FROM txo
     WHERE
         (date0 <= '$DATE1')
         AND (date1 > '$DATE1' OR date1 IS NULL)

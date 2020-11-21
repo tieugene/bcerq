@@ -1,11 +1,3 @@
--- {
--- "name": "buratinos_cent_max",
--- "note": "Get top [num] addresses with max profit (%) in period [fromdate]..[todate].",
--- "required": ["DATE0", "DATE1", "NUM"],
--- "header": ["a_id", "address", "profit, %", "balance0", "balance1"],
--- "output": "columns name:typ"
--- }
-BEGIN TRANSACTION;
 SELECT
     b.a_id AS a_id,
     addresses.a_list AS addr,
@@ -31,4 +23,3 @@ FROM (
 INNER JOIN addresses ON e.a_id = addresses.a_id
 ORDER BY profit DESC, a_id ASC
 LIMIT 50;
-COMMIT;
