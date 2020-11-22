@@ -4,18 +4,6 @@ TODO: common export
 
 Convert source PostgreSQL DB into other.
 
-Dest DB is:
-
-| Table | Field  | Type  | !Null | Contraint |
-|-------|--------|-------|-----|-----------|
-| Addr | id      | Int32 |  +  | Uniq |
-|      | name    | str   |  +  | Uniq |
-| Data | a_id    | IDREF |  +  | addr.id |
-|      | date0   | DATE  |  +  | |
-|      | date1   | DATE  |  -  | |
-|      | satoshi | Int64 |  +  | > 0  |
-| _PK_ | a_id+date0+date1|  +  | Uniq |
-
 Idea: export == COPY(SELECT) to stdout | &hellip;
 
 Test:

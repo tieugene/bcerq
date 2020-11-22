@@ -1,7 +1,7 @@
 # TODO
 
-- Documenting:
-  - prepare DB: pgsql/sqlite/mysql
+- [ ] Documenting:
+  - [ ] prepare DB: pgsql/sqlite/mysql
   - import
   - convert
   - bcerq
