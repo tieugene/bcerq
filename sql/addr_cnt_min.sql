@@ -2,15 +2,15 @@
 -- "name": "addr_cnt_min",
 -- "note": "Top [num] addresses by lost (%) in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "NUM"],
--- "header": ["a_id", "address", "loss, %", "balance0", "balance1"],
+-- "header": ["a_id", "address", "∑₀, ㋛", "∑₁, ㋛", "loss, %"],
 -- "output": "columns name:typ"
 -- }
 SELECT
     b.a_id AS a_id,
     addresses.a_list AS addr,
-    ROUND(b.itogo/e.itogo-1, 0) AS profit,
     b.itogo AS itogo0,
-    e.itogo AS itogo1
+    e.itogo AS itogo1,
+    ROUND((1-b.itogo/e.itogo)*100, 0) AS profit
 FROM (
     SELECT a_id, SUM(satoshi) AS itogo
     FROM txo
@@ -28,5 +28,5 @@ FROM (
     HAVING SUM(satoshi) > 0
 ) AS e ON b.a_id = e.a_id
 INNER JOIN addresses ON e.a_id = addresses.a_id
-ORDER BY profit DESC
+ORDER BY profit ASC
 LIMIT $NUM;

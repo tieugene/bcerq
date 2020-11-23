@@ -2,15 +2,15 @@
 -- "name": "alist_btc_gt",
 -- "note": "Balance change of addresses [alist] in period [fromdate]..[todate] which gain > [num] ₿.",
 -- "required": ["DATE0", "DATE1", "NUM", "ALIST"],
--- "header": ["a_id", "address", "Δ∑, ₿", "∑₀, ₿", "∑₁, ₿"],
+-- "header": ["a_id", "address", "∑₀, ₿", "∑₁, ₿", "Δ∑, ₿"],
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT
     a.a_id AS a_id,
     a.a_list AS addr,
-    COALESCE(e.itogo, 0) - COALESCE(b.itogo, 0) AS profit_b,
     b.itogo AS itogo0,
-    e.itogo AS itogo1
+    e.itogo AS itogo1,
+    COALESCE(e.itogo, 0) - COALESCE(b.itogo, 0) AS profit_b
 FROM (
     SELECT a_id, a_list
     FROM addresses
@@ -34,4 +34,4 @@ INNER JOIN (
     HAVING SUM(satoshi) > 0
 ) AS e ON a.a_id = e.a_id
 WHERE (e.itogo - COALESCE(b.itogo, 0)) > $NUM
-ORDER BY profit_c DESC;
+ORDER BY profit_b DESC;

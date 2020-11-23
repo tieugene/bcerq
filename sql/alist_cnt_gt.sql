@@ -2,16 +2,16 @@
 -- "name": "alist_cnt_gt",
 -- "note": "Balance change of addresses [alist] in period [fromdate]..[todate] which gain > [num] %.",
 -- "required": ["DATE0", "DATE1", "NUM", "ALIST"],
--- "header": ["a_id", "address", "Δ∑, ₿", "Δ∑, %", "∑₀, ₿", "∑₁, ₿"],
+-- "header": ["a_id", "address", "∑₀, ₿", "∑₁, ₿", "Δ∑, ₿", "Δ∑, %"],
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT
     a.a_id AS a_id,
     a.a_list AS addr,
-    COALESCE(e.itogo, 0) - COALESCE(b.itogo, 0) AS profit_b,
-    ROUND((e.itogo/b.itogo - 1) * 100, 0) AS profit_c,
     b.itogo AS itogo0,
-    e.itogo AS itogo1
+    e.itogo AS itogo1,
+    COALESCE(e.itogo, 0) - COALESCE(b.itogo, 0) AS profit_b,
+    ROUND((e.itogo/b.itogo - 1) * 100, 0) AS profit_c
 FROM (
     SELECT a_id, a_list
     FROM addresses

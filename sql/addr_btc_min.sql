@@ -2,12 +2,14 @@
 -- "name": "addr_btc_min",
 -- "note": "Top [num] addresses by lost (₿) in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "NUM"],
--- "header": ["a_id", "address", "loss, ㋛"],
+-- "header": ["a_id", "address", "∑₀, ㋛", "∑₁, ㋛", "loss, ㋛"],
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT
     e.a_id AS a_id,
     addresses.a_list AS addr,
+    b.itogo AS itogo0,
+    e.itogo AS itogo1,
     COALESCE(e.itogo, 0)-b.itogo AS profit
 FROM (
     SELECT a_id, SUM(satoshi) AS itogo

@@ -2,15 +2,15 @@
 -- "name": "addr_cnt_max",
 -- "note": "Top [num] addresses by gain (%) in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "NUM"],
--- "header": ["a_id", "address", "gain, %", "balance0", "balance1"],
+-- "header": ["a_id", "address", "∑₀, ㋛", "∑₁, ㋛", "gain, %"],
 -- "output": "columns name:typ"
 -- }
 SELECT
     b.a_id AS a_id,
     addresses.a_list AS addr,
-    ROUND(e.itogo/b.itogo-1, 0) AS profit,
     b.itogo AS itogo0,
-    e.itogo AS itogo1
+    e.itogo AS itogo1,
+    ROUND((e.itogo/b.itogo-1)*100, 0) AS profit
 FROM (
     SELECT a_id, SUM(satoshi) AS itogo
     FROM txo
