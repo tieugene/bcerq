@@ -1,6 +1,6 @@
 -- {
 -- "name": "addr_gt",
--- "note": "Addresses with balance > [num] ₿ on [todate].",
+-- "note": "     Addresses with balance > [num] ₿ on [todate].",
 -- "required": ["DATE1", "NUM"],
 -- "header": ["a_id", "address", "profit, ㋛"],
 -- "output": "columns name:typ (int,str,Decimal())"

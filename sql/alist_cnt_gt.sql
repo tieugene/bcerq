@@ -1,6 +1,6 @@
 -- {
--- "name": "alist_cent_gt",
--- "note": "Balance change (₿, %) of addresses [alist] in period [fromdate]..[todate] which gain > [num] %.",
+-- "name": "alist_cnt_gt",
+-- "note": "Balance change of addresses [alist] in period [fromdate]..[todate] which gain > [num] %.",
 -- "required": ["DATE0", "DATE1", "NUM", "ALIST"],
 -- "header": ["a_id", "address", "Δ∑, ₿", "Δ∑, %", "∑₀, ₿", "∑₁, ₿"],
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
