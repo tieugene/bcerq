@@ -1,40 +1,59 @@
 # DB
 Maintaining database.
 
-## Full
+## Schema
 
-Old schema:
+Legend:
 
-| Table | Field | Type | Len | Constraint |
-|-------|-------|------|-----|------------|
-|asdfghj||
-|DSFGsdfg|||
-|qegfsdgasd||||
-| mytable ||||||
-| myfield |
+- !Nl - NOT NULL
+- U - Uniq (indexed?, not null?)
+- P - Primary key (Uniq, not null?)
 
-New schema:
+Full:
 
-## Short
+| Name   | Type      | Idx | !Nl | Note | TODO |
+|--------|-----------|-----|-----|------|------|
+| **_blocks_** ||||| **_bk_** |
+| b_id   | INT32     | _P_ | +   | | id |
+| b_time | TIMESTAMP | +   | +   | | ?:U |
+| **_transactions_** ||||| **_tx_** |
+| t_id   | INT       | _P_ | +   | | id |
+| b_id   | INT       | +   | +   | a.id | |
+| hash   | STR[64]   | U   | +   | | |
+| **_addresses_** ||||| **_addr_** |
+| a_id   | BIGINT    | _P_ | +   | | id:int |
+| a_list | JSONB     | U   | +   | | name |
+| n      | INT       | -   | +   | | del |
+| **_data_** |
+| t\_out_id | INT    | _p_ | +   | | t_id |
+| t\_out_n | INT     | _p_ | +   | | n |
+| t\_in_id | INT     | +   | -   | | t\_id_in |
+| a_id   | BIGINT    | +   | -   | | |
+| satoshi | BIGINT   | +   | +   | | money |
 
-| Table | Field  | Type  | !Null | Contraint |
-|-------|--------|-------|-----|-----------|
-| Addr | id      | Int32 |  +  | Uniq |
-|      | name    | str   |  +  | Uniq |
-| Data | a_id    | IDREF |  +  | addr.id |
-|      | date0   | DATE  |  +  | |
-|      | date1   | DATE  |  -  | |
-|      | satoshi | Int64 |  +  | > 0  |
-| _PK_ | a_id+date0+date1|  +  | Uniq |
+Short:
 
-## Misc
-- reindex PKs etc:
+| Name   | Type  | Idx | !Nl | Note |
+|--------|-------|-----|-----|------|
+| **_addr_** |
+| id      | Int32 | _P_ | +   | |
+| name    | str   | U   | +   | |
+| **_data_** |
+| a_id    | IDREF |  +  | + | P/U.1 |
+| date0   | DATE  |  +  | + | P/U.2 |
+| date1   | DATE  |  +  | - | P/U.3 |
+| satoshi | Int64 |  +  | + | > 0 |
 
-	```
-	for t in blocks transactions addresses data; do psql -q -c "REINDEX TABLE $t;" $BTCDB $BTCUSER; done
-	```
+## Actions
 
-- updates:
+1. create tables
+1. create data
 
 	```
 	(echo "BEGIN;"; unpigz -c 0xx.vin.gz; echo "COMMIT;") | psql -q $BTCDB $BTCUSER
+	```
+1. create indices
+1. drop indices
+1. drop data
+1. drop tables
+1. vacuum

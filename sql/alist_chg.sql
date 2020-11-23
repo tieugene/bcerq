@@ -1,15 +1,15 @@
 -- {
--- "name": "alist_btc_chg",
--- "note": "Get balance change (₿) of addresses in [list] in period [fromdate]..[todate].",
+-- "name": "alist_chg",
+-- "note": "Balance change (₿, %) of addresses [alist] in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "ALIST"],
--- "header": ["a_id", "address", "Profit, ₿", "profit, %", "Start ∑, ₿", "End ∑, ₿"],
+-- "header": ["a_id", "address", "Δ∑, ₿", "Δ∑, %", "∑₀, ₿", "∑₁, ₿"],
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT
     a.a_id AS a_id,
     a.a_list AS addr,
-    COALESCE(e.itogo, 0) - COALESCE(b.itogo, 0) AS profit,
-    CASE WHEN b.itogo IS NULL THEN NULL ELSE e.itogo/b.itogo END,
+    COALESCE(e.itogo, 0) - COALESCE(b.itogo, 0) AS profit_b,
+    CASE WHEN b.itogo IS NULL THEN NULL ELSE e.itogo/b.itogo END AS profit_c,
     COALESCE(b.itogo, 0) AS itogo0,
     COALESCE(e.itogo, 0) AS itogo1
 FROM (

@@ -1,8 +1,8 @@
 -- {
--- "name": "buratinos_btc_max",
--- "note": "Get top [num] addresses with max profit (BTC) in period [fromdate]..[todate].",
+-- "name": "addr_btc_max",
+-- "note": "Top [num] addresses by gain (₿) in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "NUM"],
--- "header": ["a_id", "address", "profit, ㋛"],
+-- "header": ["a_id", "address", "gain, ㋛"],
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT

@@ -1,8 +1,8 @@
 -- {
--- "name": "buratinos_cent_max",
--- "note": "Get top [num] addresses with max profit (%) in period [fromdate]..[todate].",
+-- "name": "addr_cent_max",
+-- "note": "Top [num] addresses by gain (%) in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "NUM"],
--- "header": ["a_id", "address", "profit, %", "balance0", "balance1"],
+-- "header": ["a_id", "address", "gain, %", "balance0", "balance1"],
 -- "output": "columns name:typ"
 -- }
 SELECT

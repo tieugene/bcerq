@@ -1,14 +1,15 @@
 -- {
--- "name": "alist_btc_chg_gt",
--- "note": "Get balance change (₿) of addresses in [list] in period [fromdate]..[todate] which increased > [num] %.",
+-- "name": "alist_cent_gt",
+-- "note": "Balance change (₿, %) of addresses [alist] in period [fromdate]..[todate] which gain > [num] %.",
 -- "required": ["DATE0", "DATE1", "NUM", "ALIST"],
--- "header": ["a_id", "address", "profit, %", "∑0, ₿", "∑1, ₿"],
+-- "header": ["a_id", "address", "Δ∑, ₿", "Δ∑, %", "∑₀, ₿", "∑₁, ₿"],
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT
     a.a_id AS a_id,
     a.a_list AS addr,
-    ROUND((e.itogo/b.itogo - 1) * 100, 0) AS profit,
+    COALESCE(e.itogo, 0) - COALESCE(b.itogo, 0) AS profit_b,
+    ROUND((e.itogo/b.itogo - 1) * 100, 0) AS profit_c,
     b.itogo AS itogo0,
     e.itogo AS itogo1
 FROM (
@@ -35,4 +36,4 @@ INNER JOIN (
     HAVING SUM(satoshi) > 0
 ) AS e ON a.a_id = e.a_id
 WHERE (e.itogo/b.itogo-1)*100 > $NUM
-ORDER BY profit DESC;
+ORDER BY profit_c DESC;

@@ -1,6 +1,6 @@
 -- {
--- "name": "buratinos_cent_min",
--- "note": "Get top [num] addresses with max lost (%) in period [fromdate]..[todate].",
+-- "name": "addr_cent_min",
+-- "note": "Top [num] addresses by lost (%) in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "NUM"],
 -- "header": ["a_id", "address", "loss, %", "balance0", "balance1"],
 -- "output": "columns name:typ"
