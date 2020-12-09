@@ -1,10 +1,19 @@
-# CONVERT
+# Convert
 
-TODO: common export
+Convert source DB into other.
 
-Convert source PostgreSQL DB into other.
+DB engines:
 
-Idea: export == COPY(SELECT) to stdout | &hellip;
+- MySQL
+- PostgreSQL
+
+Comvertions:
+
+- full &rArr; midi
+- full &rArr; tiny
+- midi &rArr; tiny
+
+Idea: export == COPY(SELECT &hellip;) to stdout | &hellip;
 
 Test:
 

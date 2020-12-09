@@ -1,0 +1,2 @@
+-- f.bk
+DROP TABLE IF EXISTS bk;

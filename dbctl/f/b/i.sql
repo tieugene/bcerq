@@ -1,0 +1,3 @@
+-- bk
+ALTER TABLE bk ADD CONSTRAINT bk_pkey PRIMARY KEY (id);
+ALTER TABLE bk ADD CONSTRAINT bk_datime_key UNIQUE (datime);

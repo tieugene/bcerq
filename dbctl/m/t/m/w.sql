@@ -1,0 +1,2 @@
+-- m.tx.m
+OPTIMIZE LOCAL TABLE tx;

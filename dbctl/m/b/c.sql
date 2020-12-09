@@ -1,0 +1,5 @@
+-- m.bk
+CREATE TABLE IF NOT EXISTS bk (
+	id INT NOT NULL,
+	datime DATE NOT NULL
+);

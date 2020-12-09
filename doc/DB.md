@@ -1,59 +1,129 @@
 # DB
 Maintaining database.
 
-## Schema
+Used DB backends - PostgreSQL or MariaDB/MySQL.
+
+## 1. Usage
+
+`bce_db.py` script uses options as from config as from command line as from backend-specific configs: cfg (~/.bcerq.ini) &rArr; CLI &rArr; _backend.cfg_ (.my.cnf/.pgpass)
+
+## 2. Scheme
 
 Legend:
 
-- !Nl - NOT NULL
-- U - Uniq (indexed?, not null?)
-- P - Primary key (Uniq, not null?)
+- ∅ - NOT NULL
+- U - Uniq (indexed, null)
+- P - Primary key (Uniq, !null)
 
-Full:
+### Full
 
-| Name   | Type      | Idx | !Nl | Note | TODO |
-|--------|-----------|-----|-----|------|------|
-| **_blocks_** ||||| **_bk_** |
-| b_id   | INT32     | _P_ | +   | | id |
-| b_time | TIMESTAMP | +   | +   | | ?:U |
-| **_transactions_** ||||| **_tx_** |
-| t_id   | INT       | _P_ | +   | | id |
-| b_id   | INT       | +   | +   | a.id | |
-| hash   | STR[64]   | U   | +   | | |
-| **_addresses_** ||||| **_addr_** |
-| a_id   | BIGINT    | _P_ | +   | | id:int |
-| a_list | JSONB     | U   | +   | | name |
-| n      | INT       | -   | +   | | del |
-| **_data_** |
-| t\_out_id | INT    | _p_ | +   | | t_id |
-| t\_out_n | INT     | _p_ | +   | | n |
-| t\_in_id | INT     | +   | -   | | t\_id_in |
-| a_id   | BIGINT    | +   | -   | | |
-| satoshi | BIGINT   | +   | +   | | money |
+Whole usual blockchain info.
 
-Short:
-
-| Name   | Type  | Idx | !Nl | Note |
-|--------|-------|-----|-----|------|
+| Name     | Type      | Idx | ∅   | Note |
+|----------|-----------|-----|-----|------|
 | **_addr_** |
-| id      | Int32 | _P_ | +   | |
-| name    | str   | U   | +   | |
-| **_data_** |
-| a_id    | IDREF |  +  | + | P/U.1 |
-| date0   | DATE  |  +  | + | P/U.2 |
-| date1   | DATE  |  +  | - | P/U.3 |
-| satoshi | Int64 |  +  | + | > 0 |
+| id       | INT       | _P_ | +   |
+| name     | JSONB     | U   | +   |
+| **_bk_** |
+| id       | INT       | _P_ | +   |
+| datime   | TIMESTAMP | U   | +   |
+| **_tx_** |
+| id       | INT       | _P_ | +   |
+| hash     | CHAR(64)  | U   | +   |
+| b_id     | INT       | +   | +   | bk.id |
+| **_vout_** |
+| t_id     | INT       | _p_ | +   | tx.id |
+| n        | INT       | _p_ | +   |
+| t\_id_in | INT       | +   | -   | tx.id |
+| a_id     | INT       | +   | -   | addr.id |
+| money    | BIGINT    | +   | +   |
 
-## Actions
+### Midi
 
-1. create tables
-1. create data
+All data required for datum queries and updating them further.
 
-	```
-	(echo "BEGIN;"; unpigz -c 0xx.vin.gz; echo "COMMIT;") | psql -q $BTCDB $BTCUSER
-	```
+TODO: what to do with multisig and vout.addr is null?
+
+| Name     | Type      | Idx | ∅   | Note |
+|----------|-----------|-----|-----|------|
+| **_addr_** |
+| id       | INT       | _P_ | +   |
+| name     | VCHAR(64)⚠| U   | +   |
+| **_bk_** |
+| id       | INT       | _P_ | +   |
+| datime   | DATE⚠     | +⚠  | +   |
+| **_tx_** |
+| id       | INT       | _P_ | +   |
+| b_id     | INT       | +   | +   | bk.id |
+| **_vout_** |
+| t_id     | INT       | _p_ | +   | tx.id |
+| n        | INT       | _p_ | +   |
+| t\_id_in | INT       | +   | -   | tx.id |
+| a_id     | INT       | +   | ?⚠  | addr.id |
+| money    | BIGINT    | +   | +   |
+
+### Tiny
+
+Smallest tables for fastest queries.
+Cannot updatable with future data.
+
+| Name   | Type       | Idx | ∅ | Note |
+|--------|------------|-----|---|------|
+| **_addr_** |
+| id      | INT       | _P_ | + |
+| name    | VCHAR(64) |~~U~~| + |
+| **_vout_** |
+| a_id    | INT       |  +  | + | p.1 |
+| date0   | DATE      |  +  | + | p.2 |
+| date1   | DATE      |  +  | - | p.3 |
+| satoshi | BIGINT    |  +  | + | > 0 |
+
+## 2. Actions
+
+Ordinar workflow:
+Create tables &rArr; Import data &rArr; Indexing &rArr; Clean up.
+Import itself is not job of this tool (see [Import](Import.md)).
+
+1. create table (if not exists)
+1. ~~import data~~
 1. create indices
-1. drop indices
+1. drop indices (if exist)
 1. drop data
-1. drop tables
-1. vacuum
+1. drop tables (if exists)
+1. clean up
+
+Note: create/drop/unindex - if not exists; index/
+
+## 3. SQL
+
+Most of actions are carried out with SQL scripts in separate files.
+Some actions (drop data, drop tables) are SQL-dialect-independent and hardcoded into main script.
+Paths to sql scripts depend on scheme, table, SQL-dialect and action itself:
+
+_&lt;scheme&gt;_/_&lt;table&gt;_/[_&lt;backend&gt;_/]_&lt;action&gt;_.sql
+
+- Scheme:
+  - f[ull]
+  - m[idi]
+  - t[iny]
+- Table:
+  - a[ddress]
+  - b[lock]
+  - t[ransaction]
+  - v[out]
+- Backend:
+  - m[ariadb]
+  - p[ostgresql]
+- Action:
+  - c[reate]
+  - i[indexin]
+  - u[nindexing]
+
+Note: action runs in order: _&lt;table&gt;_/_&lt;action&gt;_.sql (if exists) &rArr; _&lt;table&gt;_/_&lt;backend&gt;_/_&lt;action&gt;_.sql (if exists)
+
+## TODO
+
+- move to external SQLs:
+  - Import:
+    - p: COPY table FROM STDIN
+    - m: LOAD ... / maradb-import

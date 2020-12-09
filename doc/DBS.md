@@ -14,51 +14,75 @@ Prerequisitions:
 - DB password: _$BTCPASS_
 - DB location: /mnt/shares/_dbsname_/
 
+**TODO**: [read-only account](https://habr.com/ru/post/531090/)
+
 ## 1. PostgrSQL
 
-### 1.1. Install
+### 1.1. Install (client and server)
 
-```
-sudo dnf install postgresql postgresql-server
-sudo postgresql-setup --initdb
-```
+```sudo dnf install postgresql-server```
 
-### 1.2. Config
+_Note: `postgresql` installing by dependencies_.
 
-/var/lib/data/pg_hba.conf:
+### 1.2. Config server
+
+- Init data:
+
+```sudo -u postgres postgresql-setup --initdb```
+
+- /var/lib/data/pg_hba.conf:
 
 ```diff
+ # "local" is for Unix domain socket connections only
 -local all all                peer
 +local all all                trust
+ # IPv4 local connections:
 -host  all all 127.0.0.1/32   ident
 +host  all all 127.0.0.1/32   md5
--host  all all ::1/128        ident
-+# if you want LAN access
++# IPv4 LAN connections:
 +host  all all 192.168.0.0/24 md5
++# or IPv4 LAN/WAN connections:
++# host  all all 0.0.0.0/0 md5
+ # IPv6 local connections:
+-host  all all ::1/128        ident
 ```
 
-Data dirs (optionaly):
+- /var/lib/data/postresql.conf:
 
+```diff
+-#listen_addresses = 'localhost'
++listen_addresses = '*'
+-shared_buffers = 128MB
++shared_buffers = 8192MB #(1/4 RAM)
 ```
-sudo mkdir -m0700 /mnt/shares/pgsql
+
+
+- Move data to external storage (option):
+
+```bash
+sudo mkdir /mnt/shares/pgsql
 sudo chown postgres:postgres /mnt/shares/pgsql
 sudo mv /var/lib/pgsql/{data,backups} /mnt/shares/pgsql/
 sudo ln -s /mnt/shares/pgsql/data /var/lib/pgsql/data
 sudo ln -s /mnt/shares/pgsql/backups /var/lib/pgsql/backups
 ```
 
-### 1.3. Start
+### 1.3. Start server
 
-```
-sudo systemctl enable --now postgresql
-sudo -i -u postgres psql -c "\password <adminpassword>"
-```
+```sudo systemctl enable --now postgresql```
 
 #### _check:_
 
 ```telnet localhost 5432```
 
-### 1.4. Create DB
+### 1.4. Create user and DB
+
+```
+sudo -u postgres createuser -U postgres -w $BTCUSER -P $BTCPASS
+sudo -u postgres createdb -O "$BTCUSER" $BTCDB
+```
+
+or (long version):
 
 ```
 psql -U postgres
@@ -70,43 +94,27 @@ ALTER DATABASE $BTCDB OWNER TO $BTCUSER;
 \q
 ```
 
-or (not tested)
+### 1.5 Config client
 
-```
-sudo createuser -U postgres -w $BTCUSER
-sudo -u postgres createdb -O "$BTCUSER" $BTCDB
-```
+- ~/.pgpass:
+
+```localhost:5433:$BTCDB:$BTCUSER:$BTCPASS```
 
 #### _check:_
 
-```
+```bash
+pg_isready -d $BTCDB -U $BTCUSER
 psql $BTCDB $BTCUSER
 \q
 ```
 
-~/.pgpass:
+### 1.x. Misc
 
-```localhost:5433:$BTCDB:$BTCUSER:$BTCPASS```
+- Check databases and users:
 
-### 1.5. Misc
+```psql -U postgres -c "SELECT * FROM pg_user;SELECT * FROM pg_database;"```
 
-Check databases and users:
-
-```
-psql -U postgres [-W]
-SELECT * FROM pg_user;
-SELECT * FROM pg_database;
-```
-
-drop db:
-
-```
-sudo -i -u postgres psql
-dropdn $BTCDB
-dropuser $BTCUSER
-```
-
-RTFM:
+- RTFM:
 [1](https://linux-notes.org/ustanovka-postgresql-centos-red-hat-fedora/)
 [2](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04-ru)
 [3](http://r00ssyp.blogspot.com/2017/03/postgresql-9.html)
@@ -115,11 +123,104 @@ RTFM:
 
 ### 2.1. Install
 
+```sudo dnf install mariadb-server```
+
+_Note: `mariadb ` installing by dependencies_.
+
 ### 2.2. Config
 
-### 2.3. Start
+- Create extra data dir:
 
-### 2.4. Create DB
+```
+mkdir /mnt/shares/mysql
+chown mysql:mysql /mnt/shares/mysql
+```
+
+/etc/my.cnf.d/mariadb-server.cnf:
+
+```diff
+ [mysqld]
+-datadir=/var/lib/mysql
++datadir=/mnt/shares/mysql
+```
+
+TODO: default-storage-engine = MyISAM
+TODO: enable LAN/WAN access
+
+### 2.3. Start server
+
+```sudo systemctl enable --now mariadb```
+
+#### _check_:
+
+````telnet localhost 3306```
+
+### 2.4. Create user and DB
+
+```
+sudo -u mysql mysql
+# or 'sudo mysql -u <root> -p`
+CREATE DATABASE $BTCDB CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE USER $BTCUSER IDENTIFIED BY '$BTCPASS';
+GRANT ALL PRIVILEGES ON $BTCDB.* TO $BTCUSER;
+CREATE USER $BTCUSER@localhost IDENTIFIED BY '$BTCPASS';
+GRANT ALL PRIVILEGES ON $BTCDB.* TO $BTCUSER@localhost;
+FLUSH PRIVILEGES;
+```
+
+#### _check_:
+
+```mysql [-h <ext_ip> -u $BTCUSER -p$BTCPASS $BTCDB```
+
+### 2.5 Config client
+
+- ~/.my.cnf:
+
+```
+[client]
+user = $BTCUSER
+password = $BTCPASS
+host = $BTCHOST
+```
+
+#### _check:_
+
+```bash
+mariadb-check $BTCDB
+mysql $BTCDB
+^D
+```
+
+### 2.x. misc
+
+```
+-- show all databases;
+SHOW DATABASES;
+-- show registered users
+SELECT User,Host,Password FROM mysql.user;
+-- show tables[ of current db]
+SHOW TABLES [FROM <db>];
+-- show privileges in db
+
+```
+
+[Example](https://computingforgeeks.com/how-to-install-glpi-on-centos-fedora/):
+
+```
+$ mysql -u root -p
+
+CREATE USER 'glpi'@'%' IDENTIFIED BY 'glpiDBSecret';
+GRANT USAGE ON *.* TO 'glpi'@'%' IDENTIFIED BY 'glpiDBSecret';
+CREATE DATABASE IF NOT EXISTS `glpi` ;
+GRANT ALL PRIVILEGES ON `glpi`.* TO 'glpi'@'%';
+FLUSH PRIVILEGES;
+EXIT
+```
+
+- mariadb-access
+- mariadb-check
+- mariadb-admin
+
 
 ## SQLite
 
