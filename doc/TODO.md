@@ -2,27 +2,26 @@
 
 ## - Next:
 
+- FIXME: mysql DROP PKEY
 - import (6):
-  - tiny: mysql/pgsql
   - midi: mysql/pgsql
-  - full: mysql/pgsql
+  - tiny: mysql/pgsql
 - convert:
-  - fm
-  - ft
-  - mt
+  - fm: mysql/pgsql
+  - ft: mysql/pgsql
+  - mt: mysql/pgsql
 - query:
   - tiny: mysql/pgsql
   - midi: mysql/pgsql
   - full: mysql/pgsql
 
 ## - Done:
-### -- 201207:
-- bcedb.tiny: mysql/pgsql
-### -- 201209:
-- bcedb.midi: mysql/pgsql
-- bcedb.full: mysql/pgsql
-- import.full.pgsql
-- bcerq.cmd.*
+- 201207 bcedb.tiny: mysql/pgsql
+- 201209 bcedb.midi: mysql/pgsql
+- 201209 bcedb.full: mysql/pgsql
+- 201209 import.full.pgsql
+- 201209 bcerq.cmd.*
+- 201209 import.full: mysql/pgsql
 
 ## - Misc
 
@@ -34,10 +33,10 @@
 - DB: full/midi/tiny x psql/mysql:
   - full: asis
   - midi:
-    - bk: date:DATE
-    - tx: ~~hash~~ (or no index hash)
-    - data: ~~!addr~~, ~~money=0~~
-    - addr: ~~multisig~~, name:!idx
+     - bk: date:DATE
+     - tx: ~~hash~~ (or no index hash)
+     - data: ~~!addr~~, ~~money=0~~
+     - addr: ~~multisig~~, name:!idx
   - tiny: addr+data
 - [ ] Documenting:
   - [ ] prepare DB: pgsql/sqlite/mysql

@@ -368,8 +368,6 @@ def main() -> int:
     else:   # job all tables
         t2job = list(tables)
         t2job.sort(reverse=(args.cmd.value[0] in 'utd'))
-        print(t2job)
-        return 1
     # 5. go
     retvalue = 0
     if db_engine.open():
