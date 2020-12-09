@@ -21,6 +21,8 @@
 ### -- 201209:
 - bcedb.midi: mysql/pgsql
 - bcedb.full: mysql/pgsql
+- import.full.pgsql
+- bcerq.cmd.*
 
 ## - Misc
 

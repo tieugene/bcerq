@@ -23,13 +23,14 @@ Whole usual blockchain info.
 |----------|-----------|-----|-----|------|
 | **_addr_** |
 | id       | INT       | _P_ | +   |
-| name     | JSONB     | U   | +   |
+| name     | JSON[B]   | U?  | +   |
+| qty      | INT       | +   | +   |
 | **_bk_** |
 | id       | INT       | _P_ | +   |
 | datime   | TIMESTAMP | U   | +   |
 | **_tx_** |
 | id       | INT       | _P_ | +   |
-| hash     | CHAR(64)  | U   | +   |
+| hash     | CHAR(64)  | U?  | +   |
 | b_id     | INT       | +   | +   | bk.id |
 | **_vout_** |
 | t_id     | INT       | _p_ | +   | tx.id |

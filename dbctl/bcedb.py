@@ -200,7 +200,8 @@ def load_cfg():
     if not os.path.exists(cfg_real_path):
         return
     config = configparser.ConfigParser()
-    config.read(cfg_real_path)
+    # config.read(cfg_real_path)
+    config.read_string("[{}]\n{}".format(CFG_MAIN_SECT, open(cfg_real_path, "rt").read()))
     config_default = config[CFG_MAIN_SECT]
     Opts.dbscheme = config_default.get('dbscheme')
     Opts.dbback = config_default.get('dbengine')
@@ -252,7 +253,7 @@ def prn_help(tables: set):
     ))
 
 
-def do_this(db_connector: object, cmd, table: str = None) -> int:
+def do_this(db_connector: object, cmd: Command, table: str = None) -> int:
     """
     Execute command
     :param db_connector: DB connector
@@ -362,10 +363,18 @@ def main() -> int:
         path_table = os.path.join(SCHEME_DIR, args.table)
         if not os.path.isdir(path_table):
             eprint("Path '{}' not exists or is not dir".format(path_table))
+            return 1
+        t2job = [args.table]
+    else:   # job all tables
+        t2job = list(tables)
+        t2job.sort(reverse=(args.cmd.value[0] in 'utd'))
+        print(t2job)
+        return 1
     # 5. go
-    retvalue = 1
+    retvalue = 0
     if db_engine.open():
-        retvalue = do_this(db_engine, args.cmd, args.table)
+        for t in t2job:
+            retvalue += do_this(db_engine, args.cmd, t)
         db_engine.close()
     return retvalue
 

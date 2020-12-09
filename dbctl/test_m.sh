@@ -1,3 +1,4 @@
+# TODO: add scheme option
 test_one() {
   echo "$1 $2"
   ./bcedb.py $1 $2
