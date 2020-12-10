@@ -3,9 +3,7 @@
 ## - Next:
 
 - FIXME: mysql DROP PKEY
-- import (6):
-  - midi: mysql/pgsql
-  - tiny: mysql/pgsql
+- impex.sh from multiple .txt.gz
 - convert:
   - fm: mysql/pgsql
   - ft: mysql/pgsql
@@ -14,6 +12,9 @@
   - tiny: mysql/pgsql
   - midi: mysql/pgsql
   - full: mysql/pgsql
+- import (6):
+  - midi: mysql/pgsql
+  - tiny: mysql/pgsql
 
 ## - Done:
 - 201207 bcedb.tiny: mysql/pgsql

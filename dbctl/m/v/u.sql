@@ -1,5 +1,4 @@
 -- m.vout
-ALTER TABLE vout DROP CONSTRAINT IF EXISTS vout_pkey;
 ALTER TABLE vout DROP CONSTRAINT IF EXISTS vout_t_id_fkey;
 ALTER TABLE vout DROP CONSTRAINT IF EXISTS vout_t_id_in_fkey;
 ALTER TABLE vout DROP CONSTRAINT IF EXISTS vout_a_id_fkey;

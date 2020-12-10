@@ -142,6 +142,9 @@ chown mysql:mysql /mnt/shares/mysql
  [mysqld]
 -datadir=/var/lib/mysql
 +datadir=/mnt/shares/mysql
++default_storage_engine=MyISAM
++# do 'SELECT @@sql_mode;' before next set
++sql_mode="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION,NO_AUTO_VALUE_ON_ZERO"
 ```
 
 TODO: default-storage-engine = MyISAM
