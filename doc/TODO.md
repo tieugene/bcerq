@@ -2,8 +2,6 @@
 
 ## - Next:
 
-- FIXME: mysql DROP PKEY
-- impex.sh from multiple .txt.gz
 - convert:
   - fm: mysql/pgsql
   - ft: mysql/pgsql
@@ -23,6 +21,8 @@
 - 201209 import.full.pgsql
 - 201209 bcerq.cmd.*
 - 201209 import.full: mysql/pgsql
+- 201210 FIXME: mysql DROP PKEY
+- 201210 impex.sh from multiple .txt.gz
 
 ## - Misc
 

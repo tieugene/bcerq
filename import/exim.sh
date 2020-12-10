@@ -1,6 +1,7 @@
 # Tool import bce2 output into SQL DB
 # Requires: psql/mariadb-import, pigz/unpigz
 # load/save: separate only, reload: +=z
+# TODO: multiple *.txt.gz ($@, shift)
 
 declare -A table
 table=([a]="addr" [b]="bk" [t]="tx" [v]="vout" [z]="addr,bk,tx,vout")
@@ -14,11 +15,11 @@ tmpdir="."
 cfgname=~/.bcerq.ini
 
 help() {
-  echo "Usage: $0 <cmd> <table> [<infile.gz>]
+  echo "Usage: $0 <cmd> <table> [<infile1.txt.gz> <infile2.txt.gz> ... ]
   cmd:
-    filter: filter input data to stdout
-    load:   load db from stdin
-    xmit:   transmit input data into db
+    ex:   filter input data to stdout
+    im:   load db from stdin
+    xmit: transmit input data into db
   table:
     a:  addr
     b:  bk
@@ -36,41 +37,45 @@ chk_table() {
   fi
 }
 
-filter() {
+ex() {
+  # $1: table character
+  # $2+: files
   # TODO: argc, src exists; multiple src
-  echo "Filtering '$1'" >> /dev/stderr
-  case "$1" in
+  echo "Export '$1'" >> /dev/stderr
+  TABLE=$1
+  shift 1
+  case "$TABLE" in
   a)
-    unpigz -c $2 | grep ^$1 | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
+    unpigz -c $@ | grep ^$TABLE | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
     ;;
   b)
-    unpigz -c $2 | grep ^$1 | gawk -F "\t" -v OFS="\t" '{print $2,$3}'
+    unpigz -c $@ | grep ^$TABLE | gawk -F "\t" -v OFS="\t" '{print $2,$3}'
     ;;
   t)
-    unpigz -c $2 | grep ^$1 | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
+    unpigz -c $@ | grep ^$TABLE | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
     ;;
   v)
     VOUTS=$tmpdir/o.txt.gz
     # 1. filter vouts (out_tx, out_n, satoshi, addr)
-    unpigz -c $2 | grep ^o | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4,$5}' | pigz -c > $VOUTS
+    unpigz -c $@ | grep ^o | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4,$5}' | pigz -c > $VOUTS
     # 2. filter vins (out_tx, out_n, in_tx)
     # 3. sort vins by vouts
     # 4. join vouts | vins
-    unpigz -c $2 | grep ^i | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}' | sort -n -k1 -k2 -T $tmpdir | python3 join_io.py $VOUTS
+    unpigz -c $@ | grep ^i | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}' | sort -n -k1 -k2 -T $tmpdir | python3 join_io.py $VOUTS
     # x. clean
     [ -f $VOUTS ] && rm -f $VOUTS
     ;;
   *)
-    echo "Bad filter '$1'" >> /dev/stderr
+    echo "Bad filter '$TABLE'" >> /dev/stderr
     ;;
   esac
 }
 
-load() {
+im() {
   # TODO: chk stdin is empty (https://unix.stackexchange.com/questions/33049/how-to-check-if-a-pipe-is-empty-and-run-a-command-on-the-data-if-it-isnt)
   t=${table[$1]}
   f=${fields[$1]}
-  echo "Loading table '$t'" >> /dev/stderr
+  echo "Import table '$t'" >> /dev/stderr
   case $dbengine in
   m)
     mariadb --local-infile=1 -h $dbhost -u $dbuser -p$dbpass $dbname -e "LOAD DATA LOCAL INFILE '/dev/stdin' INTO TABLE $t FIELDS TERMINATED BY '\t' ($f);"
@@ -85,15 +90,17 @@ load() {
 }
 
 xmit() {
-  if [ ! $1 = "z" ]; then
+  TABLE=$1
+  shift 1
+  if [ ! $TABLE = "z" ]; then
     echo "Transmit '$1'"
-    filter $1 $2 | load $1
+    ex $TABLE $@ | im $TABLE
   else
     echo "Transmit all"
-    filter a $2 | load a
-    filter b $2 | load b
-    filter t $2 | load t
-    filter v $2 | load v
+    ex a $@ | im a
+    ex b $@ | im b
+    ex t $@ | im t
+    ex v $@ | im v
   fi
 }
 
@@ -107,33 +114,36 @@ fi
 source $cfgname
 # 3. go
 chk_table $2
-case "$1" in
-  filter)
-    if [[ ! "abtv" =~ $2 ]]; then
-      echo "Bad <table> option '$2'. 'abtv' only"
+CMD=$1
+shift 1
+case "$CMD" in
+  ex)
+    if [[ ! "abtv" =~ $1 ]]; then
+      echo "Bad <table> option '$1'. 'abtv' only"
       help
     fi
-    if [ $# != "3" ]; then
-      echo "Requires source .tgz" >> /dev/stderr
+    if [ $# -lt "2" ]; then
+      echo "Requires <sources>.txt.tgz" >> /dev/stderr
       exit
     fi
-    filter  $2 $3
+    ex $@
     ;;
-  load)
-    if [[ ! "abtv" =~ $2 ]]; then
-      echo "Bad <table> option '$2'. 'abtv' only"
+  im)
+    if [[ ! "abtv" =~ $1 ]]; then
+      echo "Bad <table> option '$1'. 'abtv' only"
       help
     fi
-    load $2
+    im $1
     ;;
   xmit)
-    if [ $# != "3" ]; then
-      echo "Requires <source>.txt.gz" >> /dev/stderr
+    if [ $# -lt "2" ]; then
+      echo "Requires <sources>.txt.gz" >> /dev/stderr
       exit
     fi
-    xmit $2 $3;;
+    xmit $@
+    ;;
   *)
-    echo "Bad <cmd> '$1'"
+    echo "Bad <cmd> '$CMD'"
     help
     ;;
 esac
