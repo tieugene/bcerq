@@ -90,6 +90,15 @@ Usuals:
   mysqlimport -L database tablename.txt && /bin/rm -f tablename.txt
   ```
 
+## Test:
+
+DB2DB | f2m | f2t | m2t |
+------|-----|-----|-----|
+P > P |    |    |    |
+P > M |    |    |    |
+M > P |    |    |    |
+M > M |    |    |    |
+
 ## Results
 
 bcerq/sqlite/psql/mysql &times; hdd/sdd

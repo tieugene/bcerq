@@ -161,12 +161,12 @@ TODO: enable LAN/WAN access
 ### 2.4. Create user and DB
 
 ```
-sudo -u mysql mysql
-# or 'sudo mysql -u <root> -p`
-CREATE DATABASE $BTCDB CHARACTER SET utf8 COLLATE utf8_general_ci;
+sudo mysql -u <root> -p
+# or 'sudo -u mysql mysql`
 CREATE USER $BTCUSER IDENTIFIED BY '$BTCPASS';
-GRANT ALL PRIVILEGES ON $BTCDB.* TO $BTCUSER;
 CREATE USER $BTCUSER@localhost IDENTIFIED BY '$BTCPASS';
+CREATE DATABASE $BTCDB CHARACTER SET utf8 COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON $BTCDB.* TO $BTCUSER;
 GRANT ALL PRIVILEGES ON $BTCDB.* TO $BTCUSER@localhost;
 FLUSH PRIVILEGES;
 ```
@@ -181,9 +181,9 @@ FLUSH PRIVILEGES;
 
 ```
 [client]
+host = $BTCHOST
 user = $BTCUSER
 password = $BTCPASS
-host = $BTCHOST
 ```
 
 #### _check:_

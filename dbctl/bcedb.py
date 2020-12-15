@@ -278,7 +278,7 @@ def do_this(db_connector: object, cmd: Command, table: str = None) -> int:
             if not db_connector.exec_sql(f.read()):
                 return 1
     # engine-specific script
-    path_cmd = os.path.join(path_table, Opts.dbback, cmd_file_name)
+    path_cmd = os.path.join(path_table, Opts.dbback.value, cmd_file_name)
     if os.path.isfile(path_cmd):
         sql_found = True
         with open(path_cmd, "rt") as f:
@@ -308,7 +308,7 @@ def main() -> int:
     if args.host:
         Opts.dbhost = args.host
     if args.dbname:
-        Opts.dbhost = args.dbname
+        Opts.dbname = args.dbname
     if args.user:
         Opts.dbuser = args.user
     if args.password:
@@ -318,7 +318,7 @@ def main() -> int:
     # 4.1. chk pre-engine options
     message("Check scheme")
     if Opts.dbscheme:
-        SCHEME_DIR = os.path.join(BASE_DIR, Opts.dbscheme)
+        SCHEME_DIR = os.path.join(BASE_DIR, Opts.dbscheme.value)
         if not os.path.isdir(SCHEME_DIR):
             eprint("Path '{}' not exists or is not dir".format(SCHEME_DIR))
             return 1
@@ -328,12 +328,13 @@ def main() -> int:
         eprint("Scheme not defined")
     # 4.2. db engine
     message("Check DB engine")
+    db_engine = None
     if Opts.dbback:
-        if Opts.dbback == DbEngineType.MYSQL.value:
+        if Opts.dbback == DbEngineType.MYSQL:
             message("MySQL")
             db_engine = DbEngMySQL()
             message("MySQL created ok")
-        elif Opts.dbback == DbEngineType.PGSQL.value:
+        elif Opts.dbback == DbEngineType.PGSQL:
             message("PgSQL")
             db_engine = DbEngPGSQL()
         else:

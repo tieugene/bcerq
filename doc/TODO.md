@@ -2,6 +2,7 @@
 
 ## - Next:
 
+- chk import (=> mk queries)
 - convert:
   - fm: mysql/pgsql
   - ft: mysql/pgsql
@@ -13,6 +14,13 @@
 - import (6):
   - midi: mysql/pgsql
   - tiny: mysql/pgsql
+- whole test:
+  + create db
+  + create tables
+  - import
+  - index/wash
+  - test quiry
+  - convert (create tables/convert/ind
 
 ## - Done:
 - 201207 bcedb.tiny: mysql/pgsql
