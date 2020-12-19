@@ -2,7 +2,10 @@
 
 ## - Next:
 
-- merge import+convert=impex
+- bench (scheme(3) x db(2) x query(3)):
+  - utxo
+  - best (pure)
+  - best (view)
 - query.stat
   - tables (simple list)
   - indexed/indices
@@ -28,7 +31,8 @@
 - 201209 import.full: mysql/pgsql
 - 201210 FIXME: mysql DROP PKEY
 - 201210 impex.sh from multiple .txt.gz
-- 201218: import/convert merge/split into 3 parts
+- 201218 import/convert merge/split into 3 parts
+- 201219 merge import+convert=impex
 
 ## Misc
 

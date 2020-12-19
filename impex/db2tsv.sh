@@ -83,6 +83,6 @@ if [ ! -f "$cfgname" ]; then
   echo "Please fill '$cfgname' (dbhost=..., dbname=..., dbuser=..., tmpdir=...)" >> /dev/stderr
   exit 1
 fi
-source $cfgname
+source "$cfgname"
 # 3. go
 ex $1 $2
