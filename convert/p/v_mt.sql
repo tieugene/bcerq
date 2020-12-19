@@ -1,13 +1,11 @@
--- p.vout, f2t
+-- p.vout, m2t
 COPY (
 SELECT
 	vout.a_id AS a_id,
-	DATE(bk0.datime) AS date0,
-	DATE(tx1.datime) AS date1,
+	bk0.datime AS date0,
+	tx1.datime AS date1,
 	SUM(money) AS money
 FROM vout
-INNER JOIN addr ON
-	vout.a_id = addr.id
 INNER JOIN tx AS tx0 ON
 	vout.t_id = tx0.id
 INNER JOIN bk AS bk0 ON
@@ -21,9 +19,6 @@ LEFT JOIN (
 	tx.b_id = bk.id
 ) AS tx1 ON
 	vout.t_id_in = tx1.id
-WHERE
-	money > 0
-	AND addr.qty = 1
 GROUP BY
 	date0, date1, vout.a_id
 ORDER BY

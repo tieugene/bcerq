@@ -4,8 +4,8 @@ Format: tab-separated, `\N` as NULL, w/o field names.
 
 Actions:
 
-- data &rArr; *.csv.gz (`unpigz *.txt.gz | from ? | pigz -c > *.csv.gz`)
-- *.csv.gz &rArr; DB (`upigz -c *.csv.gz | to ?`)
+- data &rArr; *.csv.gz (`unpigz *.txt.gz | from ? | pigz -c > *.tsv.gz`
+- *.csv.gz &rArr; DB (`upigz -c *.tsv.gz | to ?`)
 - data &rArr; DB (`unpigz *.txt.gz | from ? | to ?`)
 
 DB:

@@ -2,25 +2,22 @@
 
 ## - Next:
 
-- chk import (=> mk queries)
-- convert:
-  - fm: mysql/pgsql
-  - ft: mysql/pgsql
-  - mt: mysql/pgsql
-- query:
-  - tiny: mysql/pgsql
-  - midi: mysql/pgsql
-  - full: mysql/pgsql
-- import (6):
-  - midi: mysql/pgsql
-  - tiny: mysql/pgsql
-- whole test:
-  + create db
-  + create tables
-  - import
-  - index/wash
-  - test quiry
-  - convert (create tables/convert/ind
+- merge import+convert=impex
+- query.stat
+  - tables (simple list)
+  - indexed/indices
+  - rec counts
+  - db size:
+    - p: ```SELECT pg_size_pretty( pg_database_size('dbname') );```
+    - m: ```SELECT SUM(data_length + index_length) AS size FROM information_schema.tables WHERE table_schema = (SELECT DATABASE());```
+- FIXME: bce2 - timestamp must be w/o \'
+
+## Future:
+
+- tiny: uniq a_id+date0+date1
+- import midi/tiny
+- merge impex+dbctl=...
+- bcerq.py &rArr; bcerq.sh (bash (env, eval), envsubst, m4, sed, perl)
 
 ## - Done:
 - 201207 bcedb.tiny: mysql/pgsql
@@ -31,6 +28,7 @@
 - 201209 import.full: mysql/pgsql
 - 201210 FIXME: mysql DROP PKEY
 - 201210 impex.sh from multiple .txt.gz
+- 201218: import/convert merge/split into 3 parts
 
 ## - Misc
 

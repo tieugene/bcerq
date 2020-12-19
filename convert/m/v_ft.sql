@@ -1,9 +1,8 @@
--- p.vout, f2t
-COPY (
+-- m.vout, f2t
 SELECT
 	vout.a_id AS a_id,
 	DATE(bk0.datime) AS date0,
-	DATE(tx1.datime) AS date1,
+	COALESCE(DATE(tx1.datime), '\\N') AS date1,
 	SUM(money) AS money
 FROM vout
 INNER JOIN addr ON
@@ -27,5 +26,4 @@ WHERE
 GROUP BY
 	date0, date1, vout.a_id
 ORDER BY
-	date0, date1, vout.a_id
-) TO STDOUT WITH (FORMAT text);
+	date0, date1, vout.a_id;

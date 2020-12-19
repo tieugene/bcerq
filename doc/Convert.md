@@ -7,13 +7,11 @@ DB engines:
 - MySQL
 - PostgreSQL
 
-Comvertions:
+Convertions:
 
 - full &rArr; midi
 - full &rArr; tiny
 - midi &rArr; tiny
-
-Idea: export == COPY(SELECT &hellip;) to stdout | &hellip;
 
 Test:
 
@@ -75,34 +73,25 @@ Usuals:
 
 ## 3. MySQL
 
-Idea: export | LOAD DATA INFILE
+## Check (100k):
 
-Usuals:
-
-- SET SESSION FOREIGN_KEY_CHECKS=0;
-- SET UNIQUE_CHECKS=0;
-- [mknod]:
-  ```
-  if [ ! -p tablename.txt ]; then
-  mknod tablename.txt p && echo "Created named pipe tablename.txt"
-  fi
-  gunzip < tablename.txt.gz > tablename.txt &
-  mysqlimport -L database tablename.txt && /bin/rm -f tablename.txt
-  ```
-
-## Test:
-
-DB2DB | f2m | f2t | m2t |
-------|-----|-----|-----|
-P > P |    |    |    |
-P > M |    |    |    |
-M > P |    |    |    |
-M > M |    |    |    |
+Part\Dst|Full|Midi|Tiny|
+--------|----|----|----|
+txt2tsv | +  | .  | .  |
+tsv2db  | mp | mp | mp |
+F.db2tsv| mp | mp | mp |
+M.db2tsv| -- | mp | mp |
+T.db2tsv| -- | -- | mp |
+utxo    | mp | mp | mp |
 
 ## Results
 
-bcerq/sqlite/psql/mysql &times; hdd/sdd
+psql/mysql &times; full/midi/tiny &times; utxo/...
 
+UTXO | Full | Midi | Tiny
+-----|------|------|-----
+MySQL|  |  |
+PgSQL|  |  |
 
 Query | rq | l@h | psql
 ------|----|-----|------

@@ -6,4 +6,3 @@ CREATE TABLE IF NOT EXISTS vout (
 	date1 DATE,
 	money BIGINT NOT NULL
 );
-
