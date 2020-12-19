@@ -19,7 +19,7 @@
 - merge impex+dbctl=...
 - bcerq.py &rArr; bcerq.sh (bash (env, eval), envsubst, m4, sed, perl)
 
-## - Done:
+## Done:
 - 201207 bcedb.tiny: mysql/pgsql
 - 201209 bcedb.midi: mysql/pgsql
 - 201209 bcedb.full: mysql/pgsql
@@ -30,21 +30,8 @@
 - 201210 impex.sh from multiple .txt.gz
 - 201218: import/convert merge/split into 3 parts
 
-## - Misc
+## Misc
 
-- DB connector: try
-  - [mysql-connector-python](https://pypi.org/project/mysql-connector-python/)-8.0.22
-  - [-mariadb](https://mariadb.com/docs/appdev/connector-python/)-1.0.5
-  - [-PyMySQL](https://pypi.org/project/PyMySQL/) (lin/mac)
-  - python3-mysqlclient (?)
-- DB: full/midi/tiny x psql/mysql:
-  - full: asis
-  - midi:
-     - bk: date:DATE
-     - tx: ~~hash~~ (or no index hash)
-     - data: ~~!addr~~, ~~money=0~~
-     - addr: ~~multisig~~, name:!idx
-  - tiny: addr+data
 - [ ] Documenting:
   - [ ] prepare DB: pgsql/sqlite/mysql
   - import
@@ -59,6 +46,11 @@
   - httpd
   - optimize bce2
   - update db (&rArr; 2 &times; DB)
+- DB connector: try
+  - [mysql-connector-python](https://pypi.org/project/mysql-connector-python/)-8.0.22
+  - [-mariadb](https://mariadb.com/docs/appdev/connector-python/)-1.0.5
+  - [-PyMySQL](https://pypi.org/project/PyMySQL/) (lin/mac)
+  - python3-mysqlclient (?)
 
 ## Headers
 

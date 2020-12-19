@@ -9,9 +9,10 @@ DB engines:
 
 Convertions:
 
-- full &rArr; midi
-- full &rArr; tiny
-- midi &rArr; tiny
+- txt &rArr; full
+- full &rArr; full/midi/tiny
+- midi &rArr; midi/tiny
+- tiny &rArr; tiny
 
 Test:
 
