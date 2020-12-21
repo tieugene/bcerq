@@ -1,0 +1,1 @@
+SELECT SUM(money) FROM vout WHERE date1 IS NOT NULL;

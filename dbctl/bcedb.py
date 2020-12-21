@@ -57,7 +57,7 @@ class DbEngMySQL(object):
         :param sql_string:
         :return: True if OK
         """
-        message(sql_string)
+        # message(sql_string)
         ret_value = False
         response = []
         try:
@@ -115,7 +115,7 @@ class DbEngPGSQL(object):
         :param sql_string:
         :return: True if OK
         """
-        message(sql_string)
+        # message(sql_string)
         ret_value = True
         self.db_cursor.execute(sql_string)
         # self.db_conn.commit()
@@ -274,7 +274,7 @@ def do_this(db_connector: object, cmd: Command, table: str = None) -> int:
     if os.path.isfile(path_cmd):
         sql_found = True
         with open(path_cmd, "rt") as f:
-            message("Run '{}".format(path_cmd))
+            # message("Run '{}".format(path_cmd))
             if not db_connector.exec_sql(f.read()):
                 return 1
     # engine-specific script
@@ -282,7 +282,7 @@ def do_this(db_connector: object, cmd: Command, table: str = None) -> int:
     if os.path.isfile(path_cmd):
         sql_found = True
         with open(path_cmd, "rt") as f:
-            message("Run '{}".format(path_cmd))
+            # message("Run '{}".format(path_cmd))
             if not db_connector.exec_sql(f.read()):
                 return 1
     if not sql_found:
@@ -316,31 +316,24 @@ def main() -> int:
     Opts.verbose = args.verbose
     # 3. engine cfg
     # 4.1. chk pre-engine options
-    message("Check scheme")
     if Opts.dbscheme:
         SCHEME_DIR = os.path.join(BASE_DIR, Opts.dbscheme)
         if not os.path.isdir(SCHEME_DIR):
             eprint("Path '{}' not exists or is not dir".format(SCHEME_DIR))
             return 1
         tables = set(os.listdir(SCHEME_DIR))
-        message("Scheme ok")
     else:
         eprint("Scheme not defined")
     # 4.2. db engine
-    message("Check DB engine")
     db_engine = None
     if Opts.dbback:
         if Opts.dbback == DbEngineType.MYSQL.value:
-            message("MySQL")
             db_engine = DbEngMySQL()
-            message("MySQL created ok")
         elif Opts.dbback == DbEngineType.PGSQL.value:
-            message("PgSQL")
             db_engine = DbEngPGSQL()
         else:
             eprint("Backend {} is not implemented yet.".format(Opts.dbback))
             return 1
-        message("DB engine ok")
     else:
         eprint("DB engine is not defined")
     # TODO: db_engine.load_cfg()
@@ -373,7 +366,9 @@ def main() -> int:
     # 5. go
     retvalue = 0
     if db_engine.open():
+        message("Scheme: {}, Engine: {}".format(Opts.dbscheme, Opts.dbback))
         for t in t2job:
+            message("{} {}".format(args.cmd, t))
             retvalue += do_this(db_engine, args.cmd, t)
         db_engine.close()
     return retvalue

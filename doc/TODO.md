@@ -2,10 +2,12 @@
 
 ## - Next:
 
+- FIXME: tsv2db: scheme ?
 - bench (scheme(3) x db(2) x query(3)):
   - utxo
-  - best (pure)
-  - best (view)
+  - best (top 50 on date) - pure
+  - best - view
+- mk *.sh/py path independent
 - query.stat
   - tables (simple list)
   - indexed/indices
