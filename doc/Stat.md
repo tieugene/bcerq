@@ -1,0 +1,14 @@
+PgSQL (f/utxo_f): 385,254
+PgSQL (f/utxo_f_date): 414,202
+PgSQL (f/utxo_f_no0): 407,896
+PgSQL (f/utxo_f_no0_date): 446,216
+PgSQL (f/utxo_f_noM): 508,153
+PgSQL (f/utxo_f_noM_date): 540,421
+PgSQL (m/utxo_m): 547,724
+PgSQL (t/utxo_t): 47,924
+PgSQL (f/top_fm): 379,392
+PgSQL (f/top_f_date): 418,693
+PgSQL (f/top_fm_view): err
+PgSQL (m/top_fm): 332,269
+PgSQL (m/top_fm_view): err
+PgSQL (t/top_t): 8,189

@@ -10,10 +10,10 @@ This is set of applications to import BTC blockchain into SQL RDB and process th
 - [ ][Import/Export](doc/ImpEx.md) data from bce.py/bce2 or between databases ([code](impex/))
 - [x]Check and benchmark SQL DB ([code](test/))
 - [ ][Make queries](doc/BCERQ.md) ([code](query/))
-- [ ]misc:
-  - [ ][TODO](doc/TODO.md) list
-  - [ ]Misc [notes](doc/NOTES.md)
-  - [ ][Statistics](doc/Stat.md)
+- [-]misc:
+  - [-][TODO](doc/TODO.md) list
+  - [-]Misc [notes](doc/NOTES.md)
+  - [-][Statistics](doc/Stat.md)
   - [x]Config [example](doc/bcerq.ini.sample)
 
 ## Requirements
