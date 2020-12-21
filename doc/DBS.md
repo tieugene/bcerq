@@ -3,7 +3,7 @@ DataBase Server installation.
 
 - [PosgreSQL](#postgresql)
 - [MariaDB](#mariadb)
-- [SQLite](#sqlite)
+- ~~[SQLite](#sqlite)~~
 
 Prerequisitions:
 
@@ -20,15 +20,19 @@ Prerequisitions:
 
 ### 1.1. Install (client and server)
 
-```sudo dnf install postgresql-server```
+```bash
+sudo dnf install postgresql-server
+```
 
-_Note: `postgresql` installing by dependencies_.
+_Note: `postgresql` (client) installing by dependencies_.
 
 ### 1.2. Config server
 
 - Init data:
 
-```sudo -u postgres postgresql-setup --initdb```
+```bash
+sudo -u postgres postgresql-setup --initdb
+```
 
 - /var/lib/data/pg_hba.conf:
 
@@ -69,22 +73,26 @@ sudo ln -s /mnt/shares/pgsql/backups /var/lib/pgsql/backups
 
 ### 1.3. Start server
 
-```sudo systemctl enable --now postgresql```
+```bash
+sudo systemctl enable --now postgresql
+```
 
 #### _check:_
 
-```telnet localhost 5432```
+```bash
+telnet localhost 5432
+```
 
 ### 1.4. Create user and DB
 
-```
+```bash
 sudo -u postgres createuser -U postgres -w $BTCUSER -P $BTCPASS
 sudo -u postgres createdb -O "$BTCUSER" $BTCDB
 ```
 
 or (long version):
 
-```
+```bash
 psql -U postgres
 CREATE USER $BTCUSER;
 ALTER USER $BTCUSER WITH ENCRYPTED PASSWORD '$BTCPASS';
@@ -96,7 +104,7 @@ ALTER DATABASE $BTCDB OWNER TO $BTCUSER;
 
 ### 1.5 Config client
 
-- ~/.pgpass:
+~/.pgpass:
 
 ```localhost:5433:$BTCDB:$BTCUSER:$BTCPASS```
 
@@ -112,26 +120,30 @@ psql $BTCDB $BTCUSER
 
 - Check databases and users:
 
-```psql -U postgres -c "SELECT * FROM pg_user;SELECT * FROM pg_database;"```
+```bash
+psql -U postgres -c "SELECT * FROM pg_user;SELECT * FROM pg_database;"
+```
 
 - RTFM:
 [1](https://linux-notes.org/ustanovka-postgresql-centos-red-hat-fedora/)
 [2](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04-ru)
 [3](http://r00ssyp.blogspot.com/2017/03/postgresql-9.html)
 
-## 2. MariaDB
+## 2. MariaDB/MySQL
 
 ### 2.1. Install
 
-```sudo dnf install mariadb-server```
+```bash
+sudo dnf install mariadb-server
+```
 
-_Note: `mariadb ` installing by dependencies_.
+_Note: `mariadb` (client) installing by dependencies_.
 
 ### 2.2. Config
 
-- Create extra data dir:
+Create extra data dir (option):
 
-```
+```bash
 mkdir /mnt/shares/mysql
 chown mysql:mysql /mnt/shares/mysql
 ```
@@ -147,21 +159,22 @@ chown mysql:mysql /mnt/shares/mysql
 +sql_mode="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION,NO_AUTO_VALUE_ON_ZERO"
 ```
 
-TODO: default-storage-engine = MyISAM
-TODO: enable LAN/WAN access
+_TODO: enable LAN/WAN access_
 
 ### 2.3. Start server
 
-```sudo systemctl enable --now mariadb```
+```bash
+sudo systemctl enable --now mariadb
+```
 
 #### _check_:
 
-````telnet localhost 3306```
+~~```telnet localhost 3306```~~
 
 ### 2.4. Create user and DB
 
-```
-sudo mysql -u <root> -p
+```bash
+sudo mysql -u root -p
 # or 'sudo -u mysql mysql`
 CREATE USER $BTCUSER IDENTIFIED BY '$BTCPASS';
 CREATE USER $BTCUSER@localhost IDENTIFIED BY '$BTCPASS';
@@ -173,7 +186,9 @@ FLUSH PRIVILEGES;
 
 #### _check_:
 
-```mysql [-h <ext_ip> -u $BTCUSER -p$BTCPASS $BTCDB```
+```bash
+mysql [-h <ext_ip> -u $BTCUSER -p$BTCPASS $BTCDB
+```
 
 ### 2.5 Config client
 
@@ -196,34 +211,16 @@ mysql $BTCDB
 
 ### 2.x. misc
 
-```
+```sql
 -- show all databases;
 SHOW DATABASES;
 -- show registered users
 SELECT User,Host,Password FROM mysql.user;
--- show tables[ of current db]
+-- show tables [of current db]
 SHOW TABLES [FROM <db>];
 -- show privileges in db
-
+-- (to be continued)
 ```
-
-[Example](https://computingforgeeks.com/how-to-install-glpi-on-centos-fedora/):
-
-```
-$ mysql -u root -p
-
-CREATE USER 'glpi'@'%' IDENTIFIED BY 'glpiDBSecret';
-GRANT USAGE ON *.* TO 'glpi'@'%' IDENTIFIED BY 'glpiDBSecret';
-CREATE DATABASE IF NOT EXISTS `glpi` ;
-GRANT ALL PRIVILEGES ON `glpi`.* TO 'glpi'@'%';
-FLUSH PRIVILEGES;
-EXIT
-```
-
-- mariadb-access
-- mariadb-check
-- mariadb-admin
-
 
 ## SQLite
 

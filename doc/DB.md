@@ -1,11 +1,13 @@
 # DB
+
 Maintaining database.
 
 Used DB backends - PostgreSQL or MariaDB/MySQL.
 
 ## 1. Usage
 
-`bce_db.py` script uses options as from config as from command line as from backend-specific configs: cfg (~/.bcerq.ini) &rArr; CLI &rArr; _backend.cfg_ (.my.cnf/.pgpass)
+`bcedb.py` script uses options as from config as from command line as from backend-specific configs: cfg (~/.bcerq.ini) &rArr; CLI &rArr; _backend.cfg_ (.my.cnf/.pgpass).
+CLI overwrites bcerq.ini, backend configs _appends_ settings.
 
 ## 2. Scheme
 
@@ -77,20 +79,23 @@ Cannot updatable with future data.
 | a_id    | INT       |  +  | + | p.1 |
 | date0   | DATE      |  +  | + | p.2 |
 | date1   | DATE      |  +  | - | p.3 |
-| satoshi | BIGINT    |  +  | + | > 0 |
+| money | BIGINT    |  +  | + | > 0 |
 
 ## 2. Actions
 
-Ordinar workflow:
-Create tables &rArr; Import data &rArr; Indexing &rArr; Clean up.
-Import itself is not job of this tool (see [Import](Import.md)).
+Ordinar [workflow](WorkFlow.dot):
 
-1. create table (if not exists)
+- Create DB &rArr; Create tables &rArr; Import data &rArr; Indexing &rArr; (queries) &rArr; Unindexing &rArr; Trunc &rArr; Drop tables &rArr; Drop DB.
+
+_Note: Import itself is not job of this tool (see [ImEx](ImpEx.md))._
+
+1. create tables (if not exist)
 1. ~~import data~~
 1. create indices
+1. &hellip;
 1. drop indices (if exist)
 1. drop data
-1. drop tables (if exists)
+1. drop tables (if exist)
 1. clean up
 
 Note: create/drop/unindex - if not exists; index/
@@ -98,7 +103,6 @@ Note: create/drop/unindex - if not exists; index/
 ## 3. SQL
 
 Most of actions are carried out with SQL scripts in separate files.
-Some actions (drop data, drop tables) are SQL-dialect-independent and hardcoded into main script.
 Paths to sql scripts depend on scheme, table, SQL-dialect and action itself:
 
 _&lt;scheme&gt;_/_&lt;table&gt;_/[_&lt;backend&gt;_/]_&lt;action&gt;_.sql
@@ -107,24 +111,21 @@ _&lt;scheme&gt;_/_&lt;table&gt;_/[_&lt;backend&gt;_/]_&lt;action&gt;_.sql
   - f[ull]
   - m[idi]
   - t[iny]
+- Backend:
+  - m[ariadb]
+  - p[ostgresql]
 - Table:
   - a[ddress]
   - b[lock]
   - t[ransaction]
   - v[out]
-- Backend:
-  - m[ariadb]
-  - p[ostgresql]
-- Action:
-  - c[reate]
-  - i[indexin]
-  - u[nindexing]
+- Command (use `list` to help):
+  - create
+  - indexing
+  - unindexing
+  - show (tables)
+  - wash (vacuum/optimize)
+  - trunc (drop data)
+  - drop (tables)
 
 Note: action runs in order: _&lt;table&gt;_/_&lt;action&gt;_.sql (if exists) &rArr; _&lt;table&gt;_/_&lt;backend&gt;_/_&lt;action&gt;_.sql (if exists)
-
-## TODO
-
-- move to external SQLs:
-  - Import:
-    - p: COPY table FROM STDIN
-    - m: LOAD ... / maradb-import

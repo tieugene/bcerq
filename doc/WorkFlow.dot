@@ -1,0 +1,8 @@
+digraph {
+    // rankdir=LR;
+    Create_DB -> Create_Tables -> Import -> Indexing -> queries -> Unindexing -> Trunc -> Drop_Tables -> Drop_DB;
+    queries -> queries;
+    Unindexing -> Indexing;
+    Trunc -> Wash -> Import;
+    Drop_Tables -> Create_Tables;
+}
