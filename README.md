@@ -5,16 +5,16 @@ Distributed under GPL 3.0 [license](LICENSE).
 
 This is set of applications to import BTC blockchain into SQL RDB and process them:
 
-- [x][Maintaining database server](doc/DBS.md)
-- [x][Maintaining database](doc/DB.md) ([code](dbctl/))
-- [ ][Import/Export](doc/ImpEx.md) data from bce.py/bce2 or between databases ([code](impex/))
-- [x]Check and benchmark SQL DB ([code](test/))
-- [ ][Make queries](doc/BCERQ.md) ([code](query/))
-- [-]misc:
-  - [-][TODO](doc/TODO.md) list
-  - [-]Misc [notes](doc/NOTES.md)
-  - [-][Statistics](doc/Stat.md)
-  - [x]Config [example](doc/bcerq.ini.sample)
+- &#9745; [Maintaining database server](doc/DBS.md)
+- &#9745; [Maintaining database](doc/DB.md) ([code](dbctl/))
+- &#9744; [Import/Export](doc/ImpEx.md) data from bce.py/bce2 or between databases ([code](impex/))
+- &#9745; Check and benchmark SQL DB ([code](test/))
+- &#9744; [Make queries](doc/BCERQ.md) ([code](query/))
+- &#9746; misc:
+  - &#9746; [TODO](doc/TODO.md) list
+  - &#9746; Misc [notes](doc/NOTES.md)
+  - &#9746; [Statistics](doc/Stat.md)
+  - &#9745; Config [example](doc/bcerq.ini.sample)
 
 ## Requirements
 

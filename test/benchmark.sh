@@ -8,15 +8,15 @@ source "$cfgname"
 test_mysql() {
   # $1 - scheme
   # $2 - query
-  echo -n "MySQL ($1/$2): " >> /dev/stderr
-  time mariadb -N -h "$dbhost" -u "$dbuser" -p"$dbpass" btcdb"$1" < sql/m/$2.sql > tsv/m/"$2".csv
+  sec=`time mariadb -N -h "$dbhost" -u "$dbuser" -p"$dbpass" btcdb"$1" < sql/m/$2.sql > tsv/m/"$2".csv`
+  echo -n "MySQL ($1/$2): $sec" >> /dev/stderr
 }
 
 test_pgsql() {
   # $1 - scheme
   # $2 - query
-  echo -n "PgSQL ($1/$2): " >> /dev/stderr
-  time psql -q -f sql/p/"$2".sql -t --no-align -F $'\t' -h "$dbhost" btcdb"$1" "$dbuser" > tsv/p/"$2".csv
+  sec=`time psql -q -f sql/p/"$2".sql -t --no-align -F $'\t' -h "$dbhost" btcdb"$1" "$dbuser" > tsv/p/"$2".csv`
+  echo -n "PgSQL ($1/$2): $sec" >> /dev/stderr
 }
 
 # for SCRIPT in test_mysql test_pgsql; do
