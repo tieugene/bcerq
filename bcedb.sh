@@ -18,7 +18,7 @@ dbuser=""
 dbpass=""
 verbose=""
 cfgname="$HOME/.bcerq.ini"
-SQL_DIR="f"
+SQL_DIR="sql/dbctl"
 
 help() {
   echo "Usage: $0 [-h <host>] [-d <db>] [-u <user>] [-p <pass>] <command> [<table>]
