@@ -1,2 +1,0 @@
--- m.tx
-DROP TABLE IF EXISTS tx;

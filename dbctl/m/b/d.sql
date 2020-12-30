@@ -1,2 +1,0 @@
--- m.bk
-DROP TABLE IF EXISTS bk;

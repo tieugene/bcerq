@@ -20,8 +20,6 @@ This is set of applications to import BTC blockchain into SQL RDB and process th
 ## Requirements
 
 - python3
-- python3 RDB driver:
-  - PosgreSQL: python3-psycopg2
-  - MySQL/MariaDB: mysql-connector-python3 [/python3-mysql[client])
-- RDB CLI client: psql/mysql~~/sqlite~~
+- python3-psycopg2
+- PostgreSQL CLI: psql
 - CLI utils: gawk, sed, pigz/unpigz, tail/head

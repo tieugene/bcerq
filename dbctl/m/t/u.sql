@@ -1,2 +1,0 @@
--- m.tx
-ALTER TABLE tx DROP CONSTRAINT IF EXISTS tx_b_id_fkey;

@@ -1,4 +1,5 @@
 # Tool to manipulate bce SQL database.
+# TODO: verbose
 
 declare -A cmd_array
 cmd_array=(
@@ -11,24 +12,16 @@ cmd_array=(
   [drop]="d"
 )
 
-cfgname="$HOME/.bcerq.ini"
-dbscheme=""
-dbengine=""
 dbhost=""
 dbname=""
 dbuser=""
 dbpass=""
 verbose=""
+cfgname="$HOME/.bcerq.ini"
+SQL_DIR="f"
 
 help() {
-  echo "Usage: $0 [-s <schema>] [-b <backend>] [-h <host>] [-d <db>] [-u <user>] [-p <pass>] <command> [<table>]
-  schema:
-    f:  full
-    m:  midi
-    t:  tiny
-  backend:
-    m:  MySQL
-    p:  PostgreSQL
+  echo "Usage: $0 [-h <host>] [-d <db>] [-u <user>] [-p <pass>] <command> [<table>]
   command:
     create: create table
     idx:    create indices and constraints
@@ -47,35 +40,22 @@ help() {
 
 exec_sql() {
   # Exec $1 sql string
-  case $dbengine in
-  m)
-    mariadb -e "$1" -h "$dbhost" -u "$dbuser" -p"$dbpass" "$dbname"
-    ;;
-  p)
-    psql -q -c "$1" -h "$dbhost" "$dbname" "$dbuser"
-    ;;
-  *)
-    echo "Unknown db engine '$dbengine'" >> /dev/stderr
-    ;;
-  esac
+  psql -q -c "$1" -h "$dbhost" "$dbname" "$dbuser"
 }
 
 exec_cmd() {
   # exec cmd $2 for table $1
   #echo "Do: $dbscheme/$1/$2"
-  sql_common=""
-  sql_file=$dbscheme/$1/$2.sql
+  sql_string=""
+  sql_file=$SQL_DIR/$1/$2.sql
   if [ -f "$sql_file" ]; then
-    sql_common=$(cat "$sql_file")
-  fi
-  sql_spec=""
-  sql_file=$dbscheme/$1/$dbengine/$2.sql
-  if [ -f "$sql_file" ]; then
-    sql_spec=$(cat "$sql_file")
+    sql_string=$(cat "$sql_file")
+  else
+    "Cannot find '$sql_file'"
+    exit 1
   fi
   SQL="BEGIN;
-$sql_common
-$sql_spec
+$sql_string
 COMMIT;"
   exec_sql "$SQL"
 }
@@ -86,23 +66,9 @@ if [ -f "$cfgname" ]; then
   source "$cfgname"
 fi
 # 2. get CLI
-while getopts s:e:h:d:u:p: opt
+while getopts h:d:u:p: opt
 do
     case "${opt}" in
-        s)
-          if [[ ! "fmt" =~ ${OPTARG} ]]; then
-            echo "Bad schema '${OPTARG}'." >> /dev/stderr
-            exit 1
-          fi
-          dbscheme=${OPTARG}
-          ;;
-        e)
-          if [[ ! "mp" =~ ${OPTARG} ]]; then
-            echo "Bad db engine '${OPTARG}'." >> /dev/stderr
-            exit 1
-          fi
-          dbengine=${OPTARG}
-          ;;
         h) dbhost=${OPTARG};;
         d) dbname=${OPTARG};;
         u) dbuser=${OPTARG};;
@@ -122,9 +88,9 @@ if [ -z "$CMD" ]; then
 fi
 # 3.2. table
 if [[ "dtu" =~ $CMD ]]; then
-  TBL=$(ls "$dbscheme" | sort -r)
+  TBL=$(ls "$SQL_DIR" | sort -r)
 else
-  TBL=$(ls "$dbscheme" | sort)
+  TBL=$(ls "$SQL_DIR" | sort)
 fi
 if [ $# -gt "1" ]; then
   if [[ ! "$TBL" =~ $2 ]]; then
@@ -138,4 +104,3 @@ fi
 for t in $TBL; do
   exec_cmd "$t" "$CMD"
 done
-#im "$1"

@@ -1,2 +1,0 @@
--- t.addr.m
-ALTER TABLE addr DROP PRIMARY KEY;

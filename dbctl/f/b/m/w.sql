@@ -1,2 +1,0 @@
--- f.bk.m
-OPTIMIZE LOCAL TABLE bk;
