@@ -1,6 +1,13 @@
 # Tool to manipulate bce SQL database.
-# TODO: verbose
+# +TODO: hardcode show/wash/trunc/drop (so externals=create/idx/unidx)
+# …TODO: bulk sql B2in BEGIN; ... COMMIT;
+# …TODO: verbose
+# …TODO: chk options (dbname dbuser)
+# TODO: txo = c|u|t|cp2|i|w
+# TODO: common ./functions.sh
+# TODO: load ./pgpass
 
+# const
 declare -A cmd_array
 cmd_array=(
   [create]="c"
@@ -11,82 +18,106 @@ cmd_array=(
   [trunc]="t"
   [drop]="d"
 )
-
+declare -A tbl_array
+tbl_array=(
+  [a]="addr"
+  [b]="bk"
+  [t]="tx"
+  [v]="vout"
+  [x]="txo"
+)
+cfgname="$HOME/.bcerq.ini"
+SQL_DIR="sql/dbctl"
+# var
 dbhost=""
 dbname=""
 dbuser=""
 dbpass=""
-verbose=""
-cfgname="$HOME/.bcerq.ini"
-SQL_DIR="sql/dbctl"
+verbose=0
+
+message() {
+  # print message
+  echo "$1" >> /dev/stderr
+}
+
+debug() {
+  if [ -n "$verbose" ]; then
+    message "$1"
+  fi
+}
 
 help() {
-  echo "Usage: $0 [-h <host>] [-d <db>] [-u <user>] [-p <pass>] <command> [<table>]
+  message "Usage: $0 [-h <host>] [-d <db>] [-u <user>] [-p <pass>] <command> [<table>]
   command:
     create: create table
     idx:    create indices and constraints
     unidx:  drop indices and constraints
     show:   show table info
-    wash:   wash up table (vacuum/optimize)
+    wash:   wash up table (vacuum)
     trunc:  delete all data
     drop:   drop table
   table (all if omit):
     a:  addr
     b:  bk
     t:  tx
-    v:  vout" >> /dev/stderr
+    v:  vout
+    x:  txo"
   exit
 }
 
-exec_sql() {
-  # Exec $1 sql string
-  psql -q -c "$1" -h "$dbhost" "$dbname" "$dbuser"
+load_sql() {
+  # load SQL for cmd $1 for table $2 (short)
+  T_FULL=tbl_array[$2]
+  SQL=""
+  case $1 in
+    d) SQL="DROP TABLE $T_FULL;";;
+    s) SQL="SELECT * FROM information_schema.columns WHERE table_name = '$T_FULL';";;
+    t) SQL="TRUNCATE TABLE $T_FULL;";;
+    w) SQL="VACUUM ANALYZE $T_FULL;";;
+    *)
+      sql_file=$SQL_DIR/$2/$1.sql
+      if [ -f "$sql_file" ]; then
+        SQL=$(cat "$sql_file")
+      else
+        message "Cannot find '$sql_file'"
+        exit 1
+      fi
+      ;;
+  esac
+  return "$SQL"
 }
 
-exec_cmd() {
-  # exec cmd $2 for table $1
-  #echo "Do: $dbscheme/$1/$2"
-  sql_string=""
-  sql_file=$SQL_DIR/$1/$2.sql
-  if [ -f "$sql_file" ]; then
-    sql_string=$(cat "$sql_file")
-  else
-    "Cannot find '$sql_file'"
-    exit 1
-  fi
-  SQL="BEGIN;
-$sql_string
-COMMIT;"
-  exec_sql "$SQL"
-}
-
-[ $# -lt "1" ] && help
 # 1. load defaults
+# 1.1. defaults
 if [ -f "$cfgname" ]; then
   source "$cfgname"
 fi
-# 2. get CLI
-while getopts h:d:u:p: opt
+# 1.2. CLI
+while getopts vh:d:u:p: opt
 do
-    case "${opt}" in
-        h) dbhost=${OPTARG};;
-        d) dbname=${OPTARG};;
-        u) dbuser=${OPTARG};;
-        p) dbpass=${OPTARG};;
-        *) help;;
-    esac
+  case "${opt}" in
+    v) verbose=1;;
+    h) dbhost=${OPTARG};;
+    d) dbname=${OPTARG};;
+    u) dbuser=${OPTARG};;
+    p) dbpass=${OPTARG};;
+    *) help;;
+  esac
 done
 shift $((OPTIND-1))
-# TODO: chk result
-# 3. chk positional option
-# 3.1. cmd
+# 1.3. TODO: ~/.pgpass
+# 1.x. chk mandatory
+if [ -z dbname ] || [ -z dbuser ]; then
+  message "'dbname' or 'dbuser' no defined. Use -d/-u option or fill out '$cfgname'."
+# 2. positional options
+# 2.1. cmd
 [ $# -lt "1" ] && help
 CMD=${cmd_array[$1]}
 if [ -z "$CMD" ]; then
-  echo "Bad <command> '$1'."
+  message "Bad <command> '$1'."
   help
 fi
-# 3.2. table
+# 2.2. table
 if [[ "dtu" =~ $CMD ]]; then
   TBL=$(ls "$SQL_DIR" | sort -r)
 else
@@ -94,13 +125,20 @@ else
 fi
 if [ $# -gt "1" ]; then
   if [[ ! "$TBL" =~ $2 ]]; then
-    echo "Bad <table> '$2'."
+    message "Bad table name '$2'."
     help
   else
     TBL=$2
   fi
 fi
-# 3. go
+# 3. prepare SQLs
+SQL=""
 for t in $TBL; do
-  exec_cmd "$t" "$CMD"
+  SQL+=$(load_sql $CMD $t)
 done
+#  SQL="BEGIN;
+#$sql_string
+#COMMIT;"
+# 4. go
+echo "$SQL"
+# psql -q -c "$SQL" -h "$dbhost" "$dbname" "$dbuser"

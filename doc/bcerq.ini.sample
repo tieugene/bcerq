@@ -1,7 +1,5 @@
-dbscheme=f
-dbengine=p
 #dbhost=
 #dbname=
-;dbuser=
-;dbpass=
-;tmpdir=~/tmp
+#dbuser=
+#dbpass=
+#tmpdir=~/tmp

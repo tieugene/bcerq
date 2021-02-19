@@ -1,3 +1,3 @@
--- f.bk.p
+-- bk
 ALTER TABLE bk DROP CONSTRAINT IF EXISTS bk_pkey;
 DROP INDEX IF EXISTS idx_bk_datime;

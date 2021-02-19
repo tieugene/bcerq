@@ -1,101 +1,78 @@
-# Tool to import CSV into SQL DB
-# Requires: psql/mariadb
-# TODO: mk common .sh (options, vars)
+# Tool to import TSV data into SQL DB
+# Requires: psql
+# TODO: common ./functions.sh
+# TODO: load ./pgpass
 
-declare -A table
-table=([a]="addr" [b]="bk" [t]="tx" [v]="vout")
-declare -A fields
-fields=(
-  [af]="id,name,qty" [bf]="id,datime" [tf]="id,b_id,hash" [vf]="t_id,n,money,a_id,t_id_in"
-  [am]="id,name" [bm]="id,datime" [tm]="id,b_id" [vm]="t_id,n,money,a_id,t_id_in"
-  [at]="id,name" [vt]="a_id,date0,date1,money"
-)
-
-dbscheme=""
-dbengine=""
+# const
+declare -A tbl_array
+tbl_array=([a]="addr" [b]="bk" [t]="tx" [v]="vout")
+declare -A fld_array
+fld_array=([a]="id,name,qty" [b]="id,datime" [t]="id,b_id,hash" [v]="t_id,n,money,a_id,t_id_in")
+cfgname="$HOME/.bcerq.ini"
+# var
 dbhost=""
 dbname=""
 dbuser=""
 dbpass=""
-cfgname="$HOME/.bcerq.ini"
+verbose=0
+
+message() {
+  # print message
+  echo "$1" >> /dev/stderr
+}
+
+debug() {
+  if [ -n "$verbose" ]; then
+    message "$1"
+  fi
+}
 
 help() {
-  echo "Usage: $0 [-s <schema>] [-e <engine>] [-h <host>] [-d <db>] [-u <user>] [-p <pass>] <table>
-  schema:
-    f:  full
-    m:  midi
-    t:  tiny
-  engine:
-    m:  MySQL
-    p:  PostgreSQL
+  message "Usage: $0 [-h <host>] [-d <db>] [-u <user>] [-p <pass>] <table>
   table:
     a:  addr
     b:  bk
     t:  tx
-    v:  vout" >> /dev/stderr
+    v:  vout"
   exit
 }
 
 im() {
-  t=${table[$1]}
-  f=${fields[$1$dbscheme]}
+  # import stdin into tbl_array $1:char
+  t=${tbl_array[$1]}
+  f=${fld_array[$1]}
   if [ -z "$f" ]; then
-    echo "Can't find fields for table '$1' and schema '$dbscheme'." >> /dev/stderr
+    message "Can't find fields for table '$1'."
     exit 1
   fi
-  echo "Import table '$t'" >> /dev/stderr
-  case $dbengine in
-  m)
-    mariadb --local-infile=1 -h "$dbhost" -u "$dbuser" -p"$dbpass" "$dbname" -e "LOAD DATA LOCAL INFILE '/dev/stdin' INTO TABLE $t FIELDS TERMINATED BY '\t' ($f);"
-    ;;
-  p)
-    psql -q -c "COPY $t ($f) FROM STDIN;" -h "$dbhost" "$dbname" "$dbuser"
-    ;;
-  *)
-    echo "Unknown db engine '$dbengine'" >> /dev/stderr
-    ;;
-  esac
+  debug "Import table '$t'"
+  psql -q -c "COPY $t ($f) FROM STDIN;" -h "$dbhost" "$dbname" "$dbuser"
 }
 
-[ $# -lt "1" ] && help
 # 1. load defaults
+# 1.1. cfg
 if [ -f "$cfgname" ]; then
   source "$cfgname"
 fi
-# 2. get CLI
-while getopts s:e:h:d:u:p: opt
+# 1.2. get CLI
+while getopts vh:d:u:p: opt
 do
-    case "${opt}" in
-        s)
-          if [[ ! "fmt" =~ ${OPTARG} ]]; then
-            echo "Bad schema '${OPTARG}'." >> /dev/stderr
-            exit 1
-          fi
-          dbscheme=${OPTARG}
-          ;;
-        e)
-          if [[ ! "mp" =~ ${OPTARG} ]]; then
-            echo "Bad db engine '${OPTARG}'." >> /dev/stderr
-            exit 1
-          fi
-          dbengine=${OPTARG}
-          ;;
-        h) dbhost=${OPTARG};;
-        d) dbname=${OPTARG};;
-        u) dbuser=${OPTARG};;
-        p) dbpass=${OPTARG};;
-        *) help;;
-    esac
+  case "${opt}" in
+    v) verbose=1;;
+    h) dbhost=${OPTARG};;
+    d) dbname=${OPTARG};;
+    u) dbuser=${OPTARG};;
+    p) dbpass=${OPTARG};;
+    *) help;;
+  esac
 done
 shift $((OPTIND-1))
-# TODO: chk result
-# if [ -z dbscheme ] | ...; do
-#   echo "Use options or fill out 'cfgname'."
-#   exit 1
-# fi
-# 3. chk positional option
+# 1.3. TODO: ~/.pgpass
+# 1.x. TODO: chk mandatory
+# 2. positional option
+[ $# -lt "1" ] && help
 if [[ ! "abtv" =~ $1 ]]; then
-  echo "Bad <table> '$1'."
+  message "Bad table '$1'."
   help
 fi
 # 3. go

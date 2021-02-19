@@ -28,8 +28,6 @@ OPTS_DICT = {
 
 # static
 class Opts(object):
-    dbscheme = None     # ? new
-    dbback = None       # ? new
     dbhost = None
     dbport = 5432       # ? old
     dbname = None
@@ -67,8 +65,6 @@ def load_cfg():
     # config.read(cfg_real_path)
     config.read_string("[{}]\n{}".format(CFG_MAIN_SECT, open(cfg_real_path, "rt").read()))
     config_default = config[CFG_MAIN_SECT]
-    Opts.dbscheme = config_default.get('dbscheme')
-    Opts.dbback = config_default.get('dbengine')
     Opts.dbhost = config_default.get('dbhost')
     Opts.dbname = config_default.get('dbname')
     Opts.dbuser = config_default.get('dbuser')

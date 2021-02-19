@@ -1,2 +1,0 @@
--- f.tx
-DROP TABLE IF EXISTS tx;

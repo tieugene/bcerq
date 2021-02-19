@@ -1,13 +1,18 @@
 # Tool to export bce2 output into SQL loadable CSV
 # Requires: pigz/unpigz
-# TODO: scheme
 # TODO: v | tee (remove tmp file)
+# TODO: i+o => v(i+o)+u
 
 tmpdir="."
 cfgname=~/.bcerq.ini
 
+message() {
+  # print message
+  echo "$1" >> /dev/stderr
+}
+
 help() {
-  echo "Usage: $0 <table> <infile1.txt.gz> [<infile2.txt.gz> ... ]
+  message "Usage: $0 <table> <infile1.txt.gz> [<infile2.txt.gz> ... ]
   table:
     a:  addr
     b:  bk
@@ -19,7 +24,7 @@ help() {
 ex() {
   # $1: table character
   # $2+: files
-  echo "Export '$1'" >> /dev/stderr
+  # message "Export '$1'"
   TABLE=$1
   shift 1
   case "$TABLE" in
@@ -44,7 +49,7 @@ ex() {
     [ -f $VOUTS ] && rm -f $VOUTS
     ;;
   *)
-    echo "Bad filter '$TABLE'" >> /dev/stderr
+    message "Bad table '$TABLE'"
     ;;
   esac
 }
@@ -52,12 +57,15 @@ ex() {
 # 1. chk options
 [ $# -lt "1" ] && help
 if [ $# -lt "2" ]; then
-  echo "Requires <sources>.txt.tgz" >> /dev/stderr
+  message "Requires <sources>.txt.tgz"
   exit
+fi
+if [ -f "$cfgname" ]; then
+  source "$cfgname"
 fi
 # 2. chk table
 if [[ ! "abtv" =~ $1 ]]; then
-  echo "Bad <table> option '$1'. 'abtv' only"
+  message "Bad table '$1'. 'abtv' only"
   help
 fi
 # 3. go
