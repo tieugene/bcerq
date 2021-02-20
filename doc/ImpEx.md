@@ -56,6 +56,6 @@ And last step - index it:
 Now you can *vacuum* all tables before quirying.
 
 ----
-![Comics](WorkFlow.svg)
+![Comics](ImpEx.svg)
 
-_([source](WorkFlow.dot))_
+_([source](ImpEx.dot))_
