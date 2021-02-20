@@ -111,14 +111,15 @@ psql $BTCDB $BTCUSER
 ## x. Misc
 
 - Check databases and users:
-
-  ```bash
-  psql -U postgres -c "SELECT * FROM pg_user;SELECT * FROM pg_database;"
-  ```
-
+   ```bash
+   psql -U postgres -c "SELECT * FROM pg_user;SELECT * FROM pg_database;"
+   ```
 - RTFM:
   [1](https://linux-notes.org/ustanovka-postgresql-centos-red-hat-fedora/)
   [2](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04-ru)
   [3](http://r00ssyp.blogspot.com/2017/03/postgresql-9.html)
 
-- TODO: [read-only account](https://habr.com/ru/post/531090/)
+----
+![DB scheme](DB.svg)
+
+_([source](DB.dot))_

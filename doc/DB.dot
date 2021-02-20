@@ -2,13 +2,13 @@
 digraph DB {
     rankdir=LR;
     node [shape="record"] {
-    bk_o [label="blocks: | <id> b_id:int | <date> b_time:timestamp"];
-    tx_o [label="transactions: | <id> t_id:int | <b_id> b_id:int | <hash> hash:char(64)"];
-    vout_o [label="data: | <t_id> t_out_id:int | <n> t_out_n:int | <t_id_in> [t_in_id:int] | <a_id> [a_id:int] | <money> satoshi:bigint"];
-    addr_o [label="addresses: | <id> a_id:int | <n> n:int | <name> a_list:jsonb"];
+    bk [label="bk: | <id> id:int | <datime> datime:timestamp"];
+    tx [label="tx: | <id> id:int | <b_id> b_id:int | <hash> hash:char(64)"];
+    vout [label="vout: | <t_id> t_id:int | <n> n:int | <t_id_in> [t_id_in:int] | <a_id> [a_id:int] | <money> money:bigint"];
+    addr [label="addr: | <id> id:int | <name> name:jsonb | <qty> qty:int"];
     }
-    bk_o:id -> tx_o:b_id;
-    tx_o:id -> vout_o:t_id;
-    tx_o:id -> vout_o:t_id_in;
-    addr_o:id -> vout_o:a_id;
+    bk:id -> tx:b_id;
+    tx:id -> vout:t_id;
+    tx:id -> vout:t_id_in;
+    addr:id -> vout:a_id;
 }

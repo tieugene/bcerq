@@ -1,4 +1,4 @@
--- p.vout, f2t
+-- txo
 SELECT
 	vout.a_id AS a_id,
 	DATE(bk0.datime) AS date0,

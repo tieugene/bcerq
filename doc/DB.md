@@ -1,12 +1,11 @@
 # DB
 
-Maintaining database.
-&hellip;
+Database maintaining.
 
 ## 1. Usage
 
-`bcedb.sh` script uses options as from config as from command line as from backend-specific configs: \~/.bcerq.ini &rArr; CLI &rArr; \~/.pgpass.
-CLI overwrites .bcerq.ini, .pgpass _appends_ settings.
+`bcedb.sh` script uses options as from config as from command line as from backend-specific config: _\~/.bcerq.ini &rArr; CLI &rArr; \~/.pgpass_  
+CLI overwrites .bcerq.ini, .pgpass _appends_ them.
 
 ## 2. Scheme
 
@@ -16,34 +15,34 @@ Legend:
 - U - Uniq (indexed, null)
 - P - Primary key (Uniq, !null)
 
-| Name     | Type      | Idx | ∅   | Note |
-|----------|-----------|-----|-----|------|
+| Name     | Type      | Idx | ∅ | Note |
+|----------|-----------|:---:|:-:|------|
 | **_addr_** |
-| id       | INT       | _P_ | +   |
-| name     | JSONB     |~~U~~| +   |
-| qty      | INT       | +   | +   |
+| id       | INT       | _P_ | + |
+| name     | JSONB     |~~U~~| + |
+| qty      | INT       | +   | + |
 | **_bk_** |
-| id       | INT       | _P_ | +   |
-| datime   | TIMESTAMP | U   | +   |
+| id       | INT       | _P_ | + |
+| datime   | TIMESTAMP | U   | + |
 | **_tx_** |
-| id       | INT       | _P_ | +   |
-| hash     | CHAR(64)  |~~U~~| +   |
-| b_id     | INT       | +   | +   | bk.id |
+| id       | INT       | _P_ | + |
+| hash     | CHAR(64)  |~~U~~| + |
+| b_id     | INT       | +   | + | bk.id |
 | **_vout_** |
-| t_id     | INT       | _p_ | +   | tx.id |
-| n        | INT       | _p_ | +   |
-| t\_id_in | INT       | +   | -   | tx.id |
-| a_id     | INT       | +   | -   | addr.id |
-| money    | BIGINT    | +   | +   |
+| t_id     | INT       | _p_ | + | tx.id |
+| n        | INT       | _p_ | + |
+| t\_id_in | INT       | +   | - | tx.id |
+| a_id     | INT       | +   | - | addr.id |
+| money    | BIGINT    | +   | + |
 | **_txo_** |
-| a_id    | INT       |  +  | + | p.1 |
-| date0   | DATE      |  +  | + | p.2 |
-| date1   | DATE      |  +  | - | p.3 |
-| money   | BIGINT    |  +  | + | > 0 |
+| a_id     | INT       |  +  | + | p.1 |
+| date0    | DATE      |  +  | + | p.2 |
+| date1    | DATE      |  +  | - | p.3 |
+| money    | BIGINT    |  +  | + | > 0 |
 
 ## 3. Actions
 
-Ordinar [workflow](WorkFlow.dot):
+Ordinar [workflow](WorkFlow.svg):
 
 - Create DB &rArr; Create tables &rArr; Import data &rArr; Indexing &rArr; [Re]load `txo` &rArr; (queries) &rArr; Unindexing &rArr; Trunc &rArr; Drop tables &rArr; Drop DB.
 
@@ -63,18 +62,19 @@ _Note: Import itself is not job of this tool (see [ImpEx](ImpEx.md))._
 Most of actions are carried out with SQL scripts in separate files.
 Paths to sql scripts depend on table and action itself:
 
-_sql/dbctl_/_&lt;table&gt;_/_&lt;action&gt;_.sql
+sql/dbctl/_&lt;table&gt;_/_&lt;action&gt;_.sql
 
 - Table:
   - a[ddress]
   - b[lock]
   - t[ransaction]
   - v[out]
+  - x[_txo_]
 - Command:
   - create
-  - indexing
-  - unindexing
+  - index
+  - unindex
   - show (tables)
   - wash (vacuum)
-  - trunc (delete data)
-  - drop (delete tables)
+  - trunc (delete table records)
+  - drop (delete table)

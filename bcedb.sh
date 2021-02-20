@@ -1,5 +1,4 @@
 # Tool to manipulate bce SQL database.
-# +TODO: hardcode show/wash/trunc/drop (so externals=create/idx/unidx)
 # …TODO: bulk sql B2in BEGIN; ... COMMIT;
 # …TODO: verbose
 # …TODO: chk options (dbname dbuser)
@@ -17,6 +16,7 @@ cmd_array=(
   [wash]="w"
   [trunc]="t"
   [drop]="d"
+  [xload]="x"
 )
 declare -A tbl_array
 tbl_array=(
@@ -27,13 +27,14 @@ tbl_array=(
   [x]="txo"
 )
 cfgname="$HOME/.bcerq.ini"
-SQL_DIR="sql/dbctl"
+BASE_DIR=`dirname "$0"`
+SQL_DIR="$BASE_DIR/sql/dbctl"
 # var
 dbhost=""
 dbname=""
 dbuser=""
 dbpass=""
-verbose=0
+verbose=""
 
 message() {
   # print message
@@ -56,6 +57,7 @@ help() {
     wash:   wash up table (vacuum)
     trunc:  delete all data
     drop:   drop table
+    xload:  trans-load txo from other tables ('x' table only)
   table (all if omit):
     a:  addr
     b:  bk
@@ -67,7 +69,7 @@ help() {
 
 load_sql() {
   # load SQL for cmd $1 for table $2 (short)
-  T_FULL=tbl_array[$2]
+  T_FULL=${tbl_array[$2]}
   SQL=""
   case $1 in
     d) SQL="DROP TABLE $T_FULL;";;
@@ -84,7 +86,7 @@ load_sql() {
       fi
       ;;
   esac
-  return "$SQL"
+  echo "$SQL"
 }
 
 # 1. load defaults
@@ -108,7 +110,8 @@ shift $((OPTIND-1))
 # 1.3. TODO: ~/.pgpass
 # 1.x. chk mandatory
 if [ -z dbname ] || [ -z dbuser ]; then
-  message "'dbname' or 'dbuser' no defined. Use -d/-u option or fill out '$cfgname'."
+  message "'dbname' or 'dbuser' no defined. Use -d/-u option or fill out '$cfgname'"
+fi
 # 2. positional options
 # 2.1. cmd
 [ $# -lt "1" ] && help
@@ -118,7 +121,7 @@ if [ -z "$CMD" ]; then
   help
 fi
 # 2.2. table
-if [[ "dtu" =~ $CMD ]]; then
+if [[ "dtu" =~ $CMD ]]; then  # drop/trunc/unidx in reverse order
   TBL=$(ls "$SQL_DIR" | sort -r)
 else
   TBL=$(ls "$SQL_DIR" | sort)
@@ -140,5 +143,5 @@ done
 #$sql_string
 #COMMIT;"
 # 4. go
-echo "$SQL"
-# psql -q -c "$SQL" -h "$dbhost" "$dbname" "$dbuser"
+debug "Exec '$SQL'"
+psql -q -c "$SQL" -h "$dbhost" "$dbname" "$dbuser"

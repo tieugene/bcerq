@@ -1,5 +1,4 @@
-# BCERQ - BitCoin Export ReQuests
-Tool to process bce2 exported SQL DB.
+# Notes
 
 ## Tasks
 1. Top X addresses with max **abs** <sub>&Delta;</sub>&sum; (&#x20BF;) on <sub>&Delta;</sub>D.
@@ -152,3 +151,18 @@ WHERE
   AND jsonb_typeof(addr) = 'array'
 ...
 ```
+
+----
+
+locs:
+
+kbk | dat
+----|---:
+100 | 0
+200 | 23
+250 | *73*
+300 | **138**
+350 | 249
+400 | 453
+450 | 751
+500 | 1105

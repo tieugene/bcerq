@@ -1,8 +1,13 @@
+// powered by https://dreampuf.github.io/GraphvizOnline/
 digraph {
     // rankdir=LR;
-    Create_DB -> Create_Tables -> Import -> Indexing -> queries -> Unindexing -> Trunc -> Drop_Tables -> Drop_DB;
-    queries -> queries;
-    Unindexing -> Indexing;
+    MKDB [label="Create\nDB"];
+    DELDB [label="Drop\nDB"];
+    MKTBL [label="Create\nTables"];
+    DELTBL [label="Drop\nTables"];
+    MKDB -> MKTBL -> Import -> Index -> Query -> Unindex -> Trunc -> DELTBL -> DELDB;
+    Query -> Query;
+    Unindex -> Index;
     Trunc -> Wash -> Import;
-    Drop_Tables -> Create_Tables;
+    DELTBL -> MKTBL;
 }

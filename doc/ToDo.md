@@ -1,64 +1,31 @@
-# TODO
+# ToDo
 
-## - Next:
+## Hot:
 
-- FIXME: tsv2db: scheme ?
-- bench (scheme(3) x db(2) x query(3)):
-  - utxo
-  - best (top 50 on date) - pure
-  - best - view
 - mk *.sh/py path independent
 - query.stat
   - tables (simple list)
   - indexed/indices
   - rec counts
-  - db size:
-    - p: ```SELECT pg_size_pretty( pg_database_size('dbname') );```
-    - m: ```SELECT SUM(data_length + index_length) AS size FROM information_schema.tables WHERE table_schema = (SELECT DATABASE());```
+  - db size: `SELECT pg_size_pretty(pg_database_size('dbname'));`
 - FIXME: bce2 - timestamp must be w/o \'
+
+## Enhancements:
+
+- Test: read-only DB user
+- disable journal on import
+- use [un]zstd for [un]copress:
+  - pigz 1698358803 bytes 13.5" > 792249968
+  - zstd 12.7 > 785978602 (.zst)
+  - unpigz: 6.6", unstd: 2.2"
 
 ## Future:
 
-- tiny: uniq a_id+date0+date1
-- import midi/tiny
+- Try: tx.hash = NUMBER
 - merge impex+dbctl=...
 - bcerq.py &rArr; bcerq.sh (bash (env, eval), envsubst, m4, sed, perl)
 
-## Done:
-- 201207 bcedb.tiny: mysql/pgsql
-- 201209 bcedb.midi: mysql/pgsql
-- 201209 bcedb.full: mysql/pgsql
-- 201209 import.full.pgsql
-- 201209 bcerq.cmd.*
-- 201209 import.full: mysql/pgsql
-- 201210 FIXME: mysql DROP PKEY
-- 201210 impex.sh from multiple .txt.gz
-- 201218 import/convert merge/split into 3 parts
-- 201219 merge import+convert=impex
-
-## Misc
-
-- [ ] Documenting:
-  - [ ] prepare DB: pgsql/sqlite/mysql
-  - import
-  - convert
-  - bcerq
-  - queries
-- bcepy/utils/ &rarr; import/
-- import: add right into short db
-- host003: pgsql/mysql
-- bitcoind: find script parser
-- future:
-  - httpd
-  - optimize bce2
-  - update db (&rArr; 2 &times; DB)
-- DB connector: try
-  - [mysql-connector-python](https://pypi.org/project/mysql-connector-python/)-8.0.22
-  - [-mariadb](https://mariadb.com/docs/appdev/connector-python/)-1.0.5
-  - [-PyMySQL](https://pypi.org/project/PyMySQL/) (lin/mac)
-  - python3-mysqlclient (?)
-
-## Headers
+## Headers:
 
 вот так колонки обозвать
 -- "name": "addr_gt"

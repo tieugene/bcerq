@@ -1,19 +1,8 @@
 // powered by https://dreampuf.github.io/GraphvizOnline/
 digraph {
-    rankdir=LR;
-    node [shape=circle] {
-        txt;
-        tsv;
-        db;
-    }
-    node [shape=box] {
-        txt2tsv;
-        tsv2db;
-        db2tsv;
-    }
-	bce2 -> txt -> txt2tsv -> tsv -> tsv2db -> db;
-	txt2tsv -> tsv2db [label=txt2db];
-	db -> db2tsv -> tsv;
-	db2tsv -> tsv2db [label=db2db];
-	{rank=same; tsv2db, db2tsv}
+    rankdir=TB;
+    node [shape=note] {txt, tsv}
+    node [shape=box3d] {bce2, txt2tsv, tsv2db}
+    node [shape=cylinder] {db}
+    bce2 -> txt -> txt2tsv -> tsv -> tsv2db -> db;
 }

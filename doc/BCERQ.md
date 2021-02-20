@@ -3,7 +3,7 @@
 ## Prerequisitions
 
 - filled out ~/.pgpass
-- filled out ~/.bcerqrc
+- filled out ~/.bcerq.ini
 
 Example of ~/.bcerqrc:
 

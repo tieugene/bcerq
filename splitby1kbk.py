@@ -14,8 +14,8 @@ import sys
 def main(outdir: str):
     o_f = None
     isbk = re.compile("^b\t(\d{1,3})000\t")
-    # with sys.stdin as i_f:
-    with gzip.open("txt/050-100.txt.gz", "rt") as i_f:
+    # with gzip.open("txt/050-100.txt.gz", "rt") as i_f:
+    with sys.stdin as i_f:
         line = i_f.readline()
         while line:
             m = isbk.match(line)

@@ -1,4 +1,4 @@
--- vout
+-- vout.i
 ALTER TABLE vout ADD CONSTRAINT vout_pkey PRIMARY KEY (t_id,n);
 ALTER TABLE vout ADD CONSTRAINT vout_t_id_fkey FOREIGN KEY (t_id) REFERENCES tx (id) ON DELETE CASCADE;
 ALTER TABLE vout ADD CONSTRAINT vout_t_id_in_fkey FOREIGN KEY (t_id_in) REFERENCES tx (id) ON DELETE CASCADE;

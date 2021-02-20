@@ -1,4 +1,4 @@
--- vout
+-- vout.c
 CREATE TABLE IF NOT EXISTS vout (
 	t_id INT NOT NULL,
 	n SMALLINT NOT NULL,
