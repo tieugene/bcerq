@@ -2,7 +2,7 @@
 -- "name": "alist_cnt_lt",
 -- "note": "Balance change of addresses [alist] in period [fromdate]..[todate] which loss > [num] %.",
 -- "required": ["DATE0", "DATE1", "NUM", "ALIST"],
--- "header": ["a_id", "address", "∑₀, ₿", "∑₁, ₿", "Δ∑, ₿", "Δ∑, %"],
+-- "header": ["a_id", "address", "begin data, ₿", "end data, ₿", "abs loss >N, ₿", "rel los >N, %"],
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT

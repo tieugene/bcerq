@@ -2,7 +2,7 @@
 -- "name": "alist_moves",
 -- "note": " Balance change of addresses [alist] in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "ALIST"],
--- "header": ["a_id", "address", "∑₀, ₿", "∑₁, ₿", "Δ∑, ₿", "Δ∑, %"],
+-- "header": ["a_id", "address", "begin data, ₿", "end data, ₿", "abs change, ₿", "rel change, %"],
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT

@@ -2,7 +2,7 @@
 -- "name": "addr_cnt_max",
 -- "note": "Top [num] addresses by gain (%) in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "NUM"],
--- "header": ["a_id", "address", "∑₀, ㋛", "∑₁, ㋛", "gain, %"],
+-- "header": ["a_id", "address", "begin data", "end data", "rel gain, %"],
 -- "output": "columns name:typ"
 -- }
 SELECT

@@ -2,7 +2,7 @@
 -- "name": "addr_cnt_min",
 -- "note": "Top [num] addresses by lost (%) in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "NUM"],
--- "header": ["a_id", "address", "∑₀, ㋛", "∑₁, ㋛", "loss, %"],
+-- "header": ["a_id", "address", "begin data", "end data", "rel loss, %"],
 -- "output": "columns name:typ"
 -- }
 SELECT

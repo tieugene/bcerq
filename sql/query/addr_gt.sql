@@ -2,7 +2,7 @@
 -- "name": "addr_gt",
 -- "note": "     Addresses with balance > [num] ₿ on [todate].",
 -- "required": ["DATE1", "NUM"],
--- "header": ["a_id", "address", "profit, ㋛"],
+-- "header": ["a_id", "address", "balance>N, data"],
 -- "output": "columns name:typ (int,str,Decimal())"
 -- }
 SELECT

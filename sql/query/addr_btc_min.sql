@@ -2,7 +2,7 @@
 -- "name": "addr_btc_min",
 -- "note": "Top [num] addresses by lost (₿) in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "NUM"],
--- "header": ["a_id", "address", "∑₀, ㋛", "∑₁, ㋛", "loss, ㋛"],
+-- "header": ["a_id", "address", "begin data", "end data", "abs loss"],
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT

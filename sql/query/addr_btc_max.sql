@@ -2,7 +2,7 @@
 -- "name": "addr_btc_max",
 -- "note": "Top [num] addresses by gain (₿) in period [fromdate]..[todate].",
 -- "required": ["DATE0", "DATE1", "NUM"],
--- "header": ["a_id", "address", "∑₀, ㋛", "∑₁, ㋛", "gain, ㋛"],
+-- "header": ["a_id", "address", "begin data", "end data", "abs gain"],
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT
