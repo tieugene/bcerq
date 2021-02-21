@@ -33,7 +33,7 @@ Utilities set to import BTC blockchain data from [bcepy](https://github.com/tieu
 - [bcerq.py](bcerq.py) - Make queries to SQL DB
   - [x-addrs.py](x-addrs.py) - helper for them
 - [splitby1kbk.py](splitby1kbk.py) - split bce* outs by 1 kbk (kiloblock)
-- [check and benchmark](test/) DB
+- [~~test_db.sh~~](test_db.sh) - test and benchmark of DB
 
 ## License
 
