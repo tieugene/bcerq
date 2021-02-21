@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-# test queries from misc backend/scheme
+# mis benchmarks
 
 TIMEFORMAT=%R
 cfgname="$HOME/.bcerq.ini"
@@ -9,11 +8,13 @@ SQL_DIR="$BASE_DIR/sql/test"
 
 test_pgsql() {
   # $1 - query name
-  sec=`time psql -q -f "$SQL_DIR/$1".sql -t --no-align -F $'\t' -h "$dbhost" "$dbname" "$dbuser" > tmp/"$1".csv`
-  echo -n "PgSQL ($1): $sec" >> /dev/stderr
+  DST="`basename $1 .sql`.csv"
+  echo -n "`basename $1` `head -n 1 $1`: "
+  sec=`time psql -q -f "$1" -t --no-align -F $'\t' -h "$dbhost" "$dbname" "$dbuser" > tmp/$DST`
+  echo -n "$sec" >> /dev/stderr
 }
 
-for i in `ls -1 $SQL_DIR/*.sql | grep sql$`
+for i in `ls $SQL_DIR/*.sql`
 do
-  test_pgsql $i
+  	test_pgsql $i
 done
