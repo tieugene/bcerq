@@ -25,3 +25,8 @@
 - Try: tx.hash = NUMBER
 - merge impex+dbctl=...
 - bcerq.py &rArr; bcerq.sh (bash (env, eval), envsubst, m4, sed, perl)
+
+## Updates
+
+- test `COPY` into non-empty table
+- UPDATE vs DELETE+COPY/INSERT

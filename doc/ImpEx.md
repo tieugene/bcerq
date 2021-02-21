@@ -7,13 +7,17 @@ Import into DB (`tsv2db.sh`) is enought trivial and just uses SQL `COPY` instruc
 Aim of `txt2tsv.sh` is to prepare data for this `COPY`.  
 It is possible as split export and import separately as use both of utils together via pipe.
 
-## Initial load
-
 Let's work with source data as `txt/250.txt.gz` and interim tsv in `tsv/`
 
 ## 1. Export
 
-Export from src into interim .tsv files:
+Export from src into interim .tsv files is doing with`txt2tsv.sh`utility (use `./txt2tsv.sh -h` for help).
+It accepts target table character and source data file as argument.
+Target table is: a=addr, b=bk, t=tx, v=vout.
+Source must be gzipped.  
+Optional arhgument `-t` (temporary space) is very important during generating 'v' output. With big source data utillty can eat all of RAM and then require *fast* and *huge* temporary storage (starting from half of *uncompressed* source).
+
+Bulk export into files can be:
 
 ```bash
 for i in a b t v
@@ -24,8 +28,11 @@ done
 
 ## 2. Import
 
-Import primary data into DB:  
+Import primary data into DB is douing with `./tsv2db.sh` that accepts target table as argument and imported data from stdin.
+
 _(Warning: be sure that all tables are empty (`bcedb.sh trunc`) and have no indexes (`bcedb.sh unidx`))_
+
+Bulk import sample:
 
 ```bash
 for i in a b t v
@@ -42,7 +49,7 @@ do
 done
 ```
 
-After this you can (or must) index all tables (`bcedb.sh idx`)
+After this you can (or must) index all of tables (`bcedb.sh idx`)
 
 ## 3. TXO
 
@@ -53,7 +60,7 @@ After loading primary data (bk/tx/tx/vout/addr) you must [re]**create** working 
 And last step - index it:  
 `bcedb.sh idx x`  
 
-Now you can *vacuum* all tables before quirying.
+~~Now you can *vacuum* all tables before quirying.~~
 
 ----
 ![Comics](ImpEx.svg)

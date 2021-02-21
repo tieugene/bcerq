@@ -1,25 +1,17 @@
 # BCERQ
 
-## Prerequisitions
+Querying SQL DB about BTC.
 
-- filled out ~/.pgpass
-- filled out ~/.bcerq.ini
+Each query is one SQL 'string' with parameters and asks txo[+addr] table.
 
-Example of ~/.bcerqrc:
+Each query represents as 'command' of bcerq.py.
+Mandatory options of 'command' depend on this command itself.
 
-```
-DBHOST=192.168.0.33
-DBNAME=btcdatabase
-DBUSER=btcuser
-```
-
-Where:
-
-- DBHOST: host where PostgreSQL is running (can be `/tmp/` to use socket)
-- DBNAME: PostgreSQL database at this host
-- DBUSER: PostgreSQL user has permision to query database above
+Prerequisitions: `~/.bcerq.ini`
 
 ## Usage
+
+_(use `bcerq.py -h` for help)_
 
 `./bcerq.py <options> <command>`
 
@@ -33,7 +25,6 @@ Options:
 
 Database name and DB user not required - programm get them from ~/.pgpass relating to `hostname`.
 
-## TODO:
+Other options (-f -t -n -a) depend on query itself
 
-- comment out alist
-- ~/.bcerqrc, ~/.pgpass
+## Queiries:

@@ -18,7 +18,7 @@ Utilities set to import BTC blockchain data from [bcepy](https://github.com/tieu
 - [Maintain DB server](doc/DBS.md)
 - [Maintain DB](doc/DB.md)
 - [Import](doc/ImpEx.md) data from bcepy/bce2 to DB
-- _[Make queries](doc/BCERQ.md)_
+- [Make queries](doc/BCERQ.md)
 - Config [sample](doc/bcerq.ini)
 - [ToDo](doc/ToDo.md) list
 - Misc [notes](doc/Notes.md)

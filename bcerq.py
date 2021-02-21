@@ -17,7 +17,10 @@ from string import Template
 import psycopg2
 
 # consts
-TPL_DIR = "t"
+CFG_FILE_NAME = "~/.bcerq.ini"
+CFG_MAIN_SECT = "DEFAULT"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TPL_DIR = os.path.join(BASE_DIR, "sql", "query")
 OPTS_DICT = {
     "DATE0": "fromdate",
     "DATE1": "todate",
