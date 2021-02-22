@@ -18,11 +18,12 @@ Utilities set to import BTC blockchain data from [bcepy](https://github.com/tieu
 - [Maintain DB server](doc/DBS.md)
 - [Maintain DB](doc/DB.md)
 - [Import](doc/ImpEx.md) data from bcepy/bce2 to DB
+- [Test](doc/Test_DB.md) loaded DB
 - [Make queries](doc/BCERQ.md)
 - Config [sample](doc/bcerq.ini)
-- [ToDo](doc/ToDo.md) list
-- Misc [notes](doc/Notes.md)
-- Data [~~formats~~](doc/Formats.md)
+- _[ToDo](doc/ToDo.md) list_
+- _Misc [notes](doc/Notes.md)_
+- _~~Data [formats](doc/Formats.md)~~_
 
 ## Utilities
 
@@ -33,7 +34,7 @@ Utilities set to import BTC blockchain data from [bcepy](https://github.com/tieu
 - [bcerq.py](bcerq.py) - Make queries to SQL DB
   - [x-addrs.py](x-addrs.py) - helper for them
 - [splitby1kbk.py](splitby1kbk.py) - split bce* outs by 1 kbk (kiloblock)
-- [~~test_db.sh~~](test_db.sh) - test and benchmark of DB
+- [test_db.sh](test_db.sh) - DB benchmark
 
 ## License
 

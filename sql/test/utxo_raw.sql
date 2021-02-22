@@ -1,4 +1,4 @@
--- utxo.full (no null addr, date())
+-- UTXO monthly (raw)
 SELECT
  months.d0 AS mon,
  SUM(money) AS money
@@ -6,10 +6,9 @@ FROM (
  SELECT DISTINCT DATE(datime) AS d0 FROM bk WHERE EXTRACT(DAY FROM datime) = 1
 ) AS months, (
     SELECT
-      a_id,
       vout.money AS money,
-      DATE(bk0.datime) AS date0,
-      DATE(tx1.datime) AS date1
+      bk0.datime AS date0,
+      tx1.datime AS date1
     FROM vout
     INNER JOIN tx AS tx0 ON
       vout.t_id = tx0.id
@@ -28,6 +27,5 @@ FROM (
 WHERE
  (txo_all.date0 < months.d0)
  AND (txo_all.date1 >= months.d0 OR txo_all.date1 IS NULL)
- AND txo_all.a_id IS NOT NULL
 GROUP By months.d0
 ORDER BY months.d0;

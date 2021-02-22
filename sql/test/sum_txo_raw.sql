@@ -1,2 +1,2 @@
--- sum of all TXO (vout, by vin)
+-- Sum of all TXO (raw)
 SELECT SUM(money) FROM vout WHERE t_id_in IS NOT NULL;

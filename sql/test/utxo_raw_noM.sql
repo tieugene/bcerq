@@ -1,4 +1,4 @@
--- utxo.full (no multisig, date())
+-- UTXO monthly, no multisig (raw)
 SELECT
  months.d0 AS mon,
  SUM(money) AS money
@@ -8,8 +8,8 @@ FROM (
     SELECT
       a_id,
       vout.money AS money,
-      DATE(bk0.datime) AS date0,
-      DATE(tx1.datime) AS date1,
+      bk0.datime AS date0,
+      tx1.datime AS date1,
       addr.qty AS qty
     FROM vout
     INNER JOIN addr ON

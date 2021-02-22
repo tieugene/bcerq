@@ -55,8 +55,9 @@ After this you can (or must) index all of tables (`bcedb.sh idx`)
 
 _Warning: be sure that you **indexed** all 4 previous tables and **droped txo** table before next steps._
 
-After loading primary data (bk/tx/tx/vout/addr) you must [re]**create** working table (txo):  
-`bcedb.sh xload x`  
+After loading primary data (bk/tx/tx/vout/addr) you must [re]**create** working table - txo. It is summary of vout in simplified form. Vouts that are stored: a) money > 0, b) single address (&rArr; multisigs and addressless not included):  
+`bcedb.sh xload x`
+
 And last step - index it:  
 `bcedb.sh idx x`  
 

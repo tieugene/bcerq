@@ -2,6 +2,7 @@
 
 ## FixMe:
 
+- mk txo as temporary/stored proc
 - query.stat
   - tables (simple list)
   - indexed/indices

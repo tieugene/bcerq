@@ -1,4 +1,4 @@
--- top.full/midi (view)
+-- Top buratinos on 2013-06-01 (txo)
 SELECT
     addr.name as name,
     itogo

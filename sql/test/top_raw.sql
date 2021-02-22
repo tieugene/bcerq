@@ -1,10 +1,13 @@
--- utxo.full (no null addr)
+-- Top buratinos on 2013-06-01 (raw)
+-- (bk 238926 was born those night)
 SELECT
- months.d0 AS mon,
- SUM(money) AS money
+    addr.name as name,
+    itogo
 FROM (
- SELECT DISTINCT DATE(datime) AS d0 FROM bk WHERE EXTRACT(DAY FROM datime) = 1
-) AS months, (
+    SELECT
+        a_id,
+        SUM(money) as itogo
+    FROM (
     SELECT
       a_id,
       vout.money AS money,
@@ -24,10 +27,11 @@ FROM (
       tx.b_id = bk.id
     ) AS tx1 ON
       vout.t_id_in = tx1.id
-) AS txo_all
-WHERE
- (txo_all.date0 < months.d0)
- AND (txo_all.date1 >= months.d0 OR txo_all.date1 IS NULL)
- AND txo_all.a_id IS NOT NULL
-GROUP By months.d0
-ORDER BY months.d0;
+) AS txo
+    WHERE
+        (date0 < '2013-06-01')
+        AND (date1 >= '2013-06-01' OR date1 IS NULL)
+    GROUP BY a_id
+    ORDER BY itogo DESC
+    LIMIT 50
+) AS tops INNER JOIN addr ON tops.a_id = addr.id;
