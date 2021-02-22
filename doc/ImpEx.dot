@@ -1,0 +1,9 @@
+// powered by https://dreampuf.github.io/GraphvizOnline/
+digraph {
+    rankdir=TB;
+    node [shape=note] {txt, tsv}
+    node [shape=box3d] {bce2, txt2tsv, tsv2db}
+    db [shape=cylinder];
+    bce2 -> txt -> txt2tsv -> tsv -> tsv2db -> db;
+    txt2tsv -> tsv2db [style=dashed];
+}

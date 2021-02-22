@@ -1,0 +1,14 @@
+// powered by https://dreampuf.github.io/GraphvizOnline/
+digraph DB {
+    rankdir=LR;
+    node [shape="record"] {
+    bk [label="bk: | <id> id:int | <datime> datime:timestamp"];
+    tx [label="tx: | <id> id:int | <b_id> b_id:int | <hash> hash:char(64)"];
+    vout [label="vout: | <t_id> t_id:int | <n> n:int | <t_id_in> [t_id_in:int] | <a_id> [a_id:int] | <money> money:bigint"];
+    addr [label="addr: | <id> id:int | <name> name:jsonb | <qty> qty:int"];
+    }
+    bk:id -> tx:b_id;
+    tx:id -> vout:t_id;
+    tx:id -> vout:t_id_in;
+    addr:id -> vout:a_id;
+}

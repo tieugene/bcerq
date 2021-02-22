@@ -1,7 +1,0 @@
-# Sample file for .db_ctl.cfg
-# dbname - PostgreSQL database name
-# dbuser - PostgreSQL database user (password must be in ~/.pgpass)
-# tmpdir - Directory for using with sort utility; must have enought space
-dbname=btcdb
-dbuser=btcuser
-tmpdir=/mnt/shares/tmp

@@ -1,25 +1,17 @@
 # BCERQ
 
-## Prerequisitions
+Querying SQL DB about BTC.
 
-- filled out ~/.pgpass
-- filled out ~/.bcerqrc
+Each query is one SQL 'string' with parameters and asks txo[+addr] table.
 
-Example of ~/.bcerqrc:
+Each query represents as 'command' of bcerq.py.
+Mandatory options of 'command' depend on this command itself.
 
-```
-DBHOST=192.168.0.33
-DBNAME=btcdatabase
-DBUSER=btcuser
-```
-
-Where:
-
-- DBHOST: host where PostgreSQL is running (can be `/tmp/` to use socket)
-- DBNAME: PostgreSQL database at this host
-- DBUSER: PostgreSQL user has permision to query database above
+Prerequisitions: `~/.bcerq.ini`
 
 ## Usage
+
+_(use `bcerq.py -h` for help)_
 
 `./bcerq.py <options> <command>`
 
@@ -33,7 +25,17 @@ Options:
 
 Database name and DB user not required - programm get them from ~/.pgpass relating to `hostname`.
 
-## TODO:
+Other options (-f -t -n -a) depend on query itself
 
-- comment out alist
-- ~/.bcerqrc, ~/.pgpass
+## Tests:
+_(250k, `./bcerq.py … | tee tmp/….tsv`)_
+- 90": `-t 2013-06-01 -n 4000000000000 addr_gt`
+- 15": `-n 20 -f 2013-01-01 -t 2013-06-01 addr_btc_max`
+- ": `-n 20 -f 2013-01-01 -t 2013-06-01 addr_btc_min`
+- ": `-n 20 -f 2013-01-01 -t 2013-06-01 addr_cnt_max`
+- ": `-n 20 -f 2013-01-01 -t 2013-06-01 addr_cnt_min`
+- ": `-a alist.txt -f 2013-01-01 -t 2013-06-01 -n 1 alist_btc_gt`
+- ": `-a alist.txt -f 2013-01-01 -t 2013-06-01 -n 1 alist_btc_lt`
+- ": `-a alist.txt -f 2013-01-01 -t 2013-06-01 -n 1 alist_cnt_gt`
+- ": `-a alist.txt -f 2013-01-01 -t 2013-06-01 -n 1 alist_cnt_lt`
+- ": `-a alist.txt -f 2013-01-01 -t 2013-06-01 alist_moves`

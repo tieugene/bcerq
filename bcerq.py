@@ -4,6 +4,7 @@ TODO: load templates
 """
 
 import argparse
+import configparser
 import datetime
 import decimal
 import json
@@ -16,7 +17,10 @@ from string import Template
 import psycopg2
 
 # consts
-TPL_DIR = "sql"
+CFG_FILE_NAME = "~/.bcerq.ini"
+CFG_MAIN_SECT = "DEFAULT"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TPL_DIR = os.path.join(BASE_DIR, "sql", "query")
 OPTS_DICT = {
     "DATE0": "fromdate",
     "DATE1": "todate",
@@ -27,15 +31,17 @@ OPTS_DICT = {
 
 # static
 class Opts(object):
-    dbhost = 'localhost'
-    dbport = 5432
+    dbhost = None
+    dbport = 5432       # ? old
     dbname = None
     dbuser = None
     dbpass = None
+    # query args
     date0 = None
     date1 = None
     num = None
     alist = list()
+    # misc
     sep = None
     verbose = False
 
@@ -49,6 +55,25 @@ def eprint(s: str):
     print(s, file=sys.stderr)
 
 
+def load_cfg():
+    """
+    Load defaults from config file.
+    :return:
+    TODO: use user:pass@host/dbname?engine
+    """
+    cfg_real_path = os.path.expanduser(CFG_FILE_NAME)
+    if not os.path.exists(cfg_real_path):
+        return
+    config = configparser.ConfigParser()
+    # config.read(cfg_real_path)
+    config.read_string("[{}]\n{}".format(CFG_MAIN_SECT, open(cfg_real_path, "rt").read()))
+    config_default = config[CFG_MAIN_SECT]
+    Opts.dbhost = config_default.get('dbhost')
+    Opts.dbname = config_default.get('dbname')
+    Opts.dbuser = config_default.get('dbuser')
+    Opts.dbpass = config_default.get('dbpass')
+
+
 def init_cli():
     """
     Handle CLI
@@ -58,7 +83,7 @@ def init_cli():
         description='BCE request.',
         epilog="NOTE: address list must be column of ints.")
     parser.add_argument('cmd', type=str, help="Command ('list' to list all available).")
-    parser.add_argument('-H', '--host', type=str, default='localhost',
+    parser.add_argument('-H', '--host', type=str,
                         help='Host to connect.')
     parser.add_argument('-f', '--from', dest="fromdate", metavar='date', type=datetime.date.fromisoformat,
                         help='From date (yyyy-mm-dd).')
@@ -170,15 +195,20 @@ def main():
     TODO: .pgpass, plugins
     """
     # 1. cli
+    load_cfg()
     parser = init_cli()
     args = parser.parse_args()
     if args.fromdate and args.todate and args.fromdate > args.todate:
         eprint("Starting date '{}' > ending date '{}'.".format(args.fromdate, args.todate))
         return
-    Opts.dbhost = args.host
-    Opts.date0 = args.fromdate
-    Opts.date1 = args.todate
-    Opts.num = args.num
+    if args.host:
+        Opts.dbhost = args.host
+    if args.fromdate:
+        Opts.date0 = args.fromdate
+    if args.todate:
+        Opts.date1 = args.todate
+    if args.num:
+        Opts.num = args.num
     Opts.sep = args.sep
     Opts.verbose = args.verbose
     if args.alist:

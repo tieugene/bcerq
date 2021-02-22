@@ -1,18 +1,42 @@
 # Readme
-BitCoin Export ReQuests - explore BTC blockchain using SQL DB.
 
-This is set of applications to import BTC blockchain into SQL DB and process them:
+BitCoin Export ReQuests - explore BTC blockchain using [RDB](https://en.wikipedia.org/wiki/Relational_database).
 
-- Maintaining [database server](doc/DBS.md)
-- Maintaining [database](doc/DB.md) (dbctl/)
-- [Import](doc/Import.md) data from bcepy/bce2 outputs (import/)
-- or [conver](doc/Convert.md) data from Full to Short DB (convert/)
-- Check and test loaded DB (test/)
-- Make [queries](doc/BCERQ.md) (query/)
-- misc: [TODO](TODO.md) list, [notes](doc/NOTES.md)
+## Description
+
+Utilities set to import BTC blockchain data from [bcepy](https://github.com/tieugene/bcepy) or [bce2](https://github.com/tieugene/bce2) output into PostgreSQL DB and query it.
 
 ## Requirements
 
-- python3
-- python3-psycopg2/python3-mysqlconnector
-- CLI utils: gawk, sed, pigz/unpigz, tail/head
+- core utils (`bash`, `gawk`, `sed`, `tail`/`head`, `gzip`/`ungzip` or `pigz`/`unpigz`)
+- PostgreSQL CLI client (`psql`)
+- python3-psycopg2
+
+## Documentation
+
+- Typical [workflow](doc/WorkFlow.md)
+- [Maintain DB server](doc/DBS.md)
+- [Maintain DB](doc/DB.md)
+- [Import](doc/ImpEx.md) data from bcepy/bce2 to DB
+- [Test](doc/Test_DB.md) loaded DB
+- [Make queries](doc/BCERQ.md)
+- Config [sample](doc/bcerq.ini)
+- _[ToDo](doc/ToDo.md) list_
+- _Misc [notes](doc/Notes.md)_
+- _~~Data [formats](doc/Formats.md)~~_
+
+## Utilities
+
+- [bcedb.sh](bcedb.sh) - Maintain database
+- [txt2tsv.sh](txt2tsv.sh) - Convert bcepy/bce2 output into interim [.TSV](https://en.wikipedia.org/wiki/Tab-separated_values) data
+  - [join_io.py](join_io.py) - helper for them
+- [tsv2db.sh](tsv2db.sh) - Load interim .TSV into SQL DB
+- [bcerq.py](bcerq.py) - Make queries to SQL DB
+  - [x-addrs.py](x-addrs.py) - helper for them
+- [splitby1kbk.py](splitby1kbk.py) - split bce* outs by 1 kbk (kiloblock)
+- [test_db.sh](test_db.sh) - DB benchmark
+
+## License
+
+Distributed under GPL 3.0 [license](LICENSE).
+
