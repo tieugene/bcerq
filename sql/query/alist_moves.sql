@@ -6,8 +6,8 @@
 -- "output": "columns name:typ (a_id:int,addr:str,satoshi:Decimal())"
 -- }
 SELECT
-    a.a_id AS a_id,
-    a.a_list AS addr,
+    a.id AS a_id,
+    a.name AS address,
     COALESCE(b.itogo, 0) AS itogo0,
     COALESCE(e.itogo, 0) AS itogo1,
     COALESCE(e.itogo, 0) - COALESCE(b.itogo, 0) AS profit_b,
@@ -28,24 +28,24 @@ SELECT
         END
     END AS profit_c
 FROM (
-    SELECT a_id, a_list
-    FROM addresses
-    WHERE a_id IN ($ALIST)
+    SELECT id, name
+    FROM addr
+    WHERE id IN ($ALIST)
 ) AS a
 LEFT JOIN (
-    SELECT a_id, SUM(satoshi) AS itogo
+    SELECT a_id, SUM(money) AS itogo
     FROM txo
     WHERE
         (date0 < '$DATE0')
         AND (date1 >= '$DATE0' OR date1 IS NULL)
     GROUP BY a_id
-) AS b ON a.a_id = b.a_id
+) AS b ON a.id = b.a_id
 LEFT JOIN (
-    SELECT a_id, SUM(satoshi) AS itogo
+    SELECT a_id, SUM(money) AS itogo
     FROM txo
     WHERE
         (date0 <= '$DATE1')
         AND (date1 > '$DATE1' OR date1 IS NULL)
     GROUP BY a_id
-) AS e ON a.a_id = e.a_id
-ORDER BY addr;
+) AS e ON a.id = e.a_id
+ORDER BY address;

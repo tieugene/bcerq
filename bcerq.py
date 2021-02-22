@@ -83,7 +83,7 @@ def init_cli():
         description='BCE request.',
         epilog="NOTE: address list must be column of ints.")
     parser.add_argument('cmd', type=str, help="Command ('list' to list all available).")
-    parser.add_argument('-H', '--host', type=str, default='localhost',
+    parser.add_argument('-H', '--host', type=str,
                         help='Host to connect.')
     parser.add_argument('-f', '--from', dest="fromdate", metavar='date', type=datetime.date.fromisoformat,
                         help='From date (yyyy-mm-dd).')

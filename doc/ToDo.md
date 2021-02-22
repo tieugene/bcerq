@@ -2,7 +2,6 @@
 
 ## FixMe:
 
-- mk txo as temporary/stored proc
 - query.stat
   - tables (simple list)
   - indexed/indices
@@ -14,7 +13,8 @@
 
 ## Enhancements:
 
-- Test: read-only DB user
+- mk txo as temporary/stored proc
+- Try: read-only DB user
 - disable journal on import
 - use [un]zstd for [un]copress:
   - pigz 1698358803 bytes 13.5" > 792249968

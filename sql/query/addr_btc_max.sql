@@ -7,7 +7,7 @@
 -- }
 SELECT
     a_id,
-    addr.name->>0 AS address,
+    addr.name AS address,
     itogo0,
     itogo1,
     profit
@@ -34,4 +34,4 @@ FROM (
     ) AS e ON b.a_id = e.a_id
     ORDER BY profit DESC
     LIMIT $NUM
-) INNER JOIN addr ON a_id = addr.a_id;
+) AS data INNER JOIN addr ON a_id = addr.id;
