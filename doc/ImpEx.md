@@ -28,9 +28,9 @@ done
 
 ## 2. Import
 
-Import primary data into DB is douing with `./tsv2db.sh` that accepts target table as argument and imported data from stdin.
+Import primary data into DB is doing with `./tsv2db.sh` that accepts target table as argument and imported data from stdin.
 
-_(Warning: be sure that all tables are empty (`bcedb.sh trunc`) and have no indexes (`bcedb.sh unidx`))_
+_(Warning: be sure that all tables are empty (`bcedb.sh trunc ...`) and have no indexes (`bcedb.sh unidx ...`))_
 
 Bulk import sample:
 
@@ -49,7 +49,7 @@ do
 done
 ```
 
-After this you can (or must) index all of tables (`bcedb.sh idx`)
+After this you **must** index all of these 4 tables (`bcedb.sh idx ...`)
 
 ## 3. TXO
 
