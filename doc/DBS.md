@@ -26,7 +26,7 @@ _Note: `postgresql` (client) installing by dependencies_.
 sudo -u postgres postgresql-setup --initdb
 ```
 
-- /var/lib/data/pg_hba.conf:
+- /var/lib/pgsql/data/pg_hba.conf:
 
 ```diff
  # "local" is for Unix domain socket connections only
@@ -49,7 +49,7 @@ sudo -u postgres postgresql-setup --initdb
 -#listen_addresses = 'localhost'
 +listen_addresses = '*'
 -shared_buffers = 128MB
-+shared_buffers = 8192MB #(1/4 RAM)
++shared_buffers = 8192MB #(¼ RAM)
 ```
 
 
@@ -58,9 +58,8 @@ sudo -u postgres postgresql-setup --initdb
 ```bash
 sudo mkdir /mnt/shares/pgsql
 sudo chown postgres:postgres /mnt/shares/pgsql
-sudo mv /var/lib/pgsql/{data,backups} /mnt/shares/pgsql/
+sudo mv /var/lib/pgsql/data /mnt/shares/pgsql/
 sudo ln -s /mnt/shares/pgsql/data /var/lib/pgsql/data
-sudo ln -s /mnt/shares/pgsql/backups /var/lib/pgsql/backups
 ```
 
 ## 3. Start server
@@ -98,7 +97,7 @@ ALTER DATABASE $BTCDB OWNER TO $BTCUSER;
 
 ~/.pgpass:
 
-```localhost:5433:$BTCDB:$BTCUSER:$BTCPASS```
+```localhost:5432:$BTCDB:$BTCUSER:$BTCPASS```
 
 #### _check:_
 
@@ -118,6 +117,10 @@ psql $BTCDB $BTCUSER
   [1](https://linux-notes.org/ustanovka-postgresql-centos-red-hat-fedora/)
   [2](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04-ru)
   [3](http://r00ssyp.blogspot.com/2017/03/postgresql-9.html)
+
+- ~~Move PostgreSQL data into other location:~~
+  - /etc/passwd: /var/lib/pgdsql => *newdir*
+  - *newdir*/.bash_profile : PGDATA=*newdir*
 
 ----
 ![DB scheme](DB.svg)
