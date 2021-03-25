@@ -1,10 +1,10 @@
--- txo
+-- txo (table)
 SELECT
 	vout.a_id AS a_id,
 	DATE(bk0.datime) AS date0,
 	DATE(tx1.datime) AS date1,
 	SUM(money) AS money
-INTO txo
+INTO UNLOGGED txo
 FROM vout
 INNER JOIN addr ON
 	vout.a_id = addr.id

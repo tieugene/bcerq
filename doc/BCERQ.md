@@ -25,7 +25,9 @@ Options:
 - -a *file* - address list (filename or '-' for stdin)
 
 ## Tests:
+
 _(250k, `./bcerq.py … | tee tmp/….tsv`)_
+
 - `-t 2013-06-01 -n 4000000000000 addr_gt`
 - `-f 2013-01-01 -t 2013-06-01 -n 20 addr_btc_max`
 - `-f 2013-01-01 -t 2013-06-01 -n 20 addr_btc_min`
