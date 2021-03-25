@@ -1,5 +1,7 @@
 # ImpEx
 
+_TODO: add TXO to pic._
+
 Import/Export data from bcepy/bce2 to SQL DB.
 
 Main goal is to export into interim tsv and import into DB.  
@@ -41,7 +43,8 @@ do
 done
 ```
 
-_Note: or all togeter (export+import):_
+_Note: or all together (export+import):_
+
 ```bash
 for i in a b t v
 do
@@ -49,19 +52,7 @@ do
 done
 ```
 
-After this you **must** index all of these 4 tables (`bcedb.sh idx ...`)
-
-## 3. TXO
-
-_Warning: be sure that you **indexed** all 4 previous tables and **droped txo** table before next steps._
-
-After loading primary data (bk/tx/tx/vout/addr) you must [re]**create** working table - txo. It is summary of vout in simplified form. Vouts that are stored: a) money > 0, b) single address (&rArr; multisigs and addressless not included):  
-`bcedb.sh xload x`
-
-And last step - index it:  
-`bcedb.sh idx x`  
-
-~~Now you can *vacuum* all tables before quirying.~~
+After this you **must** index all of these 4 tables (`bcedb.sh idx ...`) and *can* `VACUUM FREEZE;` them.
 
 ----
 ![Comics](ImpEx.svg)

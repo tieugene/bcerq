@@ -14,6 +14,7 @@ Typical workflow to use bcerq utility set:
 1. Load data  
    _import data using `txt2tsv.sh` and `tsv2db.sh` ([RTFM](ImpEx.md));_  
    _then index and valuum DB using `bcedb.sh`_
+1. Create [TXO](TXO.md)
 1. Check (optional)  
    _It is possible to make tests and benchmarks to estimate DB usability using [`test_db.sh`](../test_db.sh) ([RTFM](Test_DB.md))_
 1. Queries  
