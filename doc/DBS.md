@@ -110,9 +110,15 @@ psql $BTCDB $BTCUSER
 ## x. Misc
 
 - Check databases and users:
+
    ```bash
-   psql -U postgres -c "SELECT * FROM pg_user;SELECT * FROM pg_database;"
+   psql -U postgres -c "SELECT * FROM pg_user; SELECT * FROM pg_database;"
    ```
+- `psql -h <socket_dir=/tmp/>`
+- `VACUUM ANALYZE [blocks,transactions,addresses,data];`
+- `shared_buffer = 0.25 RAM`
+- `effective_cache_size = 0.5..0.75 RAM`
+- `work_mem (in 1MB)`
 - RTFM:
   [1](https://linux-notes.org/ustanovka-postgresql-centos-red-hat-fedora/)
   [2](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04-ru)

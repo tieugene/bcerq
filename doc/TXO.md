@@ -34,11 +34,11 @@ _Warning: be sure that you **droped** `txo` table before next steps._
 
 ### 2.1. Create
 
-	`psql -f sql/dbctl/x/z.sql` $BTCDB $BTCUSER`
+`psql -f sql/dbctl/x/z.sql $BTCDB $BTCUSER`
 
 ### 2.2. Delete
 
-	`psql -c 'DROP VIEW txo;' $BTCDB $BTCUSER`
+`psql -c 'DROP VIEW txo;' $BTCDB $BTCUSER`
 
 ## 3. Switch Table &lrarr; View
 
@@ -46,6 +46,9 @@ To switch between Table and View you must destroy 1st and create 2nd:
 
 - Table &rArr; View:
 	1. Delete Table (1.2)
+
+		_Note: another way - rename table: `ALTER TABLE txo RENAME TO _txo;`_
+
 	1. Create View (2.1)
 
 - View &rArr; Table:

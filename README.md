@@ -41,3 +41,9 @@ Utilities set to import BTC blockchain data from [bcepy](https://github.com/tieu
 
 Distributed under GPL 3.0 [license](LICENSE).
 
+## Branches:
+
+- 0.0.1 - old snapshot
+- multidb - experimental with switchable DB-engine
+- devel - current
+- main - stable
