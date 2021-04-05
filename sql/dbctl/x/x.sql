@@ -1,10 +1,10 @@
--- txo (table)
+-- txo (table, iss)
+INSERT INTO txo (a_id, date0, date1, money)
 SELECT
-	vout.a_id AS a_id,
+	vout.a_id,
 	DATE(bk0.datime) AS date0,
 	DATE(tx1.datime) AS date1,
-	SUM(money) AS money
-INTO UNLOGGED txo
+	SUM(money)
 FROM vout
 INNER JOIN addr ON
 	vout.a_id = addr.id
@@ -25,6 +25,4 @@ WHERE
 	money > 0
 	AND addr.qty = 1
 GROUP BY
-	vout.a_id, date0, date1
-ORDER BY
-	date0, vout.a_id, date1;
+  vout.a_id, date0, date1;

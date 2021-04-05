@@ -5,7 +5,7 @@ cfgname="$HOME/.bcerq.ini"
 source "$cfgname"
 BASE_DIR=`dirname "$0"`
 SQL_DIR="$BASE_DIR/sql/test"
-OUT_DIR="tmp"
+OUT_DIR="_tmp"
 
 test_pgsql() {
   # $1 - query name

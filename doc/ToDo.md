@@ -1,5 +1,15 @@
 # ToDo
 
+## 210405:
+
+- update scripts
+- update doc
+- vacuumdb [-h ...] -U btcuser -Fqz btcdb
+- CREATE _UNLOGGED_ txo ... (250k: t-15%)
+- _test_400.sh (&le; 2016-02-25)
+- test xload indexed
+- Partial xload
+
 ## FixMe:
 
 - query.stat
