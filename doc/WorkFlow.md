@@ -13,6 +13,7 @@ Typical workflow to use bcerq utility set:
 1. Create DB scheme
 
    create DB tables using `bcedb.sh` ([RTFM](DB.md))
+   *(e.g. `./bcedb.sh create z`)*
 
 1. Load source data
 

@@ -1,6 +1,6 @@
 # mis benchmarks
 
-TIMEFORMAT=%R
+TIMEFORMAT=%0R
 cfgname="$HOME/.bcerq.ini"
 source "$cfgname"
 BASE_DIR=`dirname "$0"`
@@ -10,9 +10,9 @@ OUT_DIR="_tmp"
 test_pgsql() {
   # $1 - query name
   DST="`basename $1 .sql`.csv"
-  echo -n "`basename $1 .sql` `head -n 1 $1`: "
-  sec=`time psql -q -f "$1" -t --no-align -F $'\t' -h "$dbhost" "$dbname" "$dbuser" > $OUT_DIR/$DST`
-  echo -n "$sec" >> /dev/stderr
+  echo -n "`basename $1 .sql` `head -n 1 $1`: " > /dev/stderr
+  SEC=`time psql -q -f "$1" -t --no-align -F $'\t' -h "$dbhost" "$dbname" "$dbuser" > $OUT_DIR/$DST`
+  echo -n "$SEC" >> /dev/stderr
 }
 mkdir -p "$OUT_DIR"
 for i in `ls $SQL_DIR/*.sql`
