@@ -1,5 +1,16 @@
 # Notes
 
+## Tips
+
+Mk alist:
+`gawk '{print $1}' *.tsv | sort -n | uniq | grep ^[0-9]`
+
+Is empty:
+
+SELECT EXISTS (SELECT 1 FROM txo); f t
+SELECT EXISTS (SELECT * FROM txo); f t
+SELECT 1 WHERE EXISTS (SELECT * FROM txo); 0 1 (rows; column unknown)
+
 ## Tasks
 1. Top X addresses with max **abs** <sub>&Delta;</sub>&sum; (&#x20BF;) on <sub>&Delta;</sub>D.
 2. Top Y addresses with max **rel** <sub>&Delta;</sub>&sum; (%) on <sub>&Delta;</sub>D (((&sum;<sub>1</sub>÷&sum;<sub>0</sub>)-1)×100%))
@@ -44,7 +55,7 @@ GROUP BY addr
 
 Limit | 1&uarr; | 1&darr; | 2&uarr; | 3&uarr; |
 ------|-----|-----|-----|-----|-----
-- <s>&sum;<sub>0</sub></s>&hellip;<s>&sum;<sub>1</sub></s> | &cross; | &cross; | &cross; 
+- <s>&sum;<sub>0</sub></s>&hellip;<s>&sum;<sub>1</sub></s> | &cross; | &cross; | &cross;
 - <s>&sum;<sub>0</sub></s>&hellip;&sum;<sub>1</sub> | &check; | &cross; | &cross;
 - &sum;<sub>0</sub>&hellip;<s>&sum;<sub>1</sub></s> | &cross; | &check; | &cross;
 - &sum;<sub>0</sub>&hellip;&sum;<sub>1</sub> | &check; | &check; | &check;
@@ -89,7 +100,7 @@ Tests (1):
 - 0-0 2010-01-01 2010-12-31 &check;
 - 0-1 2012-01-01 2012-05-31 &check;
 - 1-0 2012-06-01 2012-12-31
-- 1-1 
+- 1-1
 
 ### 3. <sub>&Delta;</sub>&sum;(&#x20BF;,%) in <sub>&Delta;</sub>D for &#9993;[&hellip;].
 
@@ -164,7 +175,17 @@ kbk | .dat | date
 300 |  138 | 2014-05-10
 350 |  249 | 2015-03-31
 400 |  453 | 2016-02-25
-450 |  751 | 
-500 | 1105 | 
+450 |  751 |
+500 | 1105 |
 
 _`SELECT id/1000 AS no, datime FROM bk WHERE MOD(id,10000) = 0 ORDER BY no;`_
+
+---
+
+txo actions:
+
+- not exists:
+
+\# | txo | idx | lim | txo
+---|-----|-----|-----|-----
+1  |  -  |  -  |

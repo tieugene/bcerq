@@ -4,6 +4,7 @@
 
 + update scripts
 + update doc
+- mk dia in [PlantUML](http://www.plantuml.com/plantuml/uml/)
 - vacuumdb [-h ...] -U btcuser -Fqz btcdb
 - CREATE _UNLOGGED_ txo ... (250k: t-15%)
 - _test_400.sh (&le; 2016-02-25)
@@ -12,6 +13,25 @@
 - Partial xload:
   - all/1y/6m/3m
   - all/till/from/in
+
+## Partial TXO
+
+\# | Lim      | Cond
+---|----------|------
+1  | D&sup1;] | d0&le;D&sup1;
+2  | [D&deg;  | d1&ge;D&deg;&or;&empty;
+3  | [D&deg;&hellip;D&sup1;] | &not;(d0&gt;D1 &or; d1&lt;D0)
+
+Bit table:
+
+d0\1 | <D0 |D0-D1| >D1 |&empty;
+-----|:---:|:---:|:---:|:---:
+\<D0 |  -  |  +  |  +  |  +
+D0-D1|  ×  |  +  |  +  |  +
+\>D1 |  ×  |  ×  |  -  |  -
+
+- &not;(d0&gt;D1 &or; d1&lt;D0)
+- d0&le;D1 & (d1&ge;D0 &or; &empty;)
 
 ## FixMe:
 

@@ -37,13 +37,13 @@ class Opts(object):
     dbuser = None
     dbpass = None
     # query args
+    verbose = False
     date0 = None
     date1 = None
     num = None
     alist = list()
     # misc
     sep = None
-    verbose = False
 
 
 TplFactory = dict()  # templates factory: cmd: fname, note, required, output, tpl_body
