@@ -2,13 +2,16 @@
 
 ## 210405:
 
-- update scripts
-- update doc
++ update scripts
++ update doc
 - vacuumdb [-h ...] -U btcuser -Fqz btcdb
 - CREATE _UNLOGGED_ txo ... (250k: t-15%)
 - _test_400.sh (&le; 2016-02-25)
 - test xload indexed
-- Partial xload
+- xload into separate script
+- Partial xload:
+  - all/1y/6m/3m
+  - all/till/from/in
 
 ## FixMe:
 

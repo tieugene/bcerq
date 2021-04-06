@@ -10,7 +10,7 @@ OUT_DIR="_tmp"
 test_pgsql() {
   # $1 - query name
   DST="`basename $1 .sql`.csv"
-  echo -n "`basename $1 .sql` `head -n 1 $1`: " > /dev/stderr
+  echo -n "`basename $1 .sql` `head -n 1 $1`: " >> /dev/stderr
   SEC=`time psql -q -f "$1" -t --no-align -F $'\t' -h "$dbhost" "$dbname" "$dbuser" > $OUT_DIR/$DST`
   echo -n "$SEC" >> /dev/stderr
 }
