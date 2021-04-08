@@ -12,8 +12,8 @@ select 1 where exists (select * from txo);
 import argparse
 from common import *
 
-SQL_From = "AND ((date1 >= '{}') OR (date1 IS NULL)) "  # date1
-SQL_UpTo = "AND (bk.datime <= '{}')"    # date0
+SQL_From = "AND ((DATE(tx1.datime) >= '{}') OR (tx1.datime IS NULL)) "  # date1
+SQL_UpTo = "AND (DATE(bk0.datime) <= '{}')"    # date0
 
 
 def init_cli():

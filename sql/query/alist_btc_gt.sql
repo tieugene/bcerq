@@ -34,4 +34,4 @@ INNER JOIN (
     HAVING SUM(money) > 0
 ) AS e ON a.id = e.a_id
 WHERE (e.itogo - COALESCE(b.itogo, 0)) > $NUM
-ORDER BY profit_b DESC;
+ORDER BY profit_b DESC, a_id ASC;

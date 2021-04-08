@@ -1,5 +1,11 @@
 # ToDo
 
+## 210409:
+
+- chk "-less addrs
+- sort queries by...
+- chk 13=>12: (13tx, 10tx; lost all)
+
 ## 210405:
 
 + update scripts

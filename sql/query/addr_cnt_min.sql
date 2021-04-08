@@ -33,6 +33,6 @@ FROM (
         GROUP BY a_id
         HAVING SUM(money) > 0
     ) AS e ON b.a_id = e.a_id
-    ORDER BY profit ASC
+    ORDER BY profit ASC, a_id ASC
     LIMIT $NUM
 ) AS data INNER JOIN addr ON a_id = addr.id;

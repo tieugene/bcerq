@@ -32,6 +32,6 @@ FROM (
             AND (date1 > '$DATE1' OR date1 IS NULL)
         GROUP BY a_id
     ) AS e ON b.a_id = e.a_id
-    ORDER BY profit DESC
+    ORDER BY profit DESC , a_id ASC
     LIMIT $NUM
 ) AS data INNER JOIN addr ON a_id = addr.id;
