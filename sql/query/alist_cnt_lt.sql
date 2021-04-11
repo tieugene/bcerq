@@ -36,4 +36,4 @@ INNER JOIN (
     HAVING SUM(money) > 0
 ) AS e ON a.id = e.a_id
 WHERE (b.itogo/e.itogo-1)*100 > $NUM
-ORDER BY profit_c ASC;
+ORDER BY profit_c ASC, a_id ASC;

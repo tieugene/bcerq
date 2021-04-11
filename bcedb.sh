@@ -48,7 +48,7 @@ debug() {
 }
 
 help() {
-  message "Usage: $0 [-h <host>] [-d <db>] [-u <user>] [-p <pass>] <command> [<table>]
+  message "Usage: $0 [-h <host>] [-d <db>] [-u <user>] [-p <pass>] <command> <table>
   command:
     create: create table
     idx:    create indices and constraints
@@ -63,7 +63,8 @@ help() {
     b:  bk
     t:  tx
     v:  vout
-    x:  txo"
+    x:  txo
+    z:  all of them"
   exit
 }
 
@@ -114,7 +115,7 @@ if [ -z dbname ] || [ -z dbuser ]; then
 fi
 # 2. positional options
 # 2.1. cmd
-[ $# -lt "1" ] && help
+[ $# -lt "2" ] && help
 CMD=${cmd_array[$1]}
 if [ -z "$CMD" ]; then
   message "Bad <command> '$1'."
@@ -126,12 +127,12 @@ if [[ "dtu" =~ $CMD ]]; then  # drop/trunc/unidx in reverse order
 else
   TBL=$(ls "$SQL_DIR" | sort)
 fi
-if [ $# -gt "1" ]; then
-  if [[ ! "$TBL" =~ $2 ]]; then
+if [[ "$2" != "z" ]]; then
+  if [[ "$TBL" =~ $2 ]]; then
+    TBL=$2
+  else
     message "Bad table name '$2'."
     help
-  else
-    TBL=$2
   fi
 fi
 # 3. prepare SQLs

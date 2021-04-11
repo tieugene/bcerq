@@ -18,4 +18,4 @@ FROM (
     GROUP BY a_id
     HAVING SUM(money) >= $NUM
 ) AS data INNER JOIN addr ON data.a_id = addr.id
-ORDER BY itogo DESC;
+ORDER BY itogo DESC, a_id ASC;

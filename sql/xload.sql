@@ -1,4 +1,4 @@
--- txo (table, iss)
+-- xload template
 INSERT INTO txo (a_id, date0, date1, money)
 SELECT
 	vout.a_id,
@@ -24,5 +24,6 @@ LEFT JOIN (
 WHERE
 	money > 0
 	AND addr.qty = 1
+	{}
 GROUP BY
-  vout.a_id, date0, date1;
+	vout.a_id, date0, date1;

@@ -4,7 +4,7 @@ Database maintaining.
 
 ## 1. Usage
 
-`bcedb.sh` script uses options as from config as from command line as from backend-specific config: _\~/.bcerq.ini &rArr; CLI &rArr; \~/.pgpass_  
+`bcedb.sh` script uses options as from config as from command line as from backend-specific config: _\~/.bcerq.ini &rArr; CLI &rArr; \~/.pgpass_
 CLI overwrites .bcerq.ini, .pgpass _appends_ them.
 
 ## 2. Scheme
@@ -49,7 +49,6 @@ Ordinar [workflow](WorkFlow.svg):
 _Note: Import itself is not job of this tool (see [ImpEx](ImpEx.md))._
 
 1. create tables (if not exist)
-1. ~~import data~~
 1. create indexes
 1. &hellip;
 1. drop indexes (if exist)
@@ -69,7 +68,7 @@ sql/dbctl/_&lt;table&gt;_/_&lt;action&gt;_.sql
   - b[lock]
   - t[ransaction]
   - v[out]
-  - x[_txo_]
+  - x[*txo*]
 - Command:
   - create
   - index
@@ -78,3 +77,4 @@ sql/dbctl/_&lt;table&gt;_/_&lt;action&gt;_.sql
   - wash (vacuum)
   - trunc (delete table records)
   - drop (delete table)
+  - xload (fill out `txo` table)

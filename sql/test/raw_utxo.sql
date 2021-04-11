@@ -1,4 +1,4 @@
--- UTXO monthly, no multisig (raw)
+-- UTXO monthly, alones (no orphaned, no multisig)
 SELECT
  months.d0 AS mon,
  SUM(money) AS money

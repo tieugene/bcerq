@@ -4,9 +4,9 @@ _TODO: add TXO to pic._
 
 Import/Export data from bcepy/bce2 to SQL DB.
 
-Main goal is to export into interim tsv and import into DB.  
-Import into DB (`tsv2db.sh`) is enought trivial and just uses SQL `COPY` instruction.  
-Aim of `txt2tsv.sh` is to prepare data for this `COPY`.  
+Main goal is to export into interim tsv and import into DB.
+Import into DB (`tsv2db.sh`) is enought trivial and just uses SQL `COPY` instruction.
+Aim of `txt2tsv.sh` is to prepare data for this `COPY`.
 It is possible as split export and import separately as use both of utils together via pipe.
 
 Let's work with source data as `txt/250.txt.gz` and interim tsv in `tsv/`
@@ -16,7 +16,7 @@ Let's work with source data as `txt/250.txt.gz` and interim tsv in `tsv/`
 Export from src into interim .tsv files is doing with`txt2tsv.sh`utility (use `./txt2tsv.sh -h` for help).
 It accepts target table character and source data file as argument.
 Target table is: a=addr, b=bk, t=tx, v=vout.
-Source must be gzipped.  
+Source must be gzipped.
 Optional arhgument `-t` (temporary space) is very important during generating 'v' output. With big source data utillty can eat all of RAM and then require *fast* and *huge* temporary storage (starting from half of *uncompressed* source).
 
 Bulk export into files can be:
