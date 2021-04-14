@@ -32,7 +32,7 @@ def main(vouts_fn: str):
                 oo += 1
             o = o_f.readline().rstrip("\n")
     res = (io - ii == oo) and io == (oo + oi)
-    print("Summary: %s (vouts=%d, vins=%d, free=%d, spent=%d)" % ("OK" if res else "ERR", io, ii, oo, oi),
+    print("Summary: %s (vouts=%d, vins=%d, utxo=%d, stxo=%d)" % ("OK" if res else "ERR", io, ii, oo, oi),
           file=sys.stderr)
 
 
