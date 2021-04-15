@@ -31,13 +31,12 @@ def init_cli():
     """
     Handle CLI
     """
-    parser = argparse.ArgumentParser(description="'plit bce2's output into pieces by blocks.",
+    parser = argparse.ArgumentParser(description="'Split bce2's output into pieces by blocks.",
                                      epilog="Note: processed blocks: frombk..frombk+num*by-1,\n"
                                             "e.g. -f 10 -n 3 -b 2 == 10..15 (10-11, 12-13, 14-15)")
     parser.add_argument('-f', '--from', dest="frombk", metavar='n', type=int, default=0, help='Start bk (default=0)')
     parser.add_argument('-n', '--num', metavar='n', type=int, default=1, help='Parts number (default=1)')
     parser.add_argument('-b', '--by', metavar='n', type=int, default=1, help='Part size, bk (default=1)')
-    parser.add_argument('-i', '--infile', metavar='path', type=str, help='Input file (default=<stdin>')
     parser.add_argument('-o', '--outdir', metavar='path', type=str, default='.', help='Output dir (default=\'.\')')
     parser.add_argument('-v', '--verbose', action='store_true', help='Debug (default=false)')
     return parser
@@ -47,20 +46,16 @@ def main():
     global frombk, num, by, outdir, verbose
     parser = init_cli()
     args = parser.parse_args()
-    if args.infile:
-        i_f = gzip.open(args.infile, "rt")
-    else:
-        i_f = sys.stdin
-        if sys.stdin.isatty():
-            eprint(f"Not file nor stdin is used.")
-            parser.print_help()
-            return 1
+    if sys.stdin.isatty():
+        eprint("No data in <stdin>.")
+        parser.print_help()
+        return 1
     frombk, num, by, outdir, verbose = args.frombk, args.num, args.by, args.outdir, args.verbose
     isbk = re.compile(r"^b\t(\d{1,6})\t")
     o_f = None
     skip = True
     nextpart = frombk
-    for line in i_f.readlines():
+    for line in sys.stdin:
         m = isbk.match(line)
         if not m:       # not bk
             if skip:
