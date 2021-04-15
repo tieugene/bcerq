@@ -8,6 +8,8 @@ txt2sql.py |
 psql -c btcdb btcuser
 RTFM (wrap): https://stackoverflow.com/questions/15112882/how-to-wrap-piped-input-to-stdout-in-a-bash-script
 `echo 'BEFORE' $(cat) 'AFTER'`
+FIXME: something wrong with addr.name (json)
+TODO: 249329 - multisign
 """
 
 import sys
@@ -20,9 +22,9 @@ def cb_o(s: list) -> str:
 
 def main():
     template = {
-        'a': lambda a: f"INSERT INTO addr (id, name, qty) VALUES ({a[0]}, {a[1]}, {a[2]});",
+        'a': lambda a: f"INSERT INTO addr (id, name, qty) VALUES ({a[0]}, '{a[1]}', {a[2]});",
         'b': lambda a: f"INSERT INTO bk (id, datime) VALUES ({a[0]}, {a[1]});",
-        't': lambda a: f"INSERT INTO tx (id, b_id, hash) VALUES ({a[0]}, {a[1]}, {a[2]});",
+        't': lambda a: f"INSERT INTO tx (id, b_id, hash) VALUES ({a[0]}, {a[1]}, '{a[2]}');",
         'o': lambda a: cb_o(a),
         'i': lambda a: f"UPDATE vout SET t_id_in={a[2]} WHERE t_id={a[0]} AND n={a[1]};",
     }
