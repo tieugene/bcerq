@@ -70,12 +70,14 @@ def main():
             if skip:
                 if bk < frombk:
                     continue
+                vprint(f"started: {bk}")
                 skip = False
             if bk >= nextpart:
                 if o_f:
                     o_f.close()
                 num -= 1
                 if num < 0:
+                    vprint(f"ended: {bk}")
                     break
                 nextpart += by
                 vprint(f"num={num}, nextpart={nextpart}")
