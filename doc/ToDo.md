@@ -1,5 +1,10 @@
 # ToDo
 
+## 210417
+
+- zstd
+  - and [python](https://github.com/indygreg/python-zstandard), mth ok
+
 ## 210409:
 
 - chk "-less addrs
