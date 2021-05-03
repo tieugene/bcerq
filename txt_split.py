@@ -5,12 +5,13 @@ Input: stdin.
 Output: start..end.txt.gz (bonus: bkno.txt.gz on one bk).
 """
 
-import gzip
 import os
 import re
 import sys
 import argparse
+import zstandard as zstd
 
+# CLI
 frombk: int
 num: int
 by: int
@@ -52,9 +53,11 @@ def main():
         return 1
     frombk, num, by, outdir, verbose = args.frombk, args.num, args.by, args.outdir, args.verbose
     isbk = re.compile(r"^b\t(\d{1,6})\t")
-    o_f = None
     skip = True
     nextpart = frombk
+    cctx = zstd.ZstdCompressor()
+    compressor = None
+    o_f = None
     for line in sys.stdin:
         m = isbk.match(line)
         if not m:       # not bk
@@ -69,6 +72,9 @@ def main():
                 skip = False
             if bk >= nextpart:
                 if o_f:
+                    if compressor:
+                        compressor.flush()
+                        compressor.close()
                     o_f.close()
                 num -= 1
                 if num < 0:
@@ -76,11 +82,16 @@ def main():
                     break
                 nextpart += by
                 vprint(f"num={num}, nextpart={nextpart}")
-                filename = "%06d.txt.gz" % bk if by == 1 else "%06d-%06d.txt.gz" % (bk, nextpart-1)
-                o_f = gzip.open(os.path.join(outdir, filename), "wt")
-        if o_f:
-            o_f.write(line)
+                filename = "%06d.txt.zst" % bk if by == 1 else "%06d-%06d.txt.zst" % (bk, nextpart-1)
+                # o_f = gzip.open(os.path.join(outdir, filename), "wt")
+                o_f = open(os.path.join(outdir, filename), "wb")
+                compressor = cctx.stream_writer(o_f)
+        if compressor:
+            compressor.write(line.encode('utf-8'))
     if o_f:
+        if compressor:
+            compressor.flush()
+            compressor.close()
         o_f.close()
 
 
