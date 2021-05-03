@@ -2,7 +2,7 @@
 """
 Split bcepy/bce2 output into pieces.
 Input: stdin.
-Output: start..end.txt.gz (bonus: bkno.txt.gz on one bk).
+Output: start..end.txt.zst (bonus: bkno.txt.zst on one bk).
 """
 
 import os
@@ -83,7 +83,6 @@ def main():
                 nextpart += by
                 vprint(f"num={num}, nextpart={nextpart}")
                 filename = "%06d.txt.zst" % bk if by == 1 else "%06d-%06d.txt.zst" % (bk, nextpart-1)
-                # o_f = gzip.open(os.path.join(outdir, filename), "wt")
                 o_f = open(os.path.join(outdir, filename), "wb")
                 compressor = cctx.stream_writer(o_f)
         if compressor:

@@ -8,7 +8,7 @@ Utilities set to import BTC blockchain data from [bcepy](https://github.com/tieu
 
 ## Requirements
 
-- core utils (`bash`, `gawk`, `sed`, `tail`/`head`, `gzip`/`ungzip` or `pigz`/`unpigz`)
+- core utils (`bash`, `gawk`, `sed`, `tail`/`head`, `zstd`/`zstdcat`)
 - PostgreSQL CLI client (`psql`)
 - python3-psycopg2
 

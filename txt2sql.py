@@ -2,7 +2,7 @@
 """
 Converts txt (bce2 output) into SQL strings to update SQL DB.
 Pipeline:
-unpigz -c <src1.txt.gz> <src2.txt.gz>... |
+zstdcat <src1.txt.zst> <src2.txt.zst>... |
 txt2sql.py |
 (wrap in 'LOCK ...; BEGIN; ... COMMIT;) |
 psql -c btcdb btcuser
@@ -36,6 +36,6 @@ def main():
 
 if __name__ == '__main__':
     if sys.stdin.isatty():  # stdin is empty
-        print(f"Usage: unpigz -c block.txt.gz | {sys.argv[0]} [> outfile.sql]", file=sys.stderr)
+        print(f"Usage: zstdcat block.txt.zst | {sys.argv[0]} [> outfile.sql]", file=sys.stderr)
     else:
         main()
