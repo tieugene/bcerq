@@ -5,7 +5,7 @@ Input - zstded sorted vouts and vins.
 Output - stdout (t_id, n, money, a_id, t_id_in)
 """
 
-import zstandard as zstd
+import gzip
 import sys
 
 

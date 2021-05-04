@@ -86,7 +86,7 @@ def main():
                 o_f = open(os.path.join(outdir, filename), "wb")
                 compressor = cctx.stream_writer(o_f)
         if compressor:
-            compressor.write(line.encode('utf-8'))
+            compressor.write(line.encode('ascii'))
     if o_f:
         if compressor:
             compressor.flush()

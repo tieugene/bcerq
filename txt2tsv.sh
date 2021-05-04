@@ -1,5 +1,5 @@
 # Tool to export bce2 output into SQL loadable CSV
-# Requires: zstdmt/zstdcat
+# Requires: zstdmt/zstdcat, gzip|pigz
 # TODO: v | tee (remove tmp file)
 # TODO: i+o => v(i+o)+u
 # tmp: macOS: TMP_DIR, Windows: TEMP/TMP, Linux: /tmp
@@ -50,9 +50,9 @@ ex() {
     zstdcat -T0 $@ | grep ^$TABLE | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
     ;;
   v)
-    VOUTS=$tmpdir/o.txt.zst
+    VOUTS=$tmpdir/o.txt.gz
     # 1. filter vouts (out_tx, out_n, satoshi, addr)
-    zstdcat -T0 $@ | grep ^o | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4,$5}' | zstdmt -c > $VOUTS
+    zstdcat -T0 $@ | grep ^o | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4,$5}' | pigz -c > $VOUTS
     # 2. filter vins (out_tx, out_n, in_tx)
     # 3. sort vins by vouts
     # 4. join vouts | vins
