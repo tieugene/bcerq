@@ -57,7 +57,6 @@ def main():
     nextpart = frombk
     cctx = zstd.ZstdCompressor()
     compressor = None
-    o_f = None
     for line in sys.stdin:
         m = isbk.match(line)
         if not m:       # not bk
@@ -74,8 +73,7 @@ def main():
                 if compressor:
                     compressor.flush()
                     compressor.close()
-                if o_f:
-                    o_f.close()
+                    compressor = None
                 num -= 1
                 if num < 0:
                     vprint(f"ended: {bk}")
@@ -83,15 +81,12 @@ def main():
                 nextpart += by
                 vprint(f"num={num}, nextpart={nextpart}")
                 filename = "%06d.txt.zst" % bk if by == 1 else "%06d-%06d.txt.zst" % (bk, nextpart-1)
-                o_f = open(os.path.join(outdir, filename), "wb")
-                compressor = cctx.stream_writer(o_f)
+                compressor = cctx.stream_writer(open(os.path.join(outdir, filename), "wb"))
         if compressor:
             compressor.write(line.encode('ascii'))
     if compressor:
         compressor.flush()
         compressor.close()
-    if o_f:
-        o_f.close()
 
 
 if __name__ == '__main__':
