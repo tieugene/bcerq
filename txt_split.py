@@ -71,10 +71,10 @@ def main():
                 vprint(f"started: {bk}")
                 skip = False
             if bk >= nextpart:
+                if compressor:
+                    compressor.flush()
+                    compressor.close()
                 if o_f:
-                    if compressor:
-                        compressor.flush()
-                        compressor.close()
                     o_f.close()
                 num -= 1
                 if num < 0:
@@ -87,10 +87,10 @@ def main():
                 compressor = cctx.stream_writer(o_f)
         if compressor:
             compressor.write(line.encode('ascii'))
+    if compressor:
+        compressor.flush()
+        compressor.close()
     if o_f:
-        if compressor:
-            compressor.flush()
-            compressor.close()
         o_f.close()
 
 
