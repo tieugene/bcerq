@@ -24,7 +24,7 @@ Bulk export into files can be:
 ```bash
 for i in a b t v
 do
-  ./txt2tsv.sh $i txt/250.txt.gz | pigz -c > tsv/$i.tsv.gz
+  ./txt2tsv.sh $i txt/250.txt.zst | zstdmt > tsv/$i.tsv.zst
 done
 ```
 
@@ -39,7 +39,7 @@ Bulk import sample:
 ```bash
 for i in a b t v
 do
-  unpigz -c tsv/$i.tsv.gz | ./tsv2db.sh $i
+  zstdcat tsv/$i.tsv.zst | ./tsv2db.sh $i
 done
 ```
 
@@ -48,7 +48,7 @@ _Note: or all together (export+import):_
 ```bash
 for i in a b t v
 do
-  ./txt2tsv.sh $i txt/250.txt.gz | ./tsv2db.sh $i
+  ./txt2tsv.sh $i txt/250.txt.zst | ./tsv2db.sh $i
 done
 ```
 
