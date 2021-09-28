@@ -136,13 +136,11 @@ if [[ "$2" != "z" ]]; then
   fi
 fi
 # 3. prepare SQLs
-SQL=""
 for t in $TBL; do
   SQL+=$(load_sql $CMD $t)
 done
-#  SQL="BEGIN;
-#$sql_string
-#COMMIT;"
+# v2: [ "dtu" =~ $CMD ] ...
+SQL="BEGIN;\n$SQL\nCOMMIT;"
 # 4. go
 debug "Exec '$SQL'"
 psql -q -c "$SQL" -h "$dbhost" "$dbname" "$dbuser"
