@@ -17,8 +17,7 @@ SQL_UpTo = "AND (DATE(bk0.datime) <= '{}')"    # date0
 
 
 def init_cli():
-    """
-    Handle CLI
+    """Handle CLI
     TODO: print SQL only (dummy mode)
     """
     parser = argparse.ArgumentParser(description='BCE xload.')
@@ -36,6 +35,7 @@ def init_cli():
 
 
 def load_cli():
+    """Load CLI options"""
     parser = init_cli()
     args = parser.parse_args()
     if args.fromdate and args.todate and args.fromdate > args.todate:
@@ -51,8 +51,7 @@ def load_cli():
 
 
 def main():
-    """
-    Main module
+    """Main module
     :return: None
     1. chk txo exists
     2. chk txo idx

@@ -25,6 +25,7 @@ Utilities set to import BTC blockchain data from [bcepy](https://github.com/tieu
 - *[ToDo](doc/ToDo.md) list*
 - *Misc [notes](doc/Notes.md)*
 - *Misc [tests](doc/tests)*
+- *[contrib](doc/Contrib.md) scripts*
 - *~~Data [formats](doc/Formats.md)~~*
 
 ## Utilities

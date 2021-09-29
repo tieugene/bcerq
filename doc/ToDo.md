@@ -1,20 +1,17 @@
 # ToDo
 
-## 210417
+## 210929:
 
-- zstd
-  - and [python](https://github.com/indygreg/python-zstandard), mth ok
-
-## 210409:
-
-- chk "-less addrs
-- sort queries by...
-- chk 13=>12: (13tx, 10tx; lost all)
+- [ ] contrib/
+   - [ ] init
+   - [ ] aio
+- [ ] Transact by a table:
+- [ ] Transact all:
 
 ## 210405:
 
-+ update scripts
-+ update doc
+- [x] update scripts
+- [x] update doc
 - mk dia in [PlantUML](http://www.plantuml.com/plantuml/uml/)
 - vacuumdb [-h ...] -U btcuser -Fqz btcdb
 - CREATE _UNLOGGED_ txo ... (250k: t-15%)

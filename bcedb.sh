@@ -140,7 +140,7 @@ for t in $TBL; do
   SQL+=$(load_sql $CMD $t)
 done
 # v2: [ "dtu" =~ $CMD ] ...
-SQL="BEGIN;\n$SQL\nCOMMIT;"
+# SQL="BEGIN;\n$SQL\nCOMMIT;"
 # 4. go
 debug "Exec '$SQL'"
 psql -q -c "$SQL" -h "$dbhost" "$dbname" "$dbuser"
