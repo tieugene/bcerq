@@ -2,11 +2,14 @@
 
 ## 210929:
 
+- [ ] SQL seq/tx/bulk_tx: "psql exec -c as single tx"
 - [ ] contrib/
-   - [ ] init
+   - [x] init:
+      - [x] init_1
+      - [x] init_2 (200k): 129/120 (10%)
+      - [x] init_3: 65/60 (10%)
+      - [x] init_4: by1=114", z=124"
    - [ ] aio
-- [ ] Transact by a table:
-- [ ] Transact all:
 
 ## 210405:
 

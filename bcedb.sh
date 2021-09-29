@@ -27,7 +27,7 @@ tbl_array=(
   [x]="txo"
 )
 cfgname="$HOME/.bcerq.ini"
-BASE_DIR=`dirname "$0"`
+BASE_DIR=$(dirname "$0")
 SQL_DIR="$BASE_DIR/sql/dbctl"
 # var
 dbhost=""
@@ -110,7 +110,7 @@ done
 shift $((OPTIND-1))
 # 1.3. TODO: ~/.pgpass
 # 1.x. chk mandatory
-if [ -z dbname ] || [ -z dbuser ]; then
+if [ -z "$dbname" ] || [ -z "$dbuser" ]; then
   message "'dbname' or 'dbuser' no defined. Use -d/-u option or fill out '$cfgname'"
 fi
 # 2. positional options
@@ -137,7 +137,7 @@ if [[ "$2" != "z" ]]; then
 fi
 # 3. prepare SQLs
 for t in $TBL; do
-  SQL+=$(load_sql $CMD $t)
+  SQL+=$(load_sql "$CMD" "$t")
 done
 # v2: [ "dtu" =~ $CMD ] ...
 # SQL="BEGIN;\n$SQL\nCOMMIT;"
