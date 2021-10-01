@@ -1,5 +1,9 @@
 #!/bin/sh
 # Direct update RDB from bitcoind
+# Usage:
+# $0 - update RDB
+# $0 <yyyy-mm-dd> - +xload from date
+# $0 <anything> - +xload all
 CFG_FILE="$(dirname "$0")/init.cfg"
 if [ -f "$CFG_FILE" ]; then . "$CFG_FILE"; else echo "$CFG_FILE not found"; exit; fi
 TXT2SQL="$BINDIR/txt2sql.py"
