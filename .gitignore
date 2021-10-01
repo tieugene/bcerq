@@ -131,3 +131,4 @@ dmypy.json
 # local
 .idea/
 _*
+/contrib/init.cfg

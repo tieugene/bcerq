@@ -2,7 +2,7 @@
 
 ## 210929:
 
-- [ ] SQL seq/tx/bulk_tx: "psql exec -c as single tx"
+- [x] SQL seq/tx/bulk_tx: "psql exec -c as single tx"
 - [ ] contrib/
    - [x] init:
       - [x] init_1
@@ -10,6 +10,7 @@
       - [x] init_3: 65/60 (10%)
       - [x] init_4: by1=114", z=124"
    - [ ] aio
+- [ ] `psql -q -c "$(./xload.py -f 2020-09-29)" btc alex)`
 
 ## 210405:
 
