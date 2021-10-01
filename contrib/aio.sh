@@ -44,7 +44,7 @@ start_svc() {
 
 stop_svc() {
     # try to stop service
-    prelog "Start $1..."
+    prelog "Stop $1..."
     sudo systemctl stop "$1"
     retcode=$?
     if [ $retcode -eq 0 ]; then postlog "OK"; else postlog "Fail"; fi
