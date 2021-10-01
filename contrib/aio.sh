@@ -77,7 +77,6 @@ xload() {
 
 :>"$ERRFILE"
 if [ -z "$1" ]; then log "== Start =="; else log "== Start with '$1' =="; fi
-exit
 # 0. Prepare
 # - bce2
 BK_KV=$(bce2 -i | grep ^Chk_bk | gawk '{print $2}')
