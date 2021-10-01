@@ -65,7 +65,7 @@ xload() {
     if [[ $1 =~ $SAMPLE ]]; then
       prelog "Reload TXO from $1..."
       SQL=$(python3 "$BINDIR/xload.py" -f "$1")
-      psql -q -c "$SQL" "$BTCDB" "$BTCUSER"
+      psql -q -c "$SQL" "$PGBASE" "$PGLOGIN"
     else
       prelog "Full reload TXO..."
       $BCEDB xload x
