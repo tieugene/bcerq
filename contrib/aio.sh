@@ -56,13 +56,24 @@ process_bk() {
 }
 
 xload() {
-    prelog "Reload TXO..."
-    $BCEDB unidx x && $BCEDB trunc x && $BCEDB xload x && (postlog "OK"; prelog "Index TXO..."; $BCEDB idx x)
-    postlog "OK"
+  SAMPLE="^20[0-9]{2}-[0-9]{2}-[0-9]{2}$"
+  $BCEDB unidx x && $BCEDB trunc x && (\
+    if [[ $1 =~ $SAMPLE ]]; then
+      prelog "Reload TXO from $1..."
+      SQL=$(python3 "$BINDIR/xload.py" -f "$1")
+      psql -q -c "$SQL" "$BTCDB" "$BTCUSER"
+    else
+      prelog "Full reload TXO..."
+      $BCEDB xload x
+    fi
+    postlog "OK"; prelog "Index TXO..."; $BCEDB idx x\
+  )
+  postlog "OK"
 }
 
 :>"$ERRFILE"
-log "== Start =="
+if [ -z "$1" ]; then log "== Start =="; else log "== Start with '$1' =="; fi
+exit
 # 0. Prepare
 # - bce2
 BK_KV=$(bce2 -i | grep ^Chk_bk | gawk '{print $2}')
@@ -88,7 +99,7 @@ if [ "$BK_KV" -lt "$BK_BTC" ]; then
   postlog "OK"
   if [ -n "$1" ]; then
     stop_svc bitcoin
-    xload
+    xload "$1"
     [ -z "$SVC_SQL" ] && stop_svc postgresql
     [ -n "$SVC_BTC" ] && start_svc bitcoin
   else
