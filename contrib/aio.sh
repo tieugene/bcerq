@@ -111,4 +111,4 @@ if [ "$BK_KV" -lt "$BK_BTC" ]; then
 fi
 [ -z "$SVC_BTC" ] && stop_svc bitcoin
 log "== End =="
-mail -s "BTC update" "$MAILTO" < "$ERRFILE"
+mail -r "$MAILFROM" -s "aio" "$MAILTO" < "$ERRFILE"
