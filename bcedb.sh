@@ -1,4 +1,5 @@
 # Tool to manipulate bce SQL database.
+# configs: /etc/bce/bcerq.cfg, ~/.bcerq.cfg
 # …TODO: bulk sql B2in BEGIN; ... COMMIT;
 # …TODO: verbose
 # …TODO: chk options (dbname dbuser)
@@ -7,6 +8,7 @@
 # TODO: load ./pgpass
 
 # const
+CFG_NAME="bcerq.conf"
 declare -A cmd_array
 cmd_array=(
   [create]="c"
@@ -26,7 +28,6 @@ tbl_array=(
   [v]="vout"
   [x]="txo"
 )
-cfgname="$HOME/.bcerq.ini"
 BASE_DIR=$(dirname "$0")
 SQL_DIR="$BASE_DIR/sql/dbctl"
 # var
@@ -92,9 +93,8 @@ load_sql() {
 
 # 1. load defaults
 # 1.1. defaults
-if [ -f "$cfgname" ]; then
-  source "$cfgname"
-fi
+[ -f "/etc/bce/$CFG_NAME" ] && source "/etc/bce/$CFG_NAME"
+[ -f "$HOME/.$CFG_NAME" ] && source "$HOME/.$CFG_NAME"
 # 1.2. CLI
 while getopts vh:d:u:p: opt
 do
@@ -111,7 +111,7 @@ shift $((OPTIND-1))
 # 1.3. TODO: ~/.pgpass
 # 1.x. chk mandatory
 if [ -z "$dbname" ] || [ -z "$dbuser" ]; then
-  message "'dbname' or 'dbuser' no defined. Use -d/-u option or fill out '$cfgname'"
+  message "'dbname' or 'dbuser' no defined. Use -d/-u option or fill out '$CFG_NAME'"
 fi
 # 2. positional options
 # 2.1. cmd

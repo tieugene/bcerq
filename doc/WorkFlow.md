@@ -6,9 +6,9 @@ Typical workflow to use bcerq utility set:
 
    install and configure PostgreSQL server, client, database and DB user manually ([RTFM](DBS.md)).
 
-1. Prepare `~/.bcerq.ini`
+1. Prepare `/etc/bce/bcerq.conf` and/or `~/.bcerq.conf`
 
-   create `~/.bcerq.ini` similar to [sample](bcerq.ini) (manually).
+   create `/etc/bce/bcerq.conf` and/or `~/.bcerq.conf` similar to [sample](bcerq.conf) (manually).
 
 1. Create DB scheme
 

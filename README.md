@@ -21,7 +21,7 @@ Utilities set to import BTC blockchain data from [bcepy](https://github.com/tieu
 - Create [TXO](doc/TXO.md) data
 - [Test](doc/Test_DB.md) loaded DB
 - Make [queries](doc/BCERQ.md)
-- Config [sample](doc/bcerq.ini)
+- Config [sample](doc/bcerq.conf)
 - *[ToDo](doc/ToDo.md) list*
 - *Misc [notes](doc/Notes.md)*
 - *Misc [tests](doc/tests)*

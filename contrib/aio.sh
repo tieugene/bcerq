@@ -5,8 +5,9 @@
 # $0 <yyyy-mm-dd> - +xload from date
 # $0 <anything> - +xload all
 # configs: /etc/bce/aio.cfg, ~/.aio.cfg
-[ -f "/etc/bce/aio.cfg" ] && source "/etc/bce/aio.cfg"
-[ -f "$HOME/.aio.cfg" ] && source "$HOME/.aio.cfg"
+CFG_NAME="aio.cfg"
+[ -f "/etc/bce/$CFG_NAME" ] && source "/etc/bce/$CFG_NAME"
+[ -f "$HOME/.$CFG_NAME" ] && source "$HOME/.$CFG_NAME"
 [ -z "$BINDIR" ] && { echo "No config found"; exit 1; }
 TXT2SQL="$BINDIR/txt2sql.py"
 BCEDB="$BINDIR/bcedb.sh"

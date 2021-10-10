@@ -4,8 +4,8 @@ Database maintaining.
 
 ## 1. Usage
 
-`bcedb.sh` script uses options as from config as from command line as from backend-specific config: _\~/.bcerq.ini &rArr; CLI &rArr; \~/.pgpass_
-CLI overwrites .bcerq.ini, .pgpass _appends_ them.
+`bcedb.sh` script uses options as from config as from command line as from backend-specific config: _\~/.bcerq.conf &rArr; CLI &rArr; \~/.pgpass_
+CLI overwrites bcerq.conf, .pgpass _appends_ them.
 
 ## 2. Scheme
 

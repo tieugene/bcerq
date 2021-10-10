@@ -4,7 +4,7 @@
 # TODO: i+o => v(i+o)+u
 # tmp: macOS: TMP_DIR, Windows: TEMP/TMP, Linux: /tmp
 
-cfgname="$HOME/.bcerq.ini"
+CFG_NAME="bcerq.conf"
 BASE_DIR=$(dirname "$0")
 tmpdir="."
 verbose=0
@@ -24,7 +24,7 @@ help() {
   message "Usage: $0 [-v] [-t <tmpdir>] <table> <infile1.txt.zst> [<infile2.txt.zst> ... ]
   Options:
   -v          - verbose
-  -t <tmpdir> - folder to store temporary file (default=here or from $cfgname)
+  -t <tmpdir> - folder to store temporary file (default=here or from $CFG_NAME)
   table:
     a:  addr
     b:  bk
@@ -41,13 +41,13 @@ ex() {
   shift 1
   case "$TABLE" in
   a)
-    zstdcat -T0 $@ | grep ^$TABLE | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
+    zstdcat -T0 $@ | grep ^"$TABLE" | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
     ;;
   b)
-    zstdcat -T0 $@ | grep ^$TABLE | sed "s/'//g" | gawk -F "\t" -v OFS="\t" '{print $2,$3}'
+    zstdcat -T0 $@ | grep ^"$TABLE" | sed "s/'//g" | gawk -F "\t" -v OFS="\t" '{print $2,$3}'
     ;;
   t)
-    zstdcat -T0 $@ | grep ^$TABLE | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
+    zstdcat -T0 $@ | grep ^"$TABLE" | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
     ;;
   v)
     VOUTS=$tmpdir/o.txt.gz
@@ -68,9 +68,8 @@ ex() {
 
 # 1. load defaults
 # 1.1. defaults
-if [ -f "$cfgname" ]; then
-  source "$cfgname"
-fi
+[ -f "/etc/bce/$CFG_NAME" ] && source "/etc/bce/$CFG_NAME"
+[ -f "$HOME/.$CFG_NAME" ] && source "$HOME/.$CFG_NAME"
 # 1.2. CLI
 while getopts t: opt
 do
