@@ -1,11 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 # Direct update RDB from bitcoind
 # Usage:
 # $0 - update RDB
 # $0 <yyyy-mm-dd> - +xload from date
 # $0 <anything> - +xload all
-CFG_FILE="$(dirname "$0")/init.cfg"
-if [ -f "$CFG_FILE" ]; then . "$CFG_FILE"; else echo "$CFG_FILE not found"; exit; fi
+# configs: /etc/bce/aio.cfg, ~/.aio.cfg
+[ -f "/etc/bce/aio.cfg" ] && . "/etc/bce/aio.cfg"
+[ -f "$HOME/.aio.cfg" ] && . "$HOME/.aio.cfg"
+[ -z "$BINDIR" ] && (echo "No config found"; exit 1)
+echo "OK"
+exit
 TXT2SQL="$BINDIR/txt2sql.py"
 BCEDB="$BINDIR/bcedb.sh"
 ERRFILE="$ERRDIR/$(date +"%y%m%d%H%M%S").log"
@@ -93,7 +97,7 @@ fi
 BK_BTC=$(bitcoin-cli getblockcount)
 [ -z "$BK_BTC" ] && (log "Cannot ask btcd"; exit 1)
 if [ "$BK_KV" -lt "$BK_BTC" ]; then
-  if [ -n "$BK_2ADD" ]; then let "BK_MAX=$BK_KV+$BK_2ADD-1"; else let "BK_MAX=$BK_BTC-1"; fi
+  if [ -n "$BK_2ADD" ]; then BK_MAX=$((BK_KV+BK_2ADD-1)); else BK_MAX=$((BK_BTC-1)); fi
   log "Updating $BK_KV ... $BK_MAX required"
   chk_svc postgresql && SVC_SQL="1"
   if [ -z "$SVC_SQL" ]; then start_svc postgresql || exit 1; fi
