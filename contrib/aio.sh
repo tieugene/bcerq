@@ -8,8 +8,6 @@
 [ -f "/etc/bce/aio.cfg" ] && source "/etc/bce/aio.cfg"
 [ -f "$HOME/.aio.cfg" ] && source "$HOME/.aio.cfg"
 [ -z "$BINDIR" ] && { echo "No config found"; exit 1; }
-echo "OK"
-exit
 TXT2SQL="$BINDIR/txt2sql.py"
 BCEDB="$BINDIR/bcedb.sh"
 ERRFILE="$ERRDIR/$(date +"%y%m%d%H%M%S").log"
