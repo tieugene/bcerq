@@ -82,7 +82,7 @@ if [ -z "$1" ]; then log "== Start =="; else log "== Start with '$1' =="; fi
 # 0. Prepare
 # - bce2
 BK_KV=$(bce2 -i | grep ^Chk_bk | gawk '{print $2}')
-[ -z "$BK_KV" ] && (log "Cannot ask bce2"; exit 1)
+[ -z "$BK_KV" ] && { log "Cannot ask bce2"; exit 1; }
 # - bitcoin
 chk_svc bitcoin && SVC_BTC="1"
 if [ -z "$SVC_BTC" ]; then
@@ -93,7 +93,7 @@ if [ -z "$SVC_BTC" ]; then
 fi
 # - blockchain
 BK_BTC=$(bitcoin-cli getblockcount)
-[ -z "$BK_BTC" ] && (log "Cannot ask btcd"; exit 1)
+[ -z "$BK_BTC" ] && { log "Cannot ask btcd"; exit 1; }
 if [ "$BK_KV" -lt "$BK_BTC" ]; then
   if [ -n "$BK_2ADD" ]; then BK_MAX=$((BK_KV+BK_2ADD-1)); else BK_MAX=$((BK_BTC-1)); fi
   log "Updating $BK_KV ... $BK_MAX required"
