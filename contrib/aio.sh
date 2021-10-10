@@ -5,7 +5,7 @@
 # $0 <yyyy-mm-dd> - +xload from date
 # $0 <anything> - +xload all
 # configs: /etc/bce/aio.cfg, ~/.aio.cfg
-CFG_NAME="aio.cfg"
+CFG_NAME="aio.conf"
 [ -f "/etc/bce/$CFG_NAME" ] && source "/etc/bce/$CFG_NAME"
 [ -f "$HOME/.$CFG_NAME" ] && source "$HOME/.$CFG_NAME"
 [ -z "$BINDIR" ] && { echo "No config found"; exit 1; }
