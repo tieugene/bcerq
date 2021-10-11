@@ -9,14 +9,14 @@ Import into DB (`tsv2db.sh`) is enought trivial and just uses SQL `COPY` instruc
 Aim of `txt2tsv.sh` is to prepare data for this `COPY`.
 It is possible as split export and import separately as use both of utils together via pipe.
 
-Let's work with source data as `txt/250.txt.gz` and interim tsv in `tsv/`
+Let's work with source data as `txt/250.txt.zst` and interim tsv in `tsv/`
 
 ## 1. Export
 
 Export from src into interim .tsv files is doing with`txt2tsv.sh`utility (use `./txt2tsv.sh -h` for help).
 It accepts target table character and source data file as argument.
 Target table is: a=addr, b=bk, t=tx, v=vout.
-Source must be gzipped.
+Source must be zsted.
 Optional arhgument `-t` (temporary space) is very important during generating 'v' output. With big source data utillty can eat all of RAM and then require *fast* and *huge* temporary storage (starting from half of *uncompressed* source).
 
 Bulk export into files can be:
@@ -24,7 +24,7 @@ Bulk export into files can be:
 ```bash
 for i in a b t v
 do
-  ./txt2tsv.sh $i txt/250.txt.zst | zstdmt > tsv/$i.tsv.zst
+  ./txt2tsv.sh $i txt/250.txt.zst | zstdmt -c > tsv/$i.tsv.zst
 done
 ```
 

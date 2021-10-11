@@ -2,10 +2,12 @@
 Common py items
 """
 
-import os, sys, configparser, datetime
+import configparser
+import os
+import sys
 from pathlib import Path
 
-CFG_FILE_NAME = "~/.bcerq.ini"
+CFG_FILE_NAME = "bcerq.conf"
 CFG_MAIN_SECT = "DEFAULT"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -41,17 +43,19 @@ def load_cfg():
     :return:
     TODO: use user:pass@host/dbname?engine
     """
-    cfg_real_path = os.path.expanduser(CFG_FILE_NAME)
-    if not os.path.exists(cfg_real_path):
-        return
-    config = configparser.ConfigParser()
-    # config.read(cfg_real_path)
-    config.read_string("[{}]\n{}".format(CFG_MAIN_SECT, open(cfg_real_path, "rt").read()))
-    config_default = config[CFG_MAIN_SECT]
-    Opts.dbhost = config_default.get('dbhost')
-    Opts.dbname = config_default.get('dbname')
-    Opts.dbuser = config_default.get('dbuser')
-    Opts.dbpass = config_default.get('dbpass')
+    def __inner(cfg_path: str):
+        if not os.path.exists(cfg_path):
+            return
+        config = configparser.ConfigParser()
+        # config.read(cfg_real_path)
+        config.read_string("[{}]\n{}".format(CFG_MAIN_SECT, open(cfg_path, "rt").read()))
+        config_default = config[CFG_MAIN_SECT]
+        Opts.dbhost = config_default.get('dbhost')
+        Opts.dbname = config_default.get('dbname')
+        Opts.dbuser = config_default.get('dbuser')
+        Opts.dbpass = config_default.get('dbpass')
+    __inner('/etc/bce/'+CFG_FILE_NAME)
+    __inner(os.path.expanduser('~/.'+CFG_FILE_NAME))
 
 
 def load_pgpass():

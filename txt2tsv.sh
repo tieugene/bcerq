@@ -1,11 +1,11 @@
 # Tool to export bce2 output into SQL loadable CSV
-# Requires: pigz/unpigz
+# Requires: zstdmt/zstdcat, gzip|pigz
 # TODO: v | tee (remove tmp file)
 # TODO: i+o => v(i+o)+u
 # tmp: macOS: TMP_DIR, Windows: TEMP/TMP, Linux: /tmp
 
-cfgname="$HOME/.bcerq.ini"
-BASE_DIR=`dirname "$0"`
+CFG_NAME="bcerq.conf"
+BASE_DIR=$(dirname "$0")
 tmpdir="."
 verbose=0
 
@@ -21,10 +21,10 @@ debug() {
 }
 
 help() {
-  message "Usage: $0 [-v] [-t <tmpdir>] <table> <infile1.txt.gz> [<infile2.txt.gz> ... ]
+  message "Usage: $0 [-v] [-t <tmpdir>] <table> <infile1.txt.zst> [<infile2.txt.zst> ... ]
   Options:
   -v          - verbose
-  -t <tmpdir> - folder to store temporary file (default=here or from $cfgname)
+  -t <tmpdir> - folder to store temporary file (default=here or from $CFG_NAME)
   table:
     a:  addr
     b:  bk
@@ -41,22 +41,22 @@ ex() {
   shift 1
   case "$TABLE" in
   a)
-    unpigz -c $@ | grep ^$TABLE | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
+    zstdcat -T0 $@ | grep ^"$TABLE" | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
     ;;
   b)
-    unpigz -c $@ | grep ^$TABLE | sed "s/'//g" | gawk -F "\t" -v OFS="\t" '{print $2,$3}'
+    zstdcat -T0 $@ | grep ^"$TABLE" | sed "s/'//g" | gawk -F "\t" -v OFS="\t" '{print $2,$3}'
     ;;
   t)
-    unpigz -c $@ | grep ^$TABLE | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
+    zstdcat -T0 $@ | grep ^"$TABLE" | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}'
     ;;
   v)
     VOUTS=$tmpdir/o.txt.gz
     # 1. filter vouts (out_tx, out_n, satoshi, addr)
-    unpigz -c $@ | grep ^o | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4,$5}' | pigz -c > $VOUTS
+    zstdcat -T0 $@ | grep ^o | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4,$5}' | pigz -c > $VOUTS
     # 2. filter vins (out_tx, out_n, in_tx)
     # 3. sort vins by vouts
     # 4. join vouts | vins
-    unpigz -c $@ | grep ^i | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}' | sort -n -k1 -k2 -T $tmpdir | python3 "$BASE_DIR/join_io.py" $VOUTS
+    zstdcat -T0 $@ | grep ^i | gawk -F "\t" -v OFS="\t" '{print $2,$3,$4}' | sort -n -k1 -k2 -T $tmpdir | python3 "$BASE_DIR/join_io.py" $VOUTS
     # x. clean
     [ -f $VOUTS ] && rm -f $VOUTS
     ;;
@@ -68,9 +68,8 @@ ex() {
 
 # 1. load defaults
 # 1.1. defaults
-if [ -f "$cfgname" ]; then
-  source "$cfgname"
-fi
+[ -f "/etc/bce/$CFG_NAME" ] && source "/etc/bce/$CFG_NAME"
+[ -f "$HOME/.$CFG_NAME" ] && source "$HOME/.$CFG_NAME"
 # 1.2. CLI
 while getopts t: opt
 do
@@ -85,7 +84,7 @@ shift $((OPTIND-1))
 # 2.1. cmd
 [ $# -lt "1" ] && help
 if [ $# -lt "2" ]; then
-  message "Requires <sources>.txt.tgz"
+  message "Requires <sources>.txt.zst"
   exit
 fi
 # 2.2. chk table

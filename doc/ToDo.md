@@ -1,15 +1,21 @@
 # ToDo
 
-## 210409:
+## 210929:
 
-- chk "-less addrs
-- sort queries by...
-- chk 13=>12: (13tx, 10tx; lost all)
+- [x] SQL seq/tx/bulk_tx: "psql exec -c as single tx"
+- [x] contrib/
+   - [x] init
+      - [x] init_1
+      - [x] init_2 (200k): 129/120 (10%)
+      - [x] init_3: 65/60 (10%)
+      - [x] init_4: by1=114", z=124"
+   - [x] aio
+- [x] `psql -q -c "$(./xload.py -f 2020-09-29)" btc alex)`
 
 ## 210405:
 
-+ update scripts
-+ update doc
+- [x] update scripts
+- [x] update doc
 - mk dia in [PlantUML](http://www.plantuml.com/plantuml/uml/)
 - vacuumdb [-h ...] -U btcuser -Fqz btcdb
 - CREATE _UNLOGGED_ txo ... (250k: t-15%)

@@ -8,7 +8,7 @@ Utilities set to import BTC blockchain data from [bcepy](https://github.com/tieu
 
 ## Requirements
 
-- core utils (`bash`, `gawk`, `sed`, `tail`/`head`, `gzip`/`ungzip` or `pigz`/`unpigz`)
+- core utils (`bash`, `gawk`, `sed`, `tail`/`head`, `zstd`/`zstdcat`)
 - PostgreSQL CLI client (`psql`)
 - python3-psycopg2
 
@@ -21,10 +21,11 @@ Utilities set to import BTC blockchain data from [bcepy](https://github.com/tieu
 - Create [TXO](doc/TXO.md) data
 - [Test](doc/Test_DB.md) loaded DB
 - Make [queries](doc/BCERQ.md)
-- Config [sample](doc/bcerq.ini)
+- Config [sample](doc/bcerq.conf)
 - *[ToDo](doc/ToDo.md) list*
 - *Misc [notes](doc/Notes.md)*
 - *Misc [tests](doc/tests)*
+- *[contrib](doc/Contrib.md) scripts*
 - *~~Data [formats](doc/Formats.md)~~*
 
 ## Utilities

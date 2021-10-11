@@ -8,7 +8,7 @@ declare -A tbl_array
 tbl_array=([a]="addr" [b]="bk" [t]="tx" [v]="vout")
 declare -A fld_array
 fld_array=([a]="id,name,qty" [b]="id,datime" [t]="id,b_id,hash" [v]="t_id,n,money,a_id,t_id_in")
-cfgname="$HOME/.bcerq.ini"
+CFG_NAME="bcerq.conf"
 # var
 dbhost=""
 dbname=""
@@ -51,9 +51,8 @@ im() {
 
 # 1. load defaults
 # 1.1. cfg
-if [ -f "$cfgname" ]; then
-  source "$cfgname"
-fi
+[ -f "/etc/bce/$CFG_NAME" ] && source "/etc/bce/$CFG_NAME"
+[ -f "$HOME/.$CFG_NAME" ] && source "$HOME/.$CFG_NAME"
 # 1.2. get CLI
 while getopts vh:d:u:p: opt
 do

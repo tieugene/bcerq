@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Join vins and vouts.
-Input - gziped sorted vouts and vins.
+Input - zstded sorted vouts and vins.
 Output - stdout (t_id, n, money, a_id, t_id_in)
 """
 
@@ -32,12 +32,12 @@ def main(vouts_fn: str):
                 oo += 1
             o = o_f.readline().rstrip("\n")
     res = (io - ii == oo) and io == (oo + oi)
-    print("Summary: %s (vouts=%d, vins=%d, free=%d, spent=%d)" % ("OK" if res else "ERR", io, ii, oo, oi),
+    print("Summary: %s (vouts=%d, vins=%d, utxo=%d, stxo=%d)" % ("OK" if res else "ERR", io, ii, oo, oi),
           file=sys.stderr)
 
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print("Usage: unpigz -c vins.txt.gz | %s vouts.txt.gz [> data.txt]" % sys.argv[0])
+        print("Usage: zstdcat vins.txt.zst | %s vouts.txt.zst [> data.txt]" % sys.argv[0])
     else:
         main(sys.argv[1])

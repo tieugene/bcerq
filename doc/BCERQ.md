@@ -9,7 +9,7 @@ Mandatory options of 'command' depend on this command itself.
 
 Results printing into stdout.
 
-Prerequisitions: `~/.bcerq.ini`
+Prerequisitions: `/etc/bce/bcerq.conf` and/or `~/.bcerq.conf`
 
 ## Usage
 

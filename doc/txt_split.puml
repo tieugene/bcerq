@@ -1,0 +1,34 @@
+@startuml
+start
+
+:skip=T;
+:nextpart=from;
+while (read line)
+  if (!bk) then (!bk)
+    if (skip) then (+)
+      :Continue;
+    endif
+  else (bk)
+    if (skip) then (+)
+      if (bk < from) then (+)
+        :Continue;
+      endif
+      :skip=F;
+    endif
+    if (bk >= nextpart) then (+)
+      :close_file;
+      :num--;
+      if (num < 0) then (+)
+        break
+      endif
+      :nextpart += by;
+      :filename=bk..nextpart-1;
+      :open_file;
+    endif
+  endif
+  :out;
+endwhile
+:close_file;
+
+stop
+@enduml
