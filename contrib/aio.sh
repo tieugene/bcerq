@@ -14,26 +14,30 @@ BCEDB="$BINDIR/bcedb.sh"
 ERRFILE="$ERRDIR/$(date +"%y%m%d%H%M%S").log"
 SVC_BTC=""
 SVC_SQL=""
+PRELOG=""
 
 prelog() {
-    echo -n "$(date +"%y-%m-%d %H:%M:%S"): $1" | tee -a "$ERRFILE"
+  PRELOG=$1
+  echo -n "$(date +"%y-%m-%d %H:%M:%S"): $1" | tee -a "$ERRFILE"
 }
 
 postlog() {
-    echo "$1" | tee -a "$ERRFILE"
+  echo "$1" | tee -a "$ERRFILE"
+  logger -t AIO "$PRELOG$1"
 }
 
 log() {
-    echo "$(date +"%y-%m-%d %H:%M:%S"): $1" | tee -a "$ERRFILE"
+  echo "$(date +"%y-%m-%d %H:%M:%S"): $1" | tee -a "$ERRFILE"
+  logger -t AIO "$1"
 }
 
 chk_svc() {
-    # check service is active
-    prelog "Check $1..."
-    systemctl is-active --quiet "$1"
-    retcode=$?
-    if [ $retcode -eq 0 ]; then postlog "works"; else postlog "stopped"; fi
-    return $retcode
+  # check service is active
+  prelog "Check $1..."
+  systemctl is-active --quiet "$1"
+  retcode=$?
+  if [ $retcode -eq 0 ]; then postlog "works"; else postlog "stopped"; fi
+  return $retcode
 }
 
 start_svc() {
@@ -64,18 +68,19 @@ process_bk() {
 
 xload() {
   SAMPLE="^20[0-9]{2}-[0-9]{2}-[0-9]{2}$"
-  $BCEDB unidx x && $BCEDB trunc x && (\
+  $BCEDB unidx x && $BCEDB trunc x && {
     if [[ $1 =~ $SAMPLE ]]; then
-      prelog "Reload TXO from $1..."
+      log "Reload TXO from $1 start"
       SQL=$(python3 "$BINDIR/xload.py" -f "$1")
       psql -q -c "$SQL" "$PGBASE" "$PGLOGIN"
     else
-      prelog "Full reload TXO..."
+      log "Reload TXO start"
       $BCEDB xload x
     fi
-    postlog "OK"; prelog "Index TXO..."; $BCEDB idx x\
-  )
-  postlog "OK"
+    log "Reload TXO end. Start indexing"
+    $BCEDB idx x
+    log "Indexing end"
+  }
 }
 
 :>"$ERRFILE"
@@ -100,9 +105,9 @@ if [ "$BK_KV" -lt "$BK_BTC" ]; then
   log "Updating $BK_KV ... $BK_MAX required"
   chk_svc postgresql && SVC_SQL="1"
   if [ -z "$SVC_SQL" ]; then start_svc postgresql || exit 1; fi
-  prelog "Updating..."
+  log "Update start"
   for i in $(seq "$BK_KV" "$BK_MAX"); do process_bk "$i"; done
-  postlog "OK"
+  log "Update end"
   if [ -n "$1" ]; then
     stop_svc bitcoin
     xload "$1"
