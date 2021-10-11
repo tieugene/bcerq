@@ -5,6 +5,7 @@
 # $0 <yyyy-mm-dd> - +xload from date
 # $0 <anything> - +xload all
 # configs: /etc/bce/aio.cfg, ~/.aio.cfg
+# 'journalctl -t AIO' for syslog monitoring
 CFG_NAME="aio.conf"
 [ -f "/etc/bce/$CFG_NAME" ] && source "/etc/bce/$CFG_NAME"
 [ -f "$HOME/.$CFG_NAME" ] && source "$HOME/.$CFG_NAME"
@@ -77,7 +78,7 @@ xload() {
       log "Reload TXO start"
       $BCEDB xload x
     fi
-    log "Reload TXO end. Start indexing"
+    log "Reload TXO end. Indexing start"
     $BCEDB idx x
     log "Indexing end"
   }
