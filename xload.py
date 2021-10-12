@@ -10,6 +10,7 @@ select 1 where exists (select * from txo);
 """
 
 import argparse
+import datetime
 from common import *
 
 SQL_From = "AND ((DATE(tx1.datime) >= '{}') OR (tx1.datime IS NULL)) "  # date1
