@@ -41,19 +41,11 @@ chk_svc() {
   return $retcode
 }
 
-start_svc() {
-    # try to start service
-    prelog "Start $1..."
-    sudo systemctl start "$1"
-    retcode=$?
-    if [ $retcode -eq 0 ]; then postlog "OK"; else postlog "Fail"; fi
-    return $retcode
-}
-
-stop_svc() {
-    # try to stop service
-    prelog "Stop $1..."
-    sudo systemctl stop "$1"
+do_svc() {
+    # try to systemctls service
+    # $1 - action, $2 - service
+    prelog "$1 $2..."
+    sudo systemctl "$1" "$2"
     retcode=$?
     if [ $retcode -eq 0 ]; then postlog "OK"; else postlog "Fail"; fi
     return $retcode
@@ -93,7 +85,7 @@ BK_KV=$(bce2 -i | grep ^Chk_bk | gawk '{print $2}')
 # - bitcoin
 chk_svc bitcoin && SVC_BTC="1"
 if [ -z "$SVC_BTC" ]; then
-  start_svc bitcoin || exit 1
+  do_svc start bitcoin || exit 1
   prelog "Wait..."
   sleep 10
   postlog "OK"
@@ -105,19 +97,17 @@ if [ "$BK_KV" -lt "$BK_BTC" ]; then
   if [ -n "$BK_2ADD" ]; then BK_MAX=$((BK_KV+BK_2ADD-1)); else BK_MAX=$((BK_BTC-1)); fi
   log "Updating $BK_KV ... $BK_MAX required"
   chk_svc postgresql && SVC_SQL="1"
-  if [ -z "$SVC_SQL" ]; then start_svc postgresql || exit 1; fi
+  if [ -z "$SVC_SQL" ]; then do_svc start postgresql || exit 1; fi
   log "Update start"
   for i in $(seq "$BK_KV" "$BK_MAX"); do process_bk "$i"; done
   log "Update end"
   if [ -n "$1" ]; then
-    stop_svc bitcoin
+    do_svc freeze bitcoin
     xload "$1"
-    [ -z "$SVC_SQL" ] && stop_svc postgresql
-    [ -n "$SVC_BTC" ] && start_svc bitcoin
-  else
-    [ -z "$SVC_SQL" ] && stop_svc postgresql
+    do_svc thaw bitcoin
   fi
+  [ -z "$SVC_SQL" ] && do_svc stop postgresql
 fi
-[ -z "$SVC_BTC" ] && stop_svc bitcoin
+[ -z "$SVC_BTC" ] && do_svc stop bitcoin
 log "== End =="
 mail -S "from=$MAILFROM" -s "aio" "$MAILTO" < "$ERRFILE"
