@@ -1,5 +1,14 @@
 # ToDo
 
+## 210930:
+- [ ] FIXME: lo_num bad
+
+bk 546 (vi: 6, vo: 7, so: 2, lo: 4, uo: 3):
+  1. tx.556: 0 => 1 => x
+  2. tx.557: bk.545 x 2 => 2 x tx.558
+  3. tx.558: bk.545 x 2 => 2 x tx.559
+  4. tx.559: bk.545 x 2 => ...
+
 ## 210929:
 
 - [x] SQL seq/tx/bulk_tx: "psql exec -c as single tx"
@@ -11,6 +20,7 @@
       - [x] init_4: by1=114", z=124"
    - [x] aio
 - [x] `psql -q -c "$(./xload.py -f 2020-09-29)" btc alex)`
+
 
 ## 210405:
 
