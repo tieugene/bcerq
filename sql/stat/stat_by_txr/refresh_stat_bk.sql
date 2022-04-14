@@ -1,10 +1,10 @@
 -- refresh_stat_bk: refresh t_stat_bk table
-DROP TABLE IF EXISTS tmp_stat;
-CREATE TEMPORARY TABLE tmp_stat (
+CREATE TEMPORARY TABLE IF NOT EXISTS tmp_stat (
     b_id INT PRIMARY KEY,
     tx0 INT,
     tx1 INT
 );
+TRUNCATE TABLE tmp_stat;
 INSERT INTO tmp_stat (b_id, tx0, tx1) (
     SELECT
         b_id,
@@ -15,6 +15,7 @@ INSERT INTO tmp_stat (b_id, tx0, tx1) (
     GROUP BY b_id
 );
 -- main
+-- TRUNCATE TABLE t_stat_bk;
 -- DELETE FROM t_stat_bk WHERE b_id BETWEEN 449990 AND 450010
 INSERT INTO t_stat_bk (
     b_id, price, total, tx_num,

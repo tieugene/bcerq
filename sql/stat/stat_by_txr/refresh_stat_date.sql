@@ -1,11 +1,11 @@
 -- refresh_stat_date: refresh t_stat_date table
-DROP TABLE IF EXISTS tmp_stat;
-CREATE TEMPORARY TABLE tmp_stat
+CREATE TEMPORARY TABLE IF NOT EXISTS tmp_stat
 (
     d DATE PRIMARY KEY,
     tx0 INT,
     tx1 INT
 );
+TRUNCATE TABLE tmp_stat;
 INSERT INTO tmp_stat (d, tx0, tx1) (
     SELECT
         DATE(datime) AS d,
@@ -17,9 +17,10 @@ INSERT INTO tmp_stat (d, tx0, tx1) (
     GROUP BY d
 );
 -- main
+-- TRUNCATE TABLE t_stat_date
 -- DELETE FROM t_stat_date WHERE d '2021-12-01' AND '2021-12-31'
 INSERT INTO t_stat_date (
-    b_id,
+    d,
     so_num, so_sum,
     lo_num, lo_sum,
     uo_num, uo_sum
