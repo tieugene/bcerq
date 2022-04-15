@@ -17,8 +17,8 @@ INSERT INTO tmp_stat (d, tx0, tx1) (
     GROUP BY d
 );
 -- main
--- TRUNCATE TABLE t_stat_date
--- DELETE FROM t_stat_date WHERE d '2021-12-01' AND '2021-12-31'
+-- TRUNCATE TABLE t_stat_date;
+-- DELETE FROM t_stat_date WHERE d '2021-12-01' AND '2021-12-31';
 INSERT INTO t_stat_date (
     d,
     so_num, so_sum,

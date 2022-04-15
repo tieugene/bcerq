@@ -16,7 +16,7 @@ INSERT INTO tmp_stat (b_id, tx0, tx1) (
 );
 -- main
 -- TRUNCATE TABLE t_stat_bk;
--- DELETE FROM t_stat_bk WHERE b_id BETWEEN 449990 AND 450010
+-- DELETE FROM t_stat_bk WHERE b_id BETWEEN 449990 AND 450010;⇒
 INSERT INTO t_stat_bk (
     b_id, price, total, tx_num,
     so_num, so_sum,
