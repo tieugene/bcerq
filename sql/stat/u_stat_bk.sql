@@ -1,16 +1,16 @@
--- a_stat_bk: Update t_stat_bk table
+-- u_stat_bk: Update t_stat_bk table
 -- TODO: empty bk => truncate stat && QUIT
 -- TODO: empty stat => FROM 0
 -- TODO: bk == stat => QUIT
 -- TODO: bk < stat => DELETE FROM stat WHERE b_id > MAX(bk.id)
 -- 1. prepare
-CREATE TEMPORARY TABLE IF NOT EXISTS tmp_stat (
+CREATE TEMPORARY TABLE IF NOT EXISTS tmp_stat_bk (
     b_id INT PRIMARY KEY,
     tx0 INT,
     tx1 INT
 );
--- TRUNCATE TABLE tmp_stat;
-INSERT INTO tmp_stat (b_id, tx0, tx1) (
+TRUNCATE TABLE tmp_stat_bk;
+INSERT INTO tmp_stat_bk (b_id, tx0, tx1) (
     SELECT
         b_id,
         MIN(id) AS tx0,
@@ -33,14 +33,13 @@ INSERT INTO t_stat_bk (
 ) (
     SELECT
         b_id,
-        (SELECT COUNT(*)   FROM tx WHERE tx.b_id = tmp_stat.b_id) AS tx_num,
+        (SELECT COUNT(*)   FROM tx WHERE tx.b_id = tmp_stat_bk.b_id) AS tx_num,
         COALESCE((SELECT COUNT(*)   FROM vout WHERE (t_id < tx0) AND (t_id_in BETWEEN tx0 AND tx1)), 0) AS s_num,
         COALESCE((SELECT SUM(money) FROM vout WHERE (t_id < tx0) AND (t_id_in BETWEEN tx0 AND tx1)), 0) AS s_sum,
         COALESCE((SELECT COUNT(*)   FROM vout WHERE (t_id BETWEEN tx0 AND tx1) AND (t_id_in BETWEEN tx0 AND tx1)), 0) AS l_num,
         COALESCE((SELECT SUM(money) FROM vout WHERE (t_id BETWEEN tx0 AND tx1) AND (t_id_in BETWEEN tx0 AND tx1)), 0) AS l_sum,
         (SELECT COUNT(*)   FROM vout WHERE (t_id BETWEEN tx0 AND tx1) AND (t_id_in > tx1 OR t_id_in IS NULL)) AS u_num,
         (SELECT SUM(money) FROM vout WHERE (t_id BETWEEN tx0 AND tx1) AND (t_id_in > tx1 OR t_id_in IS NULL)) AS u_sum
-    FROM tmp_stat
+    FROM tmp_stat_bk
 );
-DROP TABLE tmp_stat;
--- 3. post
+DROP TABLE tmp_stat_bk;
