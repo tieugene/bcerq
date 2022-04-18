@@ -1,4 +1,4 @@
--- refresh_stat_date: refresh t_stat_date table
+-- a_stat_date: refresh t_stat_date table
 CREATE TEMPORARY TABLE IF NOT EXISTS tmp_stat
 (
     d DATE PRIMARY KEY,

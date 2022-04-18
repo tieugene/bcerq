@@ -11,10 +11,6 @@ GROUP BY b_id;
 -- main
 SELECT
     b_id,
-    -- tx0,
-    -- tx1,
-    5000000000>>(b_id/210000) AS price,
-    (((1<<((b_id/210000)+1))-2)*210000+(b_id%210000)+1)*(5000000000>>(b_id/210000)) AS total,
     (SELECT COUNT(*)   FROM tx WHERE tx.b_id = tmp_stat.b_id) AS tx_num,
     (SELECT COUNT(*)   FROM vout WHERE (t_id < tx0) AND (t_id_in BETWEEN tx0 AND tx1)) AS s_num,
     (SELECT SUM(money) FROM vout WHERE (t_id < tx0) AND (t_id_in BETWEEN tx0 AND tx1)) AS s_sum,
