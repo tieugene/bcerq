@@ -15,3 +15,4 @@ CREATE TABLE IF NOT EXISTS t_stat_bk (
   uo_num_inc BIGINT,
   uo_sum_inc BIGINT
 );
+ALTER TABLE t_stat_bk ADD CONSTRAINT t_stat_bk_b_id_fkey FOREIGN KEY (b_id) REFERENCES bk (id) ON DELETE CASCADE;
