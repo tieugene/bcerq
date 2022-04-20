@@ -1,0 +1,8 @@
+ALTER TABLE tail DROP CONSTRAINT IF EXISTS tail_t_id_fkey;
+ALTER TABLE tail DROP CONSTRAINT IF EXISTS tail_t_id_in_fkey;
+ALTER TABLE tail DROP CONSTRAINT IF EXISTS tail_a_id_fkey;
+ALTER TABLE tail DROP CONSTRAINT IF EXISTS tail_pkey;
+DROP INDEX IF EXISTS tail_t_id_idx;
+DROP INDEX IF EXISTS tail_t_id_in_idx;
+DROP INDEX IF EXISTS tail_a_id_idx;
+DROP INDEX IF EXISTS tail_money_idx;
