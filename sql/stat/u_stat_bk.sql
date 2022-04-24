@@ -1,7 +1,7 @@
 -- u_stat_bk: Update t_stat_bk table
--- TODO: empty bk => QUIT
+-- TODO: bk is empty => QUIT
 -- TODO: bk == stat => QUIT
--- TODO: empty stat => FROM 0
+-- TODO: stat is empty => FROM 0
 -- 1. prepare
 CREATE TEMPORARY TABLE IF NOT EXISTS tmp_stat_bk (
     b_id INT PRIMARY KEY,
