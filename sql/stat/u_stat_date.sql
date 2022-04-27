@@ -1,5 +1,6 @@
 -- a_stat_date: Update t_stat_date table
 -- 22-04-18: t_stat_date: <= 2022-04-14, bk <= 2022-04-16
+-- TODO: from the begining of begin if stat is empty
 CREATE TEMPORARY TABLE IF NOT EXISTS tmp_stat_date
 (
     d DATE PRIMARY KEY,
