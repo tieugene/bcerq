@@ -98,9 +98,12 @@ if [ "$BK_KV" -lt "$BK_BTC" ]; then
   log "Updating $BK_KV ... $BK_MAX required"
   chk_svc postgresql && SVC_SQL="1"
   if [ -z "$SVC_SQL" ]; then do_svc start postgresql || exit 1; fi
-  log "Update start"
+  log "Update SQL DB start"
   for i in $(seq "$BK_KV" "$BK_MAX"); do process_bk "$i"; done
-  log "Update end"
+  log "Update SQL DB end"
+  log "Update stat start"
+  cat $(dirname "$0")/../sql/stat/{u_stat_bk.sql,u_stat_bk_inc.sql,u_stat_date.sql,u_stat_date_inc.sql} | psql -q -v ON_ERROR_STOP=on "$PGBASE" "$PGLOGIN"
+  log "Update stat end"
   if [ -n "$1" ]; then
     do_svc freeze bitcoin
     xload "$1"
