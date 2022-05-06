@@ -1,0 +1,1 @@
+SELECT generate_series('2017-01-01'::DATE, '2017-01-10'::DATE, '1 day'::INTERVAL)::date AS dates;

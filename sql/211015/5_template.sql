@@ -9,13 +9,15 @@
 -- 1. Fill data (R: Reports); Timing: 3'
 --- R.1: Addr_Num (addrs number to the end of tx); Timing: 12"
 -- #include 5_1_1.sql
---- R.2: Addr_Sum (addrs summs to the end of the tx); Timing: 1'30"
+--- R.2: Addr_Num_Active (addrs number active B2n txs); Timing: 50"
 -- #include 5_1_2.sql
---- R.3: Addr_Num_Active (addrs number active B2n txs); Timing: 50"
+--- R.3: Utxo_Num (utxo number); Timing:
 -- #include 5_1_3.sql
---- R.4: Vout_Num (vouts number B2n txs); Timing: 20"
+--- R.4: Utxo_Sum (utxo summs (to the end of the tx)); Timing: 1'30"
 -- #include 5_1_4.sql
---- R.5: Vout_Sum (vouts sums B2n txs); Timing: 20"
+--- R.5: Vout_Num (vouts number B2n txs); Timing: 20"
 -- #include 5_1_5.sql
+--- R.6: Vout_Sum (vouts sums B2n txs); Timing: 20"
+-- #include 5_1_6.sql
 -- 2. Clean up
 -- #include 5_2.sql

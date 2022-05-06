@@ -1,0 +1,1 @@
+cat 5_0_0.sql 5_0_1.sql 5_0_2.sql 5_1_1.sql 5_1_2.sql 5_1_3.sql 5_1_4.sql 5_1_5.sql 5_1_6.sql 5_2.sql > 5_plain_date.sql
