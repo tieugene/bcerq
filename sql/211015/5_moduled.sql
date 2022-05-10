@@ -306,7 +306,7 @@ CREATE OR REPLACE PROCEDURE _daily(d DATE)
 AS
 $$
 /*
- Timing: 10'45" (vout, 2022-01-01)
+ Timing: 10'35..10'45" (vout, 2022-01-01)
  */
 CALL __tbl_c_tmp_snap();
 CALL __tbl_c_tmp_rid();
@@ -348,4 +348,5 @@ COMMENT ON PROCEDURE _monthly(INTEGER, INTEGER) IS 'Recalc q1a for a month
 @ver: 22020507.12.20';
 
 -- CALL _daily('2022-03-30');
+-- time psql -q -c "CALL _daily('2022-01-01');" <db> <user>
 -- CALL _monthly(2022, 3);

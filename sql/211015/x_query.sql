@@ -1,5 +1,5 @@
 -- Pivot table
-CREATE EXTENSION IF NOT EXISTS tablefunc;
+-- CREATE EXTENSION IF NOT EXISTS tablefunc;
 SELECT * FROM crosstab(
     $$ SELECT d, rid, val FROM t_1a_date WHERE qid=1 ORDER BY d, rid; $$
     -- , $$ SELECT * FROM (VALUES ('≤.001'), ('≤.01'), ('≤.1'), ('≤1'), ('≤10'), ('≤100'), ('≤1k'), ('≤10k'), ('≤100k'), ('≤1m'), ('>1m')) AS t; $$
