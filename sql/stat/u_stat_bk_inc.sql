@@ -1,5 +1,5 @@
 -- u_stat_bk_inc: Update bk stat incrementals
--- Timing: 8..10" 4 732k
+-- Timing: from scratch 220510: 13"
 UPDATE
     t_stat_bk
 SET

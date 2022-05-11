@@ -1,4 +1,5 @@
 -- u_stat_bk: Update t_stat_bk table
+-- Timing: from scratch 220510: 2:30:00
 -- 1. prepare
 CREATE OR REPLACE PROCEDURE test_tops() AS $$
     -- bk == stat => QUIT (including NULL)
