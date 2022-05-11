@@ -16,7 +16,7 @@ INSERT INTO tmp_stat_date (d, tx0, tx1) (
     FROM tx
     INNER JOIN bk ON tx.b_id = bk.id
     WHERE DATE(datime) BETWEEN
-        (SELECT MAX(d) FROM t_stat_date)
+        COALESCE((SELECT MAX(d) FROM t_stat_date), '2009-01-03'::DATE)
         AND (SELECT MAX(DATE(datime)) FROM bk)
     GROUP BY d
 );
