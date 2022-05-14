@@ -1,0 +1,23 @@
+-- Fill Issues.q1a #1..5; Timing: 10..26'
+-- 0. Prepare
+-- 0.0. tx range
+-- #include 5_0_0.sql
+-- 0.1. Day snapshot (optional); Timing: 4..20'
+-- #include 5_0_1.sql
+-- 0.2. addrs rids; Timing: 3'
+-- #include 5_0_2.sql
+-- 1. Fill data (R: Reports); Timing: 3'
+--- R.1: Addr_Num (addrs number to the end of tx); Timing: 12"
+-- #include 5_1_1.sql
+--- R.2: Addr_Num_Active (addrs number active B2n txs); Timing: 50"
+-- #include 5_1_2.sql
+--- R.3: Utxo_Num (utxo number); Timing:
+-- #include 5_1_3.sql
+--- R.4: Utxo_Sum (utxo summs (to the end of the tx)); Timing: 1'30"
+-- #include 5_1_4.sql
+--- R.5: Vout_Num (vouts number B2n txs); Timing: 20"
+-- #include 5_1_5.sql
+--- R.6: Vout_Sum (vouts sums B2n txs); Timing: 20"
+-- #include 5_1_6.sql
+-- 2. Clean up
+-- #include 5_2.sql

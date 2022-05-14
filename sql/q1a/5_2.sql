@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS tmp_rid;
+DROP TABLE IF EXISTS tmp_daysnap;
+DROP TABLE IF EXISTS tmp_today;
