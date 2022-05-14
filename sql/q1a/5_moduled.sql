@@ -68,7 +68,7 @@ TRUNCATE TABLE tmp_snap;
 CALL __snap_unidx();
 INSERT INTO tmp_snap (t_id, n, t_id_in, money, a_id)
 SELECT t_id, n, t_id_in, money, a_id
-FROM tail
+FROM vout
 WHERE t_id <= tx1
   AND (t_id_in > tx0 OR t_id_in IS NULL)
   AND a_id IS NOT NULL
