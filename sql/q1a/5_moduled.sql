@@ -347,6 +347,28 @@ $$;
 COMMENT ON PROCEDURE _monthly(INTEGER, INTEGER) IS 'Recalc q1a for a month
 @ver: 22020507.12.20';
 
+
+CREATE OR REPLACE PROCEDURE _yearly(y INTEGER)
+    LANGUAGE plpgsql -- SQL cannot variables
+AS
+$$
+DECLARE
+    d_min DATE = make_date(y, 1, 1);
+    d_max DATE = make_date(y, 12, 31);
+    d DATE;
+BEGIN
+    CALL __tbl_c_tmp_snap();
+    CALL __tbl_c_tmp_rid();
+    CALL _snap_fill(__get_date_tx_min(d_min), __get_date_tx_max(d_max));
+    FOR d IN SELECT * FROM generate_series(d_min, d_max, '1 day')
+        LOOP
+            CALL _fill_q1a(d, __get_date_tx_min(d), __get_date_tx_max(d));
+        END LOOP;
+END;
+$$;
+COMMENT ON PROCEDURE _yearly(INTEGER) IS 'Recalc q1a for a year
+@ver: 22020522.22.30';
+
 -- CALL _daily('2022-03-30');
 -- time psql -q -c "CALL _daily('2022-01-01');" <db> <user>
 -- CALL _monthly(2022, 3);

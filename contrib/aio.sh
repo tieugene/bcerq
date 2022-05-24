@@ -102,9 +102,12 @@ if [ "$BK_KV" -lt "$BK_BTC" ]; then
   for i in $(seq "$BK_KV" "$BK_MAX"); do process_bk "$i"; done
   log "Update SQL stat start"
   cat $(dirname "$0")/../sql/stat/{u_stat_bk.sql,u_stat_bk_inc.sql,u_stat_date.sql,u_stat_date_inc.sql} | psql -q -v ON_ERROR_STOP=on "$PGBASE" "$PGLOGIN"
-  log "Update SQL tail start"
   TAIL_FROM=$(date -d "-3 month -1 day" +"%Y-%m-%d")
+  log "Update SQL tail from $TAIL_FROM"
   psql -q -c "CALL _tail_refill('$TAIL_FROM')" "$PGBASE" "$PGLOGIN"
+  Q1A_DATE=$(date -d "-1 day" +"%Y-%m-%d")
+  log "Update SQL for $Q1A_DATE"
+  psql -q -c "CALL _daily('$Q1A_DATE')" "$PGBASE" "$PGLOGIN"
   log "Update SQL end"
   if [ -n "$1" ]; then
     do_svc freeze bitcoin
