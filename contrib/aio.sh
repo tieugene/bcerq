@@ -59,7 +59,6 @@ process_bk() {  # Process one block no $1
 }
 
 do_data() {
-  echo "do_data"; return
   # - bce2
   BK_KV=$(bce2 -i | grep ^Chk_bk | gawk '{print $2}')
   [ -z "$BK_KV" ] && { log "Cannot ask bce2"; exit 1; }
@@ -77,21 +76,18 @@ do_data() {
 }
 
 do_stat() {
-  echo "do_stat"; return
   log "Stat..."
   # shellcheck disable=SC2046
   cat $(dirname "$0")/../sql/stat/{u_stat_bk.sql,u_stat_bk_inc.sql,u_stat_date.sql,u_stat_date_inc.sql} | psql -q -v ON_ERROR_STOP=on "$PGBASE" "$PGLOGIN"
 }
 
 do_tail() {
-  echo "do_tail"; return
   TAIL_FROM=$(date -d "-3 month -1 day" +"%Y-%m-%d")
   log "Tail (from $TAIL_FROM)"
   psql -q -c "CALL _tail_refill('$TAIL_FROM')" "$PGBASE" "$PGLOGIN"
 }
 
 do_q1a() {
-  echo "do_q1a"; return
   Q1A_DATE=$(date -d "-1 day" +"%Y-%m-%d")
   log "Q1A ($Q1A_DATE)"
   psql -q -c "CALL _daily('$Q1A_DATE')" "$PGBASE" "$PGLOGIN"
