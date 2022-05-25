@@ -16,9 +16,6 @@ help() {
   exit
 }
 
-cli() {  # handle CLI
-}
-
 load_cfg() {
   CFG_NAME="$(basename "$0" .sh).conf"
   # shellcheck disable=SC1090
