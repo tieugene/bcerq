@@ -301,6 +301,25 @@ FROM tx
 WHERE DATE(datime) = d0;
 $$;
 
+CREATE OR REPLACE PROCEDURE _dately(d0 DATE, d1 DATE)
+    LANGUAGE plpgsql
+AS
+$$
+DECLARE
+    d DATE;
+BEGIN
+    CALL __tbl_c_tmp_snap();
+    CALL __tbl_c_tmp_rid();
+    CALL _snap_fill(__get_date_tx_min(d0), __get_date_tx_max(d1));
+    FOR d IN SELECT * FROM generate_series(d0, d1, '1 day')
+        LOOP
+            CALL _fill_q1a(d, __get_date_tx_min(d), __get_date_tx_max(d));
+        END LOOP;
+END;
+$$;
+COMMENT ON PROCEDURE _dately(DATE, DATE) IS 'Recalc q1a for a dates d0..d1
+@ver: 20220610.16.15';
+
 CREATE OR REPLACE PROCEDURE _daily(d DATE)
     LANGUAGE sql
 AS
@@ -308,66 +327,29 @@ $$
 /*
  Timing: 10'35..10'45" (vout, 2022-01-01)
  */
-CALL __tbl_c_tmp_snap();
-CALL __tbl_c_tmp_rid();
-/*
- Timing logged:   5'10" (tail)/ ... (vout); 80M records (2022-03)
- Timing unlogged: 3'50" (tail)/
- */
-CALL _snap_fill(__get_date_tx_min(d), __get_date_tx_max(d));
-/*
- Timing logged:   7'14" (day)/ 7'12" (month)
- Timing unlogged: 6'40" (day)/ 6'30" (month)
- */
-CALL _fill_q1a(d, __get_date_tx_min(d), __get_date_tx_max(d));
+    CALL _dately(d, d);
 $$;
 COMMENT ON PROCEDURE _daily(DATE) IS 'Recalc q1a for a day
-@ver: 22020507.12.10';
+@ver: 20220610.16.20';
 
 CREATE OR REPLACE PROCEDURE _monthly(y INTEGER, m INTEGER)
-    LANGUAGE plpgsql -- SQL cannot variables
+    LANGUAGE sql
 AS
 $$
-DECLARE
-    d_min DATE = make_date(y, m, 1);
-    d DATE;
-BEGIN
-    CALL __tbl_c_tmp_snap();
-    CALL __tbl_c_tmp_rid();
-    -- SELECT get_date_txs(d0) INTO tx0, tx1;
-    -- Timing logged:   6'40" (tail)/ ... (vout); 105M records (2022-03)
-    -- Timing unlogged: 5'00" (tail)/
-    CALL _snap_fill(__get_date_tx_min(d_min), __get_date_tx_max(__dom_max(d_min)));
-    FOR d IN SELECT * FROM generate_series(d_min, __dom_max(d_min), '1 day')
-        LOOP
-            CALL _fill_q1a(d, __get_date_tx_min(d), __get_date_tx_max(d));
-        END LOOP;
+    CALL _dately(make_date(y, m, 1), __dom_max(make_date(y, m, 1)));
 END;
 $$;
 COMMENT ON PROCEDURE _monthly(INTEGER, INTEGER) IS 'Recalc q1a for a month
-@ver: 22020507.12.20';
-
+@ver: 20220610.16.20';
 
 CREATE OR REPLACE PROCEDURE _yearly(y INTEGER)
-    LANGUAGE plpgsql -- SQL cannot variables
+    LANGUAGE sql
 AS
 $$
-DECLARE
-    d_min DATE = make_date(y, 1, 1);
-    d_max DATE = make_date(y, 12, 31);
-    d DATE;
-BEGIN
-    CALL __tbl_c_tmp_snap();
-    CALL __tbl_c_tmp_rid();
-    CALL _snap_fill(__get_date_tx_min(d_min), __get_date_tx_max(d_max));
-    FOR d IN SELECT * FROM generate_series(d_min, d_max, '1 day')
-        LOOP
-            CALL _fill_q1a(d, __get_date_tx_min(d), __get_date_tx_max(d));
-        END LOOP;
-END;
+    CALL _dately(make_date(y, 1, 1), make_date(y, 12, 31));
 $$;
 COMMENT ON PROCEDURE _yearly(INTEGER) IS 'Recalc q1a for a year
-@ver: 22020522.22.30';
+@ver: 20220610.16.25';
 
 -- CALL _daily('2022-03-30');
 -- time psql -q -c "CALL _daily('2022-01-01');" <db> <user>
