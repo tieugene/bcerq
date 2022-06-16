@@ -103,20 +103,21 @@ $$
 TRUNCATE TABLE tmp_rid;
 CALL __rid_unidx();
 INSERT INTO tmp_rid (a_id, rid)
-SELECT a_id,
-       CASE
-           WHEN SUM(money) BETWEEN 1 AND 10 ^ 5 THEN 1
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 5 AND 10 ^ 6 THEN 2
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 6 AND 10 ^ 7 THEN 3
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 7 AND 10 ^ 8 THEN 4
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 8 AND 10 ^ 9 THEN 5
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 9 AND 10 ^ 10 THEN 6
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 10 AND 10 ^ 11 THEN 7
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 11 AND 10 ^ 12 THEN 8
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 12 AND 10 ^ 13 THEN 9
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 13 AND 10 ^ 14 THEN 10
-           WHEN SUM(money) > 10 ^ 14 THEN 11
-           END AS rid
+SELECT
+    a_id,
+    CASE
+        WHEN SUM(money) BETWEEN 1 AND 10 ^ 5 THEN 1
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 5 AND 10 ^ 6 THEN 2
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 6 AND 10 ^ 7 THEN 3
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 7 AND 10 ^ 8 THEN 4
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 8 AND 10 ^ 9 THEN 5
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 9 AND 10 ^ 10 THEN 6
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 10 AND 10 ^ 11 THEN 7
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 11 AND 10 ^ 12 THEN 8
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 12 AND 10 ^ 13 THEN 9
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 13 AND 10 ^ 14 THEN 10
+        WHEN SUM(money) > 10 ^ 14 THEN 11
+    END AS rid
 FROM tmp_snap
 WHERE t_id <= tx1
   AND (t_id_in > tx1 OR t_id_in IS NULL)
@@ -136,10 +137,11 @@ FROM t_1a_date
 WHERE t_1a_date.d = d0
   AND qid = 1;
 INSERT INTO t_1a_date (d, qid, rid, val)
-SELECT d0,
-       1,
-       tmp_rid.rid,
-       COUNT(*) AS val
+SELECT
+    d0,
+    1,
+    tmp_rid.rid,
+    COUNT(*) AS val
 FROM tmp_rid
 GROUP BY d0, rid;
 $$;
@@ -154,10 +156,11 @@ FROM t_1a_date
 WHERE t_1a_date.d = d0
   AND qid = 2;
 INSERT INTO t_1a_date (d, qid, rid, val)
-SELECT d0,
-       2,
-       tmp_rid.rid,
-       COUNT(*) AS val
+SELECT
+    d0,
+    2,
+    tmp_rid.rid,
+    COUNT(*) AS val
 FROM tmp_rid
          INNER JOIN (SELECT DISTINCT a_id
                      FROM tmp_snap
