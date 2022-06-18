@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION _q_220606(tx_min INT, m_min BIGINT, m_max BIGINT, a_num INT)
     -- query according to TZ_220606
-    RETURNS TABLE (a_id INT, a_name JSONB, money BIGINT, dt0 DATE, dt1 DATE)
+    RETURNS TABLE (a_id INT, a_name JSONB, money BIGINT, dt0 TIMESTAMP, dt1 TIMESTAMP)
     LANGUAGE sql
 AS
 $$

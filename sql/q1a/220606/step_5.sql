@@ -48,8 +48,8 @@ FROM (
                 COUNT(*) >= 2
         ) AS active
         ON b5.a_id = active.a_id
-        -- 3. limit
-        LIMIT 20000
+        -- 3. limit, addrs
+        LIMIT 200000
     ) AS address
     INNER JOIN tail ON address.a_id = tail.a_id
     WHERE
