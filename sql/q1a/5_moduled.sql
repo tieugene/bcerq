@@ -103,20 +103,21 @@ $$
 TRUNCATE TABLE tmp_rid;
 CALL __rid_unidx();
 INSERT INTO tmp_rid (a_id, rid)
-SELECT a_id,
-       CASE
-           WHEN SUM(money) BETWEEN 1 AND 10 ^ 5 THEN 1
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 5 AND 10 ^ 6 THEN 2
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 6 AND 10 ^ 7 THEN 3
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 7 AND 10 ^ 8 THEN 4
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 8 AND 10 ^ 9 THEN 5
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 9 AND 10 ^ 10 THEN 6
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 10 AND 10 ^ 11 THEN 7
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 11 AND 10 ^ 12 THEN 8
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 12 AND 10 ^ 13 THEN 9
-           WHEN SUM(money) BETWEEN 1 + 10 ^ 13 AND 10 ^ 14 THEN 10
-           WHEN SUM(money) > 10 ^ 14 THEN 11
-           END AS rid
+SELECT
+    a_id,
+    CASE
+        WHEN SUM(money) BETWEEN 1 AND 10 ^ 5 THEN 1
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 5 AND 10 ^ 6 THEN 2
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 6 AND 10 ^ 7 THEN 3
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 7 AND 10 ^ 8 THEN 4
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 8 AND 10 ^ 9 THEN 5
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 9 AND 10 ^ 10 THEN 6
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 10 AND 10 ^ 11 THEN 7
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 11 AND 10 ^ 12 THEN 8
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 12 AND 10 ^ 13 THEN 9
+        WHEN SUM(money) BETWEEN 1 + 10 ^ 13 AND 10 ^ 14 THEN 10
+        WHEN SUM(money) > 10 ^ 14 THEN 11
+    END AS rid
 FROM tmp_snap
 WHERE t_id <= tx1
   AND (t_id_in > tx1 OR t_id_in IS NULL)
@@ -136,10 +137,11 @@ FROM t_1a_date
 WHERE t_1a_date.d = d0
   AND qid = 1;
 INSERT INTO t_1a_date (d, qid, rid, val)
-SELECT d0,
-       1,
-       tmp_rid.rid,
-       COUNT(*) AS val
+SELECT
+    d0,
+    1,
+    tmp_rid.rid,
+    COUNT(*) AS val
 FROM tmp_rid
 GROUP BY d0, rid;
 $$;
@@ -154,10 +156,11 @@ FROM t_1a_date
 WHERE t_1a_date.d = d0
   AND qid = 2;
 INSERT INTO t_1a_date (d, qid, rid, val)
-SELECT d0,
-       2,
-       tmp_rid.rid,
-       COUNT(*) AS val
+SELECT
+    d0,
+    2,
+    tmp_rid.rid,
+    COUNT(*) AS val
 FROM tmp_rid
          INNER JOIN (SELECT DISTINCT a_id
                      FROM tmp_snap
@@ -301,6 +304,25 @@ FROM tx
 WHERE DATE(datime) = d0;
 $$;
 
+CREATE OR REPLACE PROCEDURE _dately(d0 DATE, d1 DATE)
+    LANGUAGE plpgsql
+AS
+$$
+DECLARE
+    d DATE;
+BEGIN
+    CALL __tbl_c_tmp_snap();
+    CALL __tbl_c_tmp_rid();
+    CALL _snap_fill(__get_date_tx_min(d0), __get_date_tx_max(d1));
+    FOR d IN SELECT * FROM generate_series(d0, d1, '1 day')
+        LOOP
+            CALL _fill_q1a(d, __get_date_tx_min(d), __get_date_tx_max(d));
+        END LOOP;
+END;
+$$;
+COMMENT ON PROCEDURE _dately(DATE, DATE) IS 'Recalc q1a for a dates d0..d1
+@ver: 20220610.16.15';
+
 CREATE OR REPLACE PROCEDURE _daily(d DATE)
     LANGUAGE sql
 AS
@@ -308,44 +330,29 @@ $$
 /*
  Timing: 10'35..10'45" (vout, 2022-01-01)
  */
-CALL __tbl_c_tmp_snap();
-CALL __tbl_c_tmp_rid();
-/*
- Timing logged:   5'10" (tail)/ ... (vout); 80M records (2022-03)
- Timing unlogged: 3'50" (tail)/
- */
-CALL _snap_fill(__get_date_tx_min(d), __get_date_tx_max(d));
-/*
- Timing logged:   7'14" (day)/ 7'12" (month)
- Timing unlogged: 6'40" (day)/ 6'30" (month)
- */
-CALL _fill_q1a(d, __get_date_tx_min(d), __get_date_tx_max(d));
+    CALL _dately(d, d);
 $$;
 COMMENT ON PROCEDURE _daily(DATE) IS 'Recalc q1a for a day
-@ver: 22020507.12.10';
+@ver: 20220610.16.20';
 
 CREATE OR REPLACE PROCEDURE _monthly(y INTEGER, m INTEGER)
-    LANGUAGE plpgsql -- SQL cannot variables
+    LANGUAGE sql
 AS
 $$
-DECLARE
-    d_min DATE = make_date(y, m, 1);
-    d DATE;
-BEGIN
-    CALL __tbl_c_tmp_snap();
-    CALL __tbl_c_tmp_rid();
-    -- SELECT get_date_txs(d0) INTO tx0, tx1;
-    -- Timing logged:   6'40" (tail)/ ... (vout); 105M records (2022-03)
-    -- Timing unlogged: 5'00" (tail)/
-    CALL _snap_fill(__get_date_tx_min(d_min), __get_date_tx_max(__dom_max(d_min)));
-    FOR d IN SELECT * FROM generate_series(d_min, __dom_max(d_min), '1 day')
-        LOOP
-            CALL _fill_q1a(d, __get_date_tx_min(d), __get_date_tx_max(d));
-        END LOOP;
+    CALL _dately(make_date(y, m, 1), __dom_max(make_date(y, m, 1)));
 END;
 $$;
 COMMENT ON PROCEDURE _monthly(INTEGER, INTEGER) IS 'Recalc q1a for a month
-@ver: 22020507.12.20';
+@ver: 20220610.16.20';
+
+CREATE OR REPLACE PROCEDURE _yearly(y INTEGER)
+    LANGUAGE sql
+AS
+$$
+    CALL _dately(make_date(y, 1, 1), make_date(y, 12, 31));
+$$;
+COMMENT ON PROCEDURE _yearly(INTEGER) IS 'Recalc q1a for a year
+@ver: 20220610.16.25';
 
 -- CALL _daily('2022-03-30');
 -- time psql -q -c "CALL _daily('2022-01-01');" <db> <user>
